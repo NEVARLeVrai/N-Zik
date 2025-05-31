@@ -3,7 +3,7 @@
 compose-plugin = "1.8.1"
 agp = "8.10.1"
 composeMarkdownVersion = "0.5.7"
-kotlin = "2.1.0"
+kotlin = "2.1.21"
 kotlin-ksp = "2.1.0-1.0.29"
 kotlin-datetime = "0.6.2"
 compose = "1.8.2"
