@@ -35,10 +35,7 @@ import it.fast4x.rimusic.utils.isConnectionMetered
 import it.fast4x.rimusic.utils.okHttpDataSourceFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import me.knighthat.innertube.Endpoints
@@ -51,7 +48,7 @@ import org.schabi.newpipe.extractor.services.youtube.PoTokenResult
 import org.schabi.newpipe.extractor.services.youtube.YoutubeJavaScriptPlayerManager
 import org.schabi.newpipe.extractor.services.youtube.YoutubeStreamHelper
 import timber.log.Timber
-import java.util.concurrent.Executors
+import java.net.UnknownHostException
 
 private const val CHUNK_LENGTH = 512 * 1024L     // 512Kb
 
@@ -93,7 +90,14 @@ private fun upsertSongInfo( videoId: String ) = runBlocking {       // Use this 
             val songItem = nextPage.itemsPage?.items?.firstOrNull() ?: return@fold
             Database.upsert( songItem )
         },
-        onFailure = { Toaster.e( R.string.failed_to_fetch_original_property ) }
+        onFailure = {
+            when( it ) {
+                // [UnknownHostException] means no internet connection in most cases
+                // Set [justInserted] to this video will skip subsequence calls
+                is UnknownHostException -> justInserted = videoId
+                else                    -> Toaster.e( R.string.failed_to_fetch_original_property )
+            }
+        }
     )
 
     // Must not modify [JustInserted] to [upsertSongFormat] let execute later
