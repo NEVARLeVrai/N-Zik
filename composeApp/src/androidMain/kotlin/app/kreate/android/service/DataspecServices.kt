@@ -47,7 +47,6 @@ import org.schabi.newpipe.extractor.localization.Localization
 import org.schabi.newpipe.extractor.services.youtube.PoTokenResult
 import org.schabi.newpipe.extractor.services.youtube.YoutubeJavaScriptPlayerManager
 import org.schabi.newpipe.extractor.services.youtube.YoutubeStreamHelper
-import timber.log.Timber
 import java.net.UnknownHostException
 
 private const val CHUNK_LENGTH = 512 * 1024L     // 512Kb
@@ -80,8 +79,6 @@ private var justInserted: String = ""
  */
 @Blocking
 private fun upsertSongInfo( videoId: String ) = runBlocking {       // Use this to prevent suspension of thread while waiting for response from YT
-    Timber.tag("DataspecServices").d("upsertSongInfo called!")
-
     // Skip adding if it's just added in previous call
     if( videoId == justInserted ) return@runBlocking
 
@@ -101,7 +98,6 @@ private fun upsertSongInfo( videoId: String ) = runBlocking {       // Use this 
     )
 
     // Must not modify [JustInserted] to [upsertSongFormat] let execute later
-    Timber.tag("DataspecServices").d("upsertSongInfo finished!")
 }
 
 /**
@@ -109,8 +105,6 @@ private fun upsertSongInfo( videoId: String ) = runBlocking {       // Use this 
  */
 @NonBlocking
 private fun upsertSongFormat( videoId: String, format: PlayerResponse.StreamingData.Format ) {
-    Timber.tag("DataspecServices").d("upsertSongFormat called!")
-
     // Skip adding if it's just added in previous call
     if( videoId == justInserted ) return
 
@@ -130,8 +124,6 @@ private fun upsertSongFormat( videoId: String, format: PlayerResponse.StreamingD
         // Format must be added successfully before setting variable
         justInserted = videoId
     }
-
-    Timber.tag("DataspecServices").d("upsertSongFormat modified justInserted to $videoId!")
 }
 
 //<editor-fold defaultstate="collapsed" desc="Extractors">
