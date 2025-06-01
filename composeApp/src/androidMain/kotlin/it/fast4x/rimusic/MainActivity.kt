@@ -93,6 +93,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.palette.graphics.Palette
 import app.kreate.android.BuildConfig
 import app.kreate.android.R
+import app.kreate.android.Settings
 import app.kreate.android.Threads
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -307,6 +308,8 @@ class MainActivity :
     @UnstableApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
+        Settings.load( this )
+
         super.onCreate(savedInstanceState)
         MonetCompat.enablePaletteCompat()
 
@@ -1306,6 +1309,7 @@ class MainActivity :
             Timber.e("MainActivity.onDestroy removeMonetColorsChangedListener ${it.stackTraceToString()}")
         }
 
+        Settings.unload()
     }
 
     private fun setSystemBarAppearance(isDark: Boolean) {
