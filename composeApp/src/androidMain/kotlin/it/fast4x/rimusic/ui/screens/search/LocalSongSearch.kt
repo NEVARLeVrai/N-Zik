@@ -57,13 +57,11 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.align
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.getDownloadState
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -105,7 +103,7 @@ fun LocalSongSearch(
 
     var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val focusRequester = remember {
         FocusRequester()

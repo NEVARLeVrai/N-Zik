@@ -29,25 +29,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.BuildConfig
 import app.kreate.android.R
+import app.kreate.android.Settings.DEBUG_LOG
+import app.kreate.android.Settings.HOME_SONGS_ON_DEVICE_SHOW_FOLDERS
+import app.kreate.android.Settings.IS_PROXY_ENABLED
+import app.kreate.android.Settings.KEEP_SCREEN_ON
+import app.kreate.android.Settings.PARENTAL_CONTROL
+import app.kreate.android.Settings.PLAYER_EXTRA_SPACE
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.ValidationType
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.defaultFolderKey
-import it.fast4x.rimusic.utils.extraspaceKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid10
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.isIgnoringBatteryOptimizations
-import it.fast4x.rimusic.utils.isKeepScreenOnEnabledKey
-import it.fast4x.rimusic.utils.isProxyEnabledKey
-import it.fast4x.rimusic.utils.logDebugEnabledKey
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.proxyHostnameKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showFoldersOnDeviceKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import me.knighthat.utils.Toaster
 import java.io.File
@@ -91,18 +91,18 @@ fun OtherSettings() {
             isIgnoringBatteryOptimizations = context.isIgnoringBatteryOptimizations
         }
 
-    var isProxyEnabled by rememberPreference(isProxyEnabledKey, false)
+    var isProxyEnabled by IS_PROXY_ENABLED
     var proxyHost by rememberPreference(proxyHostnameKey, "")
     var proxyPort by rememberPreference(proxyPortKey, 1080)
     var proxyMode by app.kreate.android.Settings.PROXY_SCHEME
 
     var defaultFolder by rememberPreference(defaultFolderKey, "/")
 
-    var isKeepScreenOnEnabled by rememberPreference(isKeepScreenOnEnabledKey, false)
+    var isKeepScreenOnEnabled by KEEP_SCREEN_ON
 
     //var checkUpdateState by rememberPreference(checkUpdateStateKey, CheckUpdateState.Disabled)
 
-    var showFolders by rememberPreference(showFoldersOnDeviceKey, true)
+    var showFolders by HOME_SONGS_ON_DEVICE_SHOW_FOLDERS
 
     var blackListedPaths by remember {
         val file = File(context.filesDir, "Blacklisted_paths.txt")
@@ -113,10 +113,10 @@ fun OtherSettings() {
         }
     }
 
-    var parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
-    var logDebugEnabled by rememberPreference(logDebugEnabledKey, false)
+    var parentalControlEnabled by PARENTAL_CONTROL
+    var logDebugEnabled by DEBUG_LOG
 
-    var extraspace by rememberPreference(extraspaceKey, false)
+    var extraspace by PLAYER_EXTRA_SPACE
 
     Column(
         modifier = Modifier

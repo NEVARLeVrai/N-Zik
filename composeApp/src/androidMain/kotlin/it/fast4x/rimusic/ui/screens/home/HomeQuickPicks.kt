@@ -109,12 +109,9 @@ import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.color
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isNowPlaying
-import it.fast4x.rimusic.utils.loadedDataKey
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.playVideo
 import it.fast4x.rimusic.utils.quickPicsDiscoverPageKey
 import it.fast4x.rimusic.utils.quickPicsHomePageKey
@@ -123,17 +120,6 @@ import it.fast4x.rimusic.utils.quickPicsTrendingSongKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showChartsKey
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showMonthlyPlaylistInQuickPicksKey
-import it.fast4x.rimusic.utils.showMoodsAndGenresKey
-import it.fast4x.rimusic.utils.showNewAlbumsArtistsKey
-import it.fast4x.rimusic.utils.showNewAlbumsKey
-import it.fast4x.rimusic.utils.showPlaylistMightLikeKey
-import it.fast4x.rimusic.utils.showRelatedAlbumsKey
-import it.fast4x.rimusic.utils.showSearchTabKey
-import it.fast4x.rimusic.utils.showSimilarArtistsKey
-import it.fast4x.rimusic.utils.showTipsKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -194,18 +180,15 @@ fun HomeQuickPicks(
     val context = LocalContext.current
 
 
-    val showRelatedAlbums by rememberPreference(showRelatedAlbumsKey, true)
-    val showSimilarArtists by rememberPreference(showSimilarArtistsKey, true)
-    val showNewAlbumsArtists by rememberPreference(showNewAlbumsArtistsKey, true)
-    val showPlaylistMightLike by rememberPreference(showPlaylistMightLikeKey, true)
-    val showMoodsAndGenres by rememberPreference(showMoodsAndGenresKey, true)
-    val showNewAlbums by rememberPreference(showNewAlbumsKey, true)
-    val showMonthlyPlaylistInQuickPicks by rememberPreference(
-        showMonthlyPlaylistInQuickPicksKey,
-        true
-    )
-    val showTips by rememberPreference(showTipsKey, true)
-    val showCharts by rememberPreference(showChartsKey, true)
+    val showRelatedAlbums by Settings.QUICK_PICKS_SHOW_RELATED_ALBUMS
+    val showSimilarArtists by Settings.QUICK_PICKS_SHOW_RELATED_ARTISTS
+    val showNewAlbumsArtists by Settings.QUICK_PICKS_SHOW_NEW_ALBUMS_ARTISTS
+    val showPlaylistMightLike by Settings.QUICK_PICKS_SHOW_MIGHT_LIKE_PLAYLISTS
+    val showMoodsAndGenres by Settings.QUICK_PICKS_SHOW_MOODS_AND_GENRES
+    val showNewAlbums by Settings.QUICK_PICKS_SHOW_NEW_ALBUMS
+    val showMonthlyPlaylistInQuickPicks by Settings.QUICK_PICKS_SHOW_MONTHLY_PLAYLISTS
+    val showTips by Settings.QUICK_PICKS_SHOW_TIPS
+    val showCharts by Settings.QUICK_PICKS_SHOW_CHARTS
 
     val refreshScope = rememberCoroutineScope()
     val last50Year: Duration = 18250.days
@@ -213,10 +196,10 @@ fun HomeQuickPicks(
 
     var selectedCountryCode = Countries.US
 
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
 
     //var loadedData by rememberSaveable { mutableStateOf(false) }
-    var loadedData by rememberPreference(loadedDataKey, false)
+    var loadedData by Settings.IS_DATA_KEY_LOADED
 
     val localRecommandationsNumber by rememberPreference(
         key = "LocalRecommandationsNumber",
@@ -365,7 +348,7 @@ fun HomeQuickPicks(
         .padding(top = 24.dp, bottom = 8.dp)
         .padding(endPaddingValues)
 
-    val showSearchTab by rememberPreference(showSearchTabKey, false)
+    val showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
 
     val downloadedSongs = remember {
         MyDownloadHelper.downloads.value.filter {
@@ -379,7 +362,7 @@ fun HomeQuickPicks(
 
     val hapticFeedback = LocalHapticFeedback.current
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     PullToRefreshBox(
         isRefreshing = refreshing,
@@ -1237,7 +1220,7 @@ fun HomeQuickPicks(
             }
 
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if (UiType.ViMusic.isCurrent() && showFloatingIcon)
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.search,

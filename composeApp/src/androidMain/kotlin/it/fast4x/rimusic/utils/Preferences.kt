@@ -546,16 +546,6 @@ fun rememberPreference(key: String, defaultValue: HomePage?): MutableState<HomeP
 }
 
 @Composable
-fun rememberPreference(key: String, defaultValue: Boolean): MutableState<Boolean> {
-    val context = LocalContext.current
-    return remember {
-        mutableStatePreferenceOf(context.preferences.getBoolean(key, defaultValue)) {
-            context.preferences.edit { putBoolean(key, it) }
-        }
-    }
-}
-
-@Composable
 fun rememberPreference(key: String, defaultValue: Int): MutableState<Int> {
     val context = LocalContext.current
     return remember {

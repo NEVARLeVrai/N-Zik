@@ -133,8 +133,6 @@ import it.fast4x.rimusic.utils.blurStrengthKey
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.drawCircle
-import it.fast4x.rimusic.utils.expandedplayerKey
-import it.fast4x.rimusic.utils.fadingedgeKey
 import it.fast4x.rimusic.utils.getDeviceVolume
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.isExplicit
@@ -155,7 +153,6 @@ import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.setDeviceVolume
 import it.fast4x.rimusic.utils.setGlobalVolume
-import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.thumbnail
 import it.fast4x.rimusic.utils.thumbnailFadeExKey
 import it.fast4x.rimusic.utils.thumbnailFadeKey
@@ -1358,10 +1355,10 @@ fun BlurParamsDialog(
         var thumbnailSpacingL by rememberPreference(thumbnailSpacingLKey, defaultSpacing)
         var thumbnailFade by rememberPreference(thumbnailFadeKey, defaultFade)
         var thumbnailFadeEx by rememberPreference(thumbnailFadeExKey, defaultFade)
-        var fadingedge by rememberPreference(fadingedgeKey, false)
+        var fadingedge by Settings.PLAYER_BACKGROUND_FADING_EDGE
         var imageCoverSize by rememberPreference(VinylSizeKey, defaultImageCoverSize)
-        val showCoverThumbnailAnimation by rememberPreference(showCoverThumbnailAnimationKey, false)
-        val expandedplayer by rememberPreference(expandedplayerKey, false)
+        val showCoverThumbnailAnimation by Settings.PLAYER_THUMBNAIL_ANIMATION
+        val expandedplayer by Settings.PLAYER_EXPANDED
         DefaultDialog(
             onDismiss = {
                 spacingValue(thumbnailSpacing)

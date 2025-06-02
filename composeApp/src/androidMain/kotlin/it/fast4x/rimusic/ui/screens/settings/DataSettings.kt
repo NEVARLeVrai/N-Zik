@@ -45,7 +45,6 @@ import it.fast4x.rimusic.utils.RestartPlayerService
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.coilCustomDiskCacheKey
 import it.fast4x.rimusic.utils.exoPlayerCustomCacheKey
-import it.fast4x.rimusic.utils.pauseSearchHistoryKey
 import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -103,7 +102,7 @@ fun DataSettings() {
         coilCustomDiskCacheKey,32
     )
 
-    var pauseSearchHistory by rememberPreference(pauseSearchHistoryKey, false)
+    var pauseSearchHistory by Settings.PAUSE_SEARCH_HISTORY
 
     var cleanCacheOfflineSongs by remember {
         mutableStateOf(false)

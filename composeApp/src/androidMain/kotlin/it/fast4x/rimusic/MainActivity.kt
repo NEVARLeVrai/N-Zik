@@ -80,7 +80,6 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
@@ -145,9 +144,7 @@ import it.fast4x.rimusic.ui.styling.typographyOf
 import it.fast4x.rimusic.utils.InitDownloader
 import it.fast4x.rimusic.utils.LocalMonetCompat
 import it.fast4x.rimusic.utils.OkHttpRequest
-import it.fast4x.rimusic.utils.applyFontPaddingKey
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.closeWithBackButtonKey
 import it.fast4x.rimusic.utils.customColorKey
 import it.fast4x.rimusic.utils.customThemeDark_Background0Key
 import it.fast4x.rimusic.utils.customThemeDark_Background1Key
@@ -169,8 +166,6 @@ import it.fast4x.rimusic.utils.customThemeLight_accentKey
 import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
 import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
 import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
-import it.fast4x.rimusic.utils.disablePlayerHorizontalSwipeKey
 import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.getEnum
@@ -178,15 +173,9 @@ import it.fast4x.rimusic.utils.intent
 import it.fast4x.rimusic.utils.invokeOnReady
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.isAtLeastAndroid8
-import it.fast4x.rimusic.utils.isKeepScreenOnEnabledKey
-import it.fast4x.rimusic.utils.isProxyEnabledKey
 import it.fast4x.rimusic.utils.isValidIP
 import it.fast4x.rimusic.utils.isVideo
-import it.fast4x.rimusic.utils.keepPlayerMinimizedKey
 import it.fast4x.rimusic.utils.loadAppLog
-import it.fast4x.rimusic.utils.loadedDataKey
-import it.fast4x.rimusic.utils.logDebugEnabledKey
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playerBackgroundColorsKey
 import it.fast4x.rimusic.utils.playerVisualizerTypeKey
@@ -195,15 +184,10 @@ import it.fast4x.rimusic.utils.proxyHostnameKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
-import it.fast4x.rimusic.utils.restartActivityKey
 import it.fast4x.rimusic.utils.setDefaultPalette
-import it.fast4x.rimusic.utils.shakeEventEnabledKey
-import it.fast4x.rimusic.utils.showButtonPlayerVideoKey
 import it.fast4x.rimusic.utils.showSearchTabKey
-import it.fast4x.rimusic.utils.showTotalTimeQueueKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.useSystemFontKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
@@ -289,8 +273,6 @@ class MainActivity :
     @UnstableApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
-        Settings.load( this )
-
         super.onCreate(savedInstanceState)
         MonetCompat.enablePaletteCompat()
 
@@ -319,7 +301,7 @@ class MainActivity :
             startApp()
         }
 
-        if (preferences.getBoolean(shakeEventEnabledKey, false)) {
+        if ( Settings.AUDIO_SHAKE_TO_SKIP.value ) {
             sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
             Objects.requireNonNull(sensorManager)
                 ?.registerListener(
@@ -407,9 +389,9 @@ class MainActivity :
     fun startApp() {
 
         // Used in QuickPics for load data from remote instead of last saved in SharedPreferences
-        preferences.edit(commit = true) { putBoolean(loadedDataKey, false) }
+        Settings.IS_DATA_KEY_LOADED.value = false
 
-        if (!preferences.getBoolean(closeWithBackButtonKey, false))
+        if ( !Settings.CLOSE_APP_ON_BACK.value )
             if (Build.VERSION.SDK_INT >= 33) {
                 onBackInvokedDispatcher.registerOnBackInvokedCallback(
                     OnBackInvokedDispatcher.PRIORITY_DEFAULT
@@ -432,10 +414,10 @@ class MainActivity :
         intentUriData = intent.data ?: intent.getStringExtra(Intent.EXTRA_TEXT)?.toUri()
 
         with(preferences) {
-            if (getBoolean(isKeepScreenOnEnabledKey, false)) {
+            if ( Settings.KEEP_SCREEN_ON.value ) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            if (getBoolean(isProxyEnabledKey, false)) {
+            if ( Settings.IS_PROXY_ENABLED.value ) {
                 val hostName = getString(proxyHostnameKey, null)
                 val proxyPort = getInt(proxyPortKey, 8080)
                 val proxyMode by Settings.PROXY_SCHEME
@@ -460,9 +442,7 @@ class MainActivity :
 
             // Valid to get log when app crash
             if (intent.action == action_copy_crash_log) {
-                preferences.edit(commit = true) {
-                    putBoolean(logDebugEnabledKey, true)
-                }
+                Settings.DEBUG_LOG.value = true
                 loadAppLog(this@MainActivity, type = LogType.Crash).let {
                     if (it != null) textCopyToClipboard(it, this@MainActivity)
                 }
@@ -501,8 +481,8 @@ class MainActivity :
                     val colorPaletteName by Settings.COLOR_PALETTE
                     val colorPaletteMode by Settings.THEME_MODE
                     val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
-                    val useSystemFont = getBoolean(useSystemFontKey, false)
-                    val applyFontPadding = getBoolean(applyFontPaddingKey, false)
+                    val useSystemFont by Settings.USE_SYSTEM_FONT
+                    val applyFontPadding by Settings.APPLY_FONT_PADDING
 
                     var colorPalette =
                         colorPaletteOf(colorPaletteName, colorPaletteMode, !lightTheme)
@@ -658,17 +638,17 @@ class MainActivity :
                             Settings.PLAYER_PORTRAIT_THUMBNAIL_SIZE.key,
                             playerVisualizerTypeKey,
                             Settings.MAIN_THEME.key,
-                            disablePlayerHorizontalSwipeKey,
-                            disableClosingPlayerSwipingDownKey,
+                            Settings.PLAYER_THUMBNAIL_HORIZONTAL_SWIPE_DISABLED.key,
+                            Settings.MINI_DISABLE_SWIPE_DOWN_TO_DISMISS.key,
                             showSearchTabKey,
                             Settings.NAVIGATION_BAR_POSITION.key,
                             Settings.NAVIGATION_BAR_TYPE.key,
-                            showTotalTimeQueueKey,
+                            Settings.PLAYER_SHOW_TOTAL_QUEUE_TIME.key,
                             Settings.MINI_PLAYER_PROGRESS_BAR.key,
                             Settings.TRANSITION_EFFECT.key,
                             Settings.PLAYER_BACKGROUND.key,
                             Settings.MINI_PLAYER_TYPE.key,
-                            restartActivityKey
+                            Settings.RESTART_ACTIVITY.key
                                 -> {
                                 this@MainActivity.recreate()
                                 println("MainActivity.recreate()")
@@ -783,11 +763,11 @@ class MainActivity :
                                 )
                             }
 
-                            useSystemFontKey, applyFontPaddingKey, Settings.FONT.key -> {
-                                val useSystemFont =
-                                    sharedPreferences.getBoolean(useSystemFontKey, false)
-                                val applyFontPadding =
-                                    sharedPreferences.getBoolean(applyFontPaddingKey, false)
+                            Settings.USE_SYSTEM_FONT.key,
+                            Settings.APPLY_FONT_PADDING.key,
+                            Settings.FONT.key -> {
+                                val useSystemFont by Settings.USE_SYSTEM_FONT
+                                val applyFontPadding by Settings.APPLY_FONT_PADDING
                                 val fontType by Settings.FONT
 
                                 appearance = appearance.copy(
@@ -980,8 +960,7 @@ class MainActivity :
                             val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
                             val isVideo = binder?.player?.currentMediaItem?.isVideo ?: false
-                            val isVideoEnabled =
-                                preferences.getBoolean(showButtonPlayerVideoKey, false)
+                            val isVideoEnabled by Settings.PLAYER_ACTION_TOGGLE_VIDEO
 
                             val youtubePlayer: @Composable () -> Unit = {
                                 binder?.player?.currentMediaItem?.mediaId?.let {
@@ -1078,9 +1057,7 @@ class MainActivity :
                     } else {
                         if (launchedFromNotification) {
                             intent.replaceExtras(Bundle())
-                            if (preferences.getBoolean(keepPlayerMinimizedKey, false))
-                                showPlayer = false
-                            else showPlayer = true
+                            showPlayer = !Settings.PLAYER_KEEP_MINIMIZED.value
                         } else {
                             showPlayer = false
                         }
@@ -1090,9 +1067,7 @@ class MainActivity :
                         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                             if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED && mediaItem != null) {
                                 if (mediaItem.mediaMetadata.extras?.getBoolean("isFromPersistentQueue") != true) {
-                                    if (preferences.getBoolean(keepPlayerMinimizedKey, false))
-                                        showPlayer = false
-                                    else showPlayer = true
+                                    showPlayer = !Settings.PLAYER_KEEP_MINIMIZED.value
                                 }
                             }
 
@@ -1157,11 +1132,7 @@ class MainActivity :
                             Innertube.song(videoId)?.getOrNull()?.let { song ->
                                 val binder = snapshotFlow { binder }.filterNotNull().first()
                                 withContext(Dispatchers.Main) {
-                                    if (!song.explicit && !preferences.getBoolean(
-                                            parentalControlEnabledKey,
-                                            false
-                                        )
-                                    )
+                                    if ( !song.explicit && !Settings.PARENTAL_CONTROL.value )
                                         binder?.player?.forcePlay(song.asMediaItem)
                                     else
                                         Toaster.w( "Parental control is enabled" )
@@ -1182,7 +1153,7 @@ class MainActivity :
     private val sensorListener: SensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
 
-            if (preferences.getBoolean(shakeEventEnabledKey, false)) {
+            if ( Settings.AUDIO_SHAKE_TO_SKIP.value ) {
                 // Fetching x,y,z values
                 val x = event.values[0]
                 val y = event.values[1]
@@ -1267,8 +1238,6 @@ class MainActivity :
         }.onFailure {
             Timber.e("MainActivity.onDestroy removeMonetColorsChangedListener ${it.stackTraceToString()}")
         }
-
-        Settings.unload()
     }
 
     private fun setSystemBarAppearance(isDark: Boolean) {

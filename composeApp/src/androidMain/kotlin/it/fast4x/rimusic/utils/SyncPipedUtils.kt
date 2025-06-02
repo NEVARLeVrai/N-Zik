@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.piped.Piped
 import it.fast4x.piped.models.Session
 import it.fast4x.rimusic.Database
@@ -66,7 +67,7 @@ fun syncSongsInPipedPlaylist(context: Context,coroutineScope: CoroutineScope, pi
 
 @Composable
 fun ImportPipedPlaylists(){
-    val isPipedEnabled by rememberPreference(isPipedEnabledKey, false)
+    val isPipedEnabled by Settings.ENABLE_PIPED
     if (!isPipedEnabled) return
 
     val coroutineScope = rememberCoroutineScope()
@@ -190,7 +191,7 @@ fun String.toID(): String {
 }
 
 fun checkPipedAccount(context: Context, pipedSession: Session): Boolean {
-    val isPipedEnabled = context.preferences.getBoolean(isPipedEnabledKey, false)
+    val isPipedEnabled by Settings.ENABLE_PIPED
     //println("mediaItem SyncPipedUtils checkPipedAccount isPipedEnabled $isPipedEnabled token ${pipedSession.token}")
     if (isPipedEnabled && pipedSession.token.isEmpty()) {
         Toaster.w( R.string.info_connect_your_piped_account_first )

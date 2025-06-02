@@ -20,9 +20,6 @@ import it.fast4x.rimusic.ui.components.tab.toolbar.Descriptive
 import it.fast4x.rimusic.ui.components.tab.toolbar.DynamicColor
 import it.fast4x.rimusic.ui.components.tab.toolbar.Icon
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
-import it.fast4x.rimusic.utils.discoverKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showButtonPlayerArrowKey
 import it.fast4x.rimusic.utils.shuffleQueue
 import it.fast4x.rimusic.utils.smoothScrollToTop
 import kotlinx.coroutines.launch
@@ -39,7 +36,7 @@ fun Discover(
     override val messageId: Int = R.string.discoverinfo
 
     // Active state of this button
-    override var isFirstColor: Boolean by rememberPreference(discoverKey, false)
+    override var isFirstColor: Boolean by Settings.ENABLE_DISCOVER
 
     override fun onShortClick() {
         isFirstColor = !isFirstColor
@@ -122,7 +119,7 @@ fun DeleteFromQueue(
 fun QueueArrow(
     onShortClick: () -> Unit
 ): Icon = object: Icon {
-    override val isEnabled: Boolean by rememberPreference( showButtonPlayerArrowKey, true )
+    override val isEnabled: Boolean by Settings.PLAYER_ACTION_OPEN_QUEUE_ARROW
     override val iconId: Int = R.drawable.chevron_down
 
     override fun onShortClick() = onShortClick()

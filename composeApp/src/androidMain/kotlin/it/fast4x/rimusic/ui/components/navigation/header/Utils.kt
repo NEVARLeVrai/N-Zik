@@ -14,9 +14,6 @@ import androidx.compose.ui.unit.dp
 import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
-import it.fast4x.rimusic.utils.logDebugEnabledKey
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 
 @Composable
 internal fun HeaderIcon(
@@ -40,12 +37,10 @@ internal class Preference {
     internal companion object {
 
         @Composable
-        fun parentalControl(): Boolean =
-            rememberPreference( parentalControlEnabledKey, false ).value
+        fun parentalControl(): Boolean = Settings.PARENTAL_CONTROL.value
 
         @Composable
-        fun debugLog(): Boolean =
-            rememberPreference( logDebugEnabledKey, false ).value
+        fun debugLog(): Boolean = Settings.DEBUG_LOG.value
 
         @Composable
         fun colorTheme(): ColorPaletteMode = Settings.THEME_MODE.value

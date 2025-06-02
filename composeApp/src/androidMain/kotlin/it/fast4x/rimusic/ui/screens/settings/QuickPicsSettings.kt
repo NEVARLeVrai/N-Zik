@@ -29,17 +29,6 @@ import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.ui.components.themed.ConfirmationDialog
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.enableQuickPicksPageKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showChartsKey
-import it.fast4x.rimusic.utils.showMonthlyPlaylistInQuickPicksKey
-import it.fast4x.rimusic.utils.showMoodsAndGenresKey
-import it.fast4x.rimusic.utils.showNewAlbumsArtistsKey
-import it.fast4x.rimusic.utils.showNewAlbumsKey
-import it.fast4x.rimusic.utils.showPlaylistMightLikeKey
-import it.fast4x.rimusic.utils.showRelatedAlbumsKey
-import it.fast4x.rimusic.utils.showSimilarArtistsKey
-import it.fast4x.rimusic.utils.showTipsKey
 import kotlinx.coroutines.Dispatchers
 import me.knighthat.utils.Toaster
 
@@ -48,16 +37,16 @@ import me.knighthat.utils.Toaster
 @Composable
 fun  QuickPicsSettings() {
     var playEventType by Settings.QUICK_PICKS_TYPE
-    var showTips by rememberPreference(showTipsKey, true)
-    var showRelatedAlbums by rememberPreference(showRelatedAlbumsKey, true)
-    var showSimilarArtists by rememberPreference(showSimilarArtistsKey, true)
-    var showNewAlbumsArtists by rememberPreference(showNewAlbumsArtistsKey, true)
-    var showNewAlbums by rememberPreference(showNewAlbumsKey, true)
-    var showPlaylistMightLike by rememberPreference(showPlaylistMightLikeKey, true)
-    var showMoodsAndGenres by rememberPreference(showMoodsAndGenresKey, true)
-    var showMonthlyPlaylistInQuickPicks by rememberPreference(showMonthlyPlaylistInQuickPicksKey, true)
-    var showCharts by rememberPreference(showChartsKey, true)
-    var enableQuickPicksPage by rememberPreference(enableQuickPicksPageKey, true)
+    var showTips by Settings.QUICK_PICKS_SHOW_TIPS
+    var showRelatedAlbums by Settings.QUICK_PICKS_SHOW_RELATED_ALBUMS
+    var showSimilarArtists by Settings.QUICK_PICKS_SHOW_RELATED_ARTISTS
+    var showNewAlbumsArtists by Settings.QUICK_PICKS_SHOW_NEW_ALBUMS_ARTISTS
+    var showNewAlbums by Settings.QUICK_PICKS_SHOW_NEW_ALBUMS
+    var showPlaylistMightLike by Settings.QUICK_PICKS_SHOW_MIGHT_LIKE_PLAYLISTS
+    var showMoodsAndGenres by Settings.QUICK_PICKS_SHOW_MOODS_AND_GENRES
+    var showMonthlyPlaylistInQuickPicks by Settings.QUICK_PICKS_SHOW_MONTHLY_PLAYLISTS
+    var showCharts by Settings.QUICK_PICKS_SHOW_CHARTS
+    var enableQuickPicksPage by Settings.QUICK_PICKS_PAGE
     var clearEvents by remember { mutableStateOf(false) }
     if (clearEvents) {
         ConfirmationDialog(

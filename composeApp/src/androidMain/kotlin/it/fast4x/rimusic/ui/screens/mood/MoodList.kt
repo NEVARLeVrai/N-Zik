@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import com.valentinilk.shimmer.shimmer
 import it.fast4x.compose.persist.persist
 import it.fast4x.innertube.Innertube
@@ -53,8 +54,6 @@ import it.fast4x.rimusic.ui.items.PlaylistItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.center
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 
@@ -88,7 +87,7 @@ fun MoodList(
         .padding(top = 24.dp, bottom = 8.dp)
         .padding(endPaddingValues)
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     Column (
         modifier = Modifier

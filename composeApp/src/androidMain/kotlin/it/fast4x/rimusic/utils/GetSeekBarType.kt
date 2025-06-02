@@ -57,7 +57,7 @@ fun GetSeekBar(
     var scrubbingPosition by remember(mediaId) {
         mutableStateOf<Long?>(null)
     }
-    var transparentbar by rememberPreference(transparentbarKey, true)
+    var transparentbar by Settings.TRANSPARENT_TIMELINE
     val scope = rememberCoroutineScope()
     val animatedPosition = remember { Animatable(position.toFloat()) }
     var isSeeking by remember { mutableStateOf(false) }

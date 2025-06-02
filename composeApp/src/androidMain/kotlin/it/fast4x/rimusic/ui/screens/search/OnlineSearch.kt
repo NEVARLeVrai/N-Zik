@@ -80,12 +80,9 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.align
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.pauseSearchHistoryKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -107,7 +104,7 @@ fun OnlineSearch(
     decorationBox: @Composable (@Composable () -> Unit) -> Unit,
 ) {
     // Settings
-    val isHistoryPaused by rememberPreference( pauseSearchHistoryKey, false )
+    val isHistoryPaused by Settings.PAUSE_SEARCH_HISTORY
 
     var reloadHistory by remember {
         mutableStateOf(false)
@@ -175,7 +172,7 @@ fun OnlineSearch(
     val hapticFeedback = LocalHapticFeedback.current
     val binder = LocalPlayerServiceBinder.current
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     Box(
         modifier = Modifier

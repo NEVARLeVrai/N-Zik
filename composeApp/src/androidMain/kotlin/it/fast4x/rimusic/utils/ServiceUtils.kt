@@ -13,8 +13,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
-import it.fast4x.rimusic.LocalPlayerServiceBinder
 import app.kreate.android.R
+import app.kreate.android.Settings
+import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import it.fast4x.rimusic.ui.screens.settings.SettingsDescription
 import me.knighthat.utils.Toaster
@@ -54,7 +55,7 @@ fun RestartActivity(
     restart: Boolean = false,
     onRestart: () -> Unit
 ) {
-    var restartActivity by rememberPreference(restartActivityKey, false)
+    var restartActivity by Settings.RESTART_ACTIVITY
     val context = LocalContext.current
     AnimatedVisibility(visible = restart) {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

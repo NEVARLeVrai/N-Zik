@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerAwareWindowInsets
 import it.fast4x.rimusic.colorPalette
@@ -43,9 +44,6 @@ import it.fast4x.rimusic.ui.components.themed.InputTextDialog
 import it.fast4x.rimusic.ui.items.PlaylistItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.favoritesIcon
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showSearchTabKey
 
 @SuppressLint("SuspiciousIndentation")
 @ExperimentalAnimationApi
@@ -88,7 +86,7 @@ fun HomeStatistics(
          */
     }
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
 /*
     val sortOrderIconRotation by animateFloatAsState(
@@ -98,7 +96,7 @@ fun HomeStatistics(
 */
     val thumbnailSizeDp = 108.dp
     val lazyGridState = rememberLazyGridState()
-    val showSearchTab by rememberPreference(showSearchTabKey, false)
+    val showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
 
     Box(
         modifier = Modifier

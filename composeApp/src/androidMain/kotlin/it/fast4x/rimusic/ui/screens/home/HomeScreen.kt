@@ -26,7 +26,6 @@ import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.toUiMood
 import it.fast4x.rimusic.ui.components.Skeleton
-import it.fast4x.rimusic.utils.enableQuickPicksPageKey
 import it.fast4x.rimusic.utils.homeScreenTabIndexKey
 import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberPreference
@@ -56,7 +55,7 @@ fun HomeScreen(
     val preferences = LocalContext.current.preferences
     //val showSearchTab by rememberPreference(showSearchTabKey, false)
     //val showStatsInNavbar by rememberPreference(showStatsInNavbarKey, false)
-    val enableQuickPicksPage by rememberPreference(enableQuickPicksPageKey, true)
+    val enableQuickPicksPage by Settings.QUICK_PICKS_PAGE
 
     PersistMapCleanup("home/")
 

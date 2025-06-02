@@ -70,12 +70,8 @@ import it.fast4x.rimusic.ui.screens.settings.isYouTubeSyncEnabled
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.autoSyncToolbutton
-import it.fast4x.rimusic.utils.autosyncKey
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.importYTMSubscribedChannels
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -111,7 +107,7 @@ fun HomeArtists(
 
     var itemsOnDisplay by persistList<Artist>( "home/artists/on_display" )
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val search = Search(lazyGridState)
 
@@ -172,7 +168,7 @@ fun HomeArtists(
 
     val sync = autoSyncToolbutton(R.string.autosync_channels)
 
-    val doAutoSync by rememberPreference(autosyncKey, false)
+    val doAutoSync by Settings.AUTO_SYNC
     var justSynced by rememberSaveable { mutableStateOf(!doAutoSync) }
 
     var refreshing by remember { mutableStateOf(false) }
@@ -313,7 +309,7 @@ fun HomeArtists(
 
             FloatingActionsContainerWithScrollToTop(lazyGridState = lazyGridState)
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if( UiType.ViMusic.isCurrent() && showFloatingIcon )
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.search,

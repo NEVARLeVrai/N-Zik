@@ -50,13 +50,6 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.enqueue
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showCachedPlaylistKey
-import it.fast4x.rimusic.utils.showDownloadedPlaylistKey
-import it.fast4x.rimusic.utils.showFavoritesPlaylistKey
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showMyTopPlaylistKey
-import it.fast4x.rimusic.utils.showOnDevicePlaylistKey
 import me.knighthat.component.ResetCache
 import me.knighthat.component.tab.ImportSongsFromCSV
 import me.knighthat.component.tab.ItemSelector
@@ -159,11 +152,11 @@ fun HomeSongsScreen(navController: NavController ) {
             ) {
                 Column {
                     //<editor-fold defaultstate="collapsed" desc="Chips">
-                    val showFavoritesPlaylist by rememberPreference( showFavoritesPlaylistKey, true )
-                    val showCachedPlaylist by rememberPreference( showCachedPlaylistKey, true )
-                    val showMyTopPlaylist by rememberPreference( showMyTopPlaylistKey, true )
-                    val showDownloadedPlaylist by rememberPreference( showDownloadedPlaylistKey, true )
-                    val showOnDeviceChip by rememberPreference( showOnDevicePlaylistKey, true )
+                    val showFavoritesPlaylist by Settings.HOME_SONGS_SHOW_FAVORITES_CHIP
+                    val showCachedPlaylist by Settings.HOME_SONGS_SHOW_CACHED_CHIP
+                    val showDownloadedPlaylist by Settings.HOME_SONGS_SHOW_DOWNLOADED_CHIP
+                    val showMyTopPlaylist by Settings.HOME_SONGS_SHOW_MOST_PLAYED_CHIP
+                    val showOnDevice by Settings.HOME_SONGS_SHOW_ON_DEVICE_CHIP
                     val chips = remember( showFavoritesPlaylist, showCachedPlaylist, showMyTopPlaylist, showDownloadedPlaylist) {
                         buildList {
                             add( BuiltInPlaylist.All )
@@ -175,7 +168,7 @@ fun HomeSongsScreen(navController: NavController ) {
                                 add( BuiltInPlaylist.Downloaded )
                             if( showMyTopPlaylist )
                                 add( BuiltInPlaylist.Top )
-                            if( showOnDeviceChip )
+                            if( showOnDevice )
                                 add( BuiltInPlaylist.OnDevice )
                         }
                     }
@@ -214,7 +207,7 @@ fun HomeSongsScreen(navController: NavController ) {
 
         FloatingActionsContainerWithScrollToTop(lazyListState = lazyListState)
 
-        val showFloatingIcon by rememberPreference( showFloatingIconKey, false )
+        val showFloatingIcon by Settings.SHOW_FLOATING_ICON
         if( UiType.ViMusic.isCurrent() && showFloatingIcon )
             MultiFloatingActionsContainer(
                 iconId = R.drawable.search,

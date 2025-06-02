@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -19,13 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.bodies.ContinuationBody
 import it.fast4x.innertube.models.bodies.SearchBody
 import it.fast4x.innertube.requests.searchPage
 import it.fast4x.innertube.utils.from
 import it.fast4x.rimusic.LocalPlayerServiceBinder
-import app.kreate.android.R
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.SwipeablePlaylistItem
@@ -62,7 +64,7 @@ fun SearchYoutubeEntity (
             modifier = Modifier.padding(bottom = 12.dp)
         )
     }
-    val isVideoEnabled = LocalContext.current.preferences.getBoolean(showButtonPlayerVideoKey, false)
+    val isVideoEnabled by Settings.PLAYER_ACTION_TOGGLE_VIDEO
 
     Box(
         modifier = Modifier

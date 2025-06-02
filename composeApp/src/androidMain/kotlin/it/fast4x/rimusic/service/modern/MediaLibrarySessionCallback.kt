@@ -41,8 +41,6 @@ import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_FAVORITES
 import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_ONDEVICE
 import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_TOP
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.persistentQueueKey
-import it.fast4x.rimusic.utils.preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -478,7 +476,7 @@ class MediaLibrarySessionCallback(
                 0,
                 0
             )
-        if(!context.preferences.getBoolean(persistentQueueKey, false))
+        if( !Settings.ENABLE_PERSISTENT_QUEUE.value )
             return Futures.immediateFuture(defaultResult)
 
         scope.future {
@@ -564,7 +562,7 @@ class MediaLibrarySessionCallback(
                     .setMediaType(MediaMetadata.MEDIA_TYPE_MUSIC)
                     .setExtras(
                         Bundle().apply {
-                            putBoolean(persistentQueueKey, isFromPersistentQueue)
+                            putBoolean(Settings.ENABLE_PERSISTENT_QUEUE.key, isFromPersistentQueue)
                         }
                     )
                     .build()

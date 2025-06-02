@@ -49,14 +49,9 @@ import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.themed.IconButton
 import it.fast4x.rimusic.ui.styling.onOverlay
 import it.fast4x.rimusic.ui.styling.overlay
-import it.fast4x.rimusic.utils.blackgradientKey
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showthumbnailKey
-import it.fast4x.rimusic.utils.statsfornerdsKey
-import it.fast4x.rimusic.utils.transparentBackgroundPlayerActionBarKey
 import kotlinx.coroutines.Dispatchers
 import kotlin.math.roundToInt
 
@@ -92,14 +87,11 @@ fun StatsForNerds(
         val format by remember {
             Database.formatTable.findBySongId( mediaId )
         }.collectAsState( null, Dispatchers.IO )
-        val showThumbnail by rememberPreference(showthumbnailKey, true)
-        val statsForNerds by rememberPreference(statsfornerdsKey, false)
+        val showThumbnail by Settings.PLAYER_SHOW_THUMBNAIL
+        val statsForNerds by Settings.PLAYER_STATS_FOR_NERDS
         val playerType by Settings.PLAYER_TYPE
-        val transparentBackgroundActionBarPlayer by rememberPreference(
-            transparentBackgroundPlayerActionBarKey,
-            false
-        )
-        var blackgradient by rememberPreference(blackgradientKey, false)
+        val transparentBackgroundActionBarPlayer by Settings.PLAYER_TRANSPARENT_ACTIONS_BAR
+        var blackgradient by Settings.BLACK_GRADIENT
         val playerBackgroundColors by Settings.PLAYER_BACKGROUND
         var statsfornerdsfull by remember {mutableStateOf(false)}
         val rotationAngle by animateFloatAsState(

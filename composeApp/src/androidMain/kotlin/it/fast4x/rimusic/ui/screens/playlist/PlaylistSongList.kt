@@ -118,7 +118,6 @@ import it.fast4x.rimusic.utils.align
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.color
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.durationTextToMillis
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.fadingEdge
@@ -133,12 +132,9 @@ import it.fast4x.rimusic.utils.isNetworkConnected
 import it.fast4x.rimusic.utils.languageDestination
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -172,8 +168,8 @@ fun PlaylistSongList(
     val lazyListState = rememberLazyListState()
 
     // Settings
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     var playlistPage by persist<PlaylistPage?>("playlist/$browseId/playlistPage")
     var continuation: String? by remember { mutableStateOf( null ) }
@@ -1056,7 +1052,7 @@ fun PlaylistSongList(
                     item( "loading" ) { SongItemPlaceholder() }
             }
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if( UiType.ViMusic.isCurrent() && showFloatingIcon )
             FloatingActionsContainerWithScrollToTop(
                 lazyListState = lazyListState,

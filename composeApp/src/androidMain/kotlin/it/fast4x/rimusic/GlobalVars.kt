@@ -3,20 +3,10 @@ package it.fast4x.rimusic
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.platform.LocalContext
+import app.kreate.android.Settings
 import it.fast4x.rimusic.ui.styling.LocalAppearance
-import it.fast4x.rimusic.utils.autosyncKey
-import it.fast4x.rimusic.utils.bassboostEnabledKey
-import it.fast4x.rimusic.utils.bassboostLevelKey
-import it.fast4x.rimusic.utils.handleAudioFocusEnabledKey
 import it.fast4x.rimusic.utils.isConnectionMetered
-import it.fast4x.rimusic.utils.isConnectionMeteredEnabledKey
-import it.fast4x.rimusic.utils.logDebugEnabledKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showButtonPlayerVideoKey
-import it.fast4x.rimusic.utils.showSearchTabKey
-import it.fast4x.rimusic.utils.showStatsInNavbarKey
 import it.fast4x.rimusic.utils.useYtLoginOnlyForBrowseKey
 import it.fast4x.rimusic.utils.ytAccountNameKey
 import it.fast4x.rimusic.utils.ytAccountThumbnailKey
@@ -32,10 +22,10 @@ fun colorPalette() = LocalAppearance.current.colorPalette
 fun thumbnailShape() = LocalAppearance.current.thumbnailShape
 
 @Composable
-fun showSearchIconInNav() = rememberPreference( showSearchTabKey, false ).value
+fun showSearchIconInNav() = Settings.SHOW_SEARCH_IN_NAVIGATION_BAR.value
 
 @Composable
-fun showStatsIconInNav() = rememberPreference( showStatsInNavbarKey, false ).value
+fun showStatsIconInNav() = Settings.SHOW_STATS_IN_NAVIGATION_BAR.value
 
 @Composable
 fun binder() = LocalPlayerServiceBinder.current?.service
@@ -46,11 +36,11 @@ fun context(): Context = Dependencies.application
 fun ytAccountName() = appContext().preferences.getString(ytAccountNameKey, "")
 fun ytAccountThumbnail() = appContext().preferences.getString(ytAccountThumbnailKey, "")
 fun useYtLoginOnlyForBrowse() = appContext().preferences.getBoolean(useYtLoginOnlyForBrowseKey, false)
-fun isVideoEnabled() = appContext().preferences.getBoolean(showButtonPlayerVideoKey, false)
+fun isVideoEnabled() = Settings.PLAYER_ACTION_TOGGLE_VIDEO.value
 
 fun isConnectionMetered() = appContext().isConnectionMetered()
-fun isConnectionMeteredEnabled() = appContext().preferences.getBoolean(isConnectionMeteredEnabledKey, true)
-fun isAutoSyncEnabled() = appContext().preferences.getBoolean(autosyncKey, false)
-fun isHandleAudioFocusEnabled() = appContext().preferences.getBoolean(handleAudioFocusEnabledKey, true)
-fun isBassBoostEnabled() = appContext().preferences.getBoolean(bassboostEnabledKey, false)
-fun isDebugModeEnabled() = appContext().preferences.getBoolean(logDebugEnabledKey, false)
+fun isConnectionMeteredEnabled() = Settings.IS_CONNECTION_METERED.value
+fun isAutoSyncEnabled() = Settings.AUTO_SYNC.value
+fun isHandleAudioFocusEnabled() = Settings.AUDIO_SMART_PAUSE_DURING_CALLS.value
+fun isBassBoostEnabled() = Settings.AUDIO_BASS_BOOSTED.value
+fun isDebugModeEnabled() = Settings.DEBUG_LOG.value

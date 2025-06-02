@@ -78,9 +78,6 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.ui.styling.favoritesOverlay
 import it.fast4x.rimusic.utils.DisposableListener
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.getLikedIcon
 import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.intent
@@ -88,7 +85,6 @@ import it.fast4x.rimusic.utils.isExplicit
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
 import it.fast4x.rimusic.utils.positionAndDurationState
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.shouldBePlaying
 import kotlinx.coroutines.CoroutineScope
@@ -186,7 +182,7 @@ fun MiniPlayer(
         }
     )
     val backgroundProgress by Settings.MINI_PLAYER_PROGRESS_BAR
-    val effectRotationEnabled by rememberPreference(effectRotationKey, true)
+    val effectRotationEnabled by Settings.ROTATION_EFFECT
     val shouldBePlayingTransition = updateTransition(shouldBePlaying, label = "shouldBePlaying")
     val playPauseRoundness by shouldBePlayingTransition.animateDp(
         transitionSpec = { tween(durationMillis = 100, easing = LinearEasing) },
@@ -199,9 +195,9 @@ fun MiniPlayer(
         targetValue = if (isRotated) 360F else 0f,
         animationSpec = tween(durationMillis = 200), label = ""
     )
-    val disableClosingPlayerSwipingDown by rememberPreference(disableClosingPlayerSwipingDownKey, false)
+    val disableClosingPlayerSwipingDown by Settings.MINI_DISABLE_SWIPE_DOWN_TO_DISMISS
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     SwipeToDismissBox(
         modifier = Modifier

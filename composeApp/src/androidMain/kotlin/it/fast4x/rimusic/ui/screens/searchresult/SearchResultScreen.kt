@@ -1,53 +1,55 @@
 package it.fast4x.rimusic.ui.screens.searchresult
+
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
+import it.fast4x.compose.persist.persist
 import it.fast4x.innertube.Innertube
+import it.fast4x.innertube.models.bodies.BrowseBody
 import it.fast4x.innertube.models.bodies.ContinuationBody
 import it.fast4x.innertube.models.bodies.SearchBody
+import it.fast4x.innertube.requests.albumPage
 import it.fast4x.innertube.requests.searchPage
 import it.fast4x.innertube.utils.from
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.enums.NavRoutes
+import it.fast4x.rimusic.models.Album
+import it.fast4x.rimusic.models.SongAlbumMap
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.Skeleton
+import it.fast4x.rimusic.ui.components.SwipeableAlbumItem
 import it.fast4x.rimusic.ui.components.SwipeablePlaylistItem
 import it.fast4x.rimusic.ui.components.themed.NonQueuedMediaItemMenu
 import it.fast4x.rimusic.ui.components.themed.Title
 import it.fast4x.rimusic.ui.items.AlbumItem
+import it.fast4x.rimusic.ui.items.AlbumItemPlaceholder
 import it.fast4x.rimusic.ui.items.ArtistItem
 import it.fast4x.rimusic.ui.items.ArtistItemPlaceholder
 import it.fast4x.rimusic.ui.items.PlaylistItem
+import it.fast4x.rimusic.ui.items.PlaylistItemPlaceholder
 import it.fast4x.rimusic.ui.items.SongItemPlaceholder
 import it.fast4x.rimusic.ui.items.VideoItem
 import it.fast4x.rimusic.ui.items.VideoItemPlaceholder
@@ -56,42 +58,20 @@ import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.playVideo
-import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.searchResultScreenTabIndexKey
-import it.fast4x.rimusic.utils.showButtonPlayerVideoKey
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.knighthat.component.SongItem
 import me.knighthat.utils.Toaster
-import androidx.compose.foundation.text.BasicText
-import it.fast4x.rimusic.typography
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.ui.items.AlbumItemGridPlaceholder
-import androidx.compose.foundation.layout.Arrangement
-import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.ui.items.AlbumItemListPlaceholder
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import it.fast4x.rimusic.thumbnailShape
-import me.knighthat.coil.ImageCacheFactory
-
-
-fun String.toBooleanArray(): BooleanArray = this.map { it == '1' }.toBooleanArray()
-fun BooleanArray.toPrefString(): String = joinToString(separator = "") { if (it) "1" else "0" }
-val searchResultGridStatesKey = it.fast4x.rimusic.utils.Preference.Key("searchResultGridStates", "1111111")
 
 @ExperimentalTextApi
 @SuppressLint("SuspiciousIndentation")
@@ -113,18 +93,10 @@ fun SearchResultScreen(
 
     val hapticFeedback = LocalHapticFeedback.current
 
-    val isVideoEnabled = LocalContext.current.preferences.getBoolean(showButtonPlayerVideoKey, false)
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
+    val isVideoEnabled by Settings.PLAYER_ACTION_TOGGLE_VIDEO
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
-
-    val gridStates = rememberSaveable("searchResultGridStates") { mutableStateOf(BooleanArray(7) { true }) }
-    val useGrid = gridStates.value[tabIndex]
-    val setUseGrid: (Boolean) -> Unit = { newValue ->
-        val arr = gridStates.value.copyOf()
-        arr[tabIndex] = newValue
-        gridStates.value = arr
-    }
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val headerContent: @Composable (textButton: (@Composable () -> Unit)?) -> Unit = {
         Title(
@@ -135,11 +107,11 @@ fun SearchResultScreen(
             title = query,
             icon = R.drawable.pencil,
             onClick = {
-                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode(query)}")
+                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode( query )}")
             },
             verticalPadding = 4.dp
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
     }
 
     val emptyItemsText = stringResource(R.string.no_results_found)
@@ -199,7 +171,7 @@ fun SearchResultScreen(
                                 onDownload = {
                                     localBinder?.cache?.removeResource(song.asMediaItem.mediaId)
                                     Database.asyncTransaction {
-                                        formatTable.updateContentLengthOf(song.key)
+                                        formatTable.updateContentLengthOf( song.key )
                                     }
                                     manageDownload(
                                         context = context,
@@ -215,190 +187,214 @@ fun SearchResultScreen(
                                     song = song.asSong,
                                     navController = navController,
                                     onClick = {
-                                        binder?.startRadio(song.asMediaItem, false, song.info?.endpoint)
+                                        binder?.startRadio( song.asMediaItem, false, song.info?.endpoint )
                                     }
                                 )
                             }
                         },
-                        itemPlaceholderContent = {
-                            Column {
-                                repeat(8) {
-                                    SongItemPlaceholder()
-                                }
-                            }
-                        }
+                        itemPlaceholderContent = { SongItemPlaceholder() }
                     )
                 }
 
                 1 -> {
-                    val thumbnailSizeDp = Dimensions.thumbnails.album + 8.dp
+                    val thumbnailSizeDp = 108.dp
                     val thumbnailSizePx = thumbnailSizeDp.px
 
-                    val albumItemContentGrid: @Composable androidx.compose.foundation.lazy.grid.LazyGridItemScope.(Innertube.AlbumItem) -> Unit = { album ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(
-                                vertical = Dimensions.itemsVerticalPadding,
-                                horizontal = 0.dp
-                            )
-                        ) {
-                            AlbumItem(
-                                yearCentered = false,
-                                album = album,
-                                thumbnailSizePx = thumbnailSizePx,
-                                thumbnailSizeDp = thumbnailSizeDp,
-                                modifier = Modifier
-                                    .combinedClickable(
-                                        onClick = {
-                                            navController.navigate("${NavRoutes.album.name}/${album.key}")
-                                        },
-                                        onLongClick = {}
+                    ItemsPage(
+                        tag = "searchResults/$query/albums",
+                        itemsPageProvider = { continuation ->
+                            if (continuation == null) {
+                                Innertube.searchPage(
+                                    body = SearchBody(
+                                        query = query,
+                                        params = Innertube.SearchFilter.Album.value
                                     ),
-                                disableScrollingText = disableScrollingText
-                            )
-                            BasicText(
-                                text = album.title ?: "",
-                                style = typography().s.copy(textAlign = TextAlign.Center),
-                                maxLines = 2,
-                                modifier = Modifier
-                                    .width((thumbnailSizeDp - 8.dp) * 0.8f)
-                                    .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                            )
-                            album.year?.let { year ->
-                                if (year.isNotBlank()) {
-                                    BasicText(
-                                        text = year,
-                                        style = typography().xs.copy(color = Color.Gray, textAlign = TextAlign.Center),
-                                        maxLines = 1,
-                                        modifier = Modifier
-                                            .width((thumbnailSizeDp - 8.dp) * 0.4f)
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    val albumItemContentList: @Composable androidx.compose.foundation.lazy.LazyItemScope.(Innertube.AlbumItem) -> Unit = { album ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box {
-                                ImageCacheFactory.Thumbnail(
-                                    thumbnailUrl = album.thumbnail?.url,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .size(thumbnailSizeDp - 8.dp)
-                                        .clip(thumbnailShape())
+                                    fromMusicShelfRendererContent = Innertube.AlbumItem::from
+                                )
+                            } else {
+                                Innertube.searchPage(
+                                    body = ContinuationBody(continuation = continuation),
+                                    fromMusicShelfRendererContent = Innertube.AlbumItem::from
                                 )
                             }
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.weight(1f)
+                        },
+                        emptyItemsText = emptyItemsText,
+                        headerContent = headerContent,
+                        itemContent = { album ->
+                            var albumPage by persist<Innertube.PlaylistOrAlbumPage?>("album/${album.key}/albumPage")
+                            SwipeableAlbumItem(
+                                albumItem = album,
+                                onPlayNext = {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        Database.albumTable
+                                                .findById( album.key )
+                                                .combine(snapshotFlow { currentTabIndex }) { album, tabIndex -> album to tabIndex }
+                                                .collect {
+                                                    if (albumPage == null)
+                                                        withContext(Dispatchers.IO) {
+                                                            Innertube.albumPage(
+                                                                BrowseBody(
+                                                                    browseId = album.key
+                                                                )
+                                                            )
+                                                                ?.onSuccess { currentAlbumPage ->
+                                                                    albumPage =
+                                                                        currentAlbumPage
+
+                                                                    println("mediaItem success home album songsPage ${currentAlbumPage.songsPage} description ${currentAlbumPage.description} year ${currentAlbumPage.year}")
+
+                                                                    albumPage
+                                                                        ?.songsPage
+                                                                        ?.items
+                                                                        ?.map(
+                                                                            Innertube.SongItem::asMediaItem
+                                                                        )
+                                                                        ?.let { it1 ->
+                                                                            withContext(Dispatchers.Main) {
+                                                                                binder?.player?.addNext(
+                                                                                    it1,
+                                                                                    context
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                    println("mediaItem success add in queue album songsPage ${albumPage
+                                                                        ?.songsPage
+                                                                        ?.items?.size}")
+
+                                                                }
+                                                                ?.onFailure {
+                                                                    println("mediaItem error searchResultScreen album ${it.stackTraceToString()}")
+                                                                }
+                                                        }
+                                                }
+                                    }
+
+                                },
+                                onEnqueue = {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        Database.albumTable
+                                                .findById( album.key )
+                                                .combine(snapshotFlow { currentTabIndex }) { album, tabIndex -> album to tabIndex }
+                                                .collect {
+                                                    if (albumPage == null)
+                                                        withContext(Dispatchers.IO) {
+                                                            Innertube.albumPage(
+                                                                BrowseBody(
+                                                                    browseId = album.key
+                                                                )
+                                                            )
+                                                                ?.onSuccess { currentAlbumPage ->
+                                                                    albumPage =
+                                                                        currentAlbumPage
+
+                                                                    println("mediaItem success home album songsPage ${currentAlbumPage.songsPage} description ${currentAlbumPage.description} year ${currentAlbumPage.year}")
+
+                                                                    albumPage
+                                                                        ?.songsPage
+                                                                        ?.items
+                                                                        ?.map(
+                                                                            Innertube.SongItem::asMediaItem
+                                                                        )
+                                                                        ?.let { it1 ->
+                                                                            withContext(Dispatchers.Main) {
+                                                                                binder?.player?.enqueue(
+                                                                                    it1,
+                                                                                    context
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                    println("mediaItem success add in queue album songsPage ${albumPage
+                                                                        ?.songsPage
+                                                                        ?.items?.size}")
+
+                                                                }
+                                                                ?.onFailure {
+                                                                    println("mediaItem error searchResultScreen album ${it.stackTraceToString()}")
+                                                                }
+
+                                                        }
+
+                                                    //}
+                                                }
+
+                                    }
+
+                                },
+                                onBookmark = {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        Database.albumTable
+                                                .findById( album.key )
+                                                .combine(snapshotFlow { currentTabIndex }) { album, tabIndex -> album to tabIndex }
+                                                .collect {
+                                                    if (albumPage == null)
+                                                        withContext(Dispatchers.IO) {
+                                                            Innertube.albumPage(
+                                                                BrowseBody(
+                                                                    browseId = album.key
+                                                                )
+                                                            )
+                                                                ?.onSuccess { currentAlbumPage ->
+                                                                    albumPage =
+                                                                        currentAlbumPage
+
+                                                                    println("mediaItem success home album songsPage ${currentAlbumPage.songsPage} description ${currentAlbumPage.description} year ${currentAlbumPage.year}")
+
+                                                                    Database.albumTable.upsert(
+                                                                        Album(
+                                                                            id = album.key,
+                                                                            title = currentAlbumPage.title,
+                                                                            thumbnailUrl = currentAlbumPage.thumbnail?.url,
+                                                                            year = currentAlbumPage.year,
+                                                                            authorsText = currentAlbumPage.authors?.joinToString( "" ) { it.name ?: "" },
+                                                                            shareUrl = currentAlbumPage.url,
+                                                                            timestamp = System.currentTimeMillis(),
+                                                                            bookmarkedAt = System.currentTimeMillis()
+                                                                        )
+                                                                    )
+
+                                                                    currentAlbumPage.songsPage
+                                                                                    ?.items
+                                                                                    ?.map( Innertube.SongItem::asMediaItem )
+                                                                                    ?.onEach( Database::insertIgnore )
+                                                                                    ?.mapIndexed { position, mediaItem ->
+                                                                                        SongAlbumMap(
+                                                                                            songId = mediaItem.mediaId,
+                                                                                            albumId = album.key,
+                                                                                            position = position
+                                                                                        )
+                                                                                    }
+                                                                                    ?.also( Database.songAlbumMapTable::upsert )
+                                                                }
+                                                                ?.onFailure {
+                                                                    println("mediaItem error searchResultScreen album ${it.stackTraceToString()}")
+                                                                }
+
+                                                        }
+                                                }
+                                    }
+                                }
                             ) {
-                                BasicText(
-                                    text = album.title ?: "",
-                                    style = typography().s,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
+                                AlbumItem(
+                                    yearCentered = false,
+                                    album = album,
+                                    thumbnailSizePx = thumbnailSizePx,
+                                    thumbnailSizeDp = thumbnailSizeDp,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                                )
-                                album.year?.let { year ->
-                                    if (year.isNotBlank()) {
-                                        BasicText(
-                                            text = year,
-                                            style = typography().xs.copy(color = Color.Gray),
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = Modifier
-                                                .fillMaxWidth(0.6f)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                                        .combinedClickable(
+                                            onClick = {
+                                                navController.navigate("${NavRoutes.album.name}/${album.key}")
+                                            },
+                                            onLongClick = {}
 
-                    Column {
-                        Title(
-                            title = stringResource(R.string.search_results_for),
-                            verticalPadding = 4.dp
-                        )
-                        Title(
-                            title = query,
-                            icon = R.drawable.pencil,
-                            onClick = {
-                                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode(query)}")
-                            },
-                            verticalPadding = 4.dp,
-                            trailingIcon = {
-                                IconButton(onClick = { setUseGrid(!useGrid) }) {
-                                    Icon(
-                                        painter = painterResource(id = if (useGrid) R.drawable.sort_vertical else R.drawable.sort_grid),
-                                        contentDescription = "Switch Mode",
-                                        tint = colorPalette().text
-                                    )
-                                }
+                                        ),
+                                    disableScrollingText = disableScrollingText
+                                )
                             }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        if (useGrid) {
-                            ItemsGridPage(
-                                tag = "searchResults/$query/albums",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(
-                                                query = query,
-                                                params = Innertube.SearchFilter.Album.value
-                                            ),
-                                            fromMusicShelfRendererContent = Innertube.AlbumItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.AlbumItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = albumItemContentGrid,
-                                itemPlaceholderContent = { AlbumItemGridPlaceholder(thumbnailSizeDp = thumbnailSizeDp) },
-                                thumbnailSizeDp = thumbnailSizeDp
-                            )
-                        } else {
-                            ItemsPage(
-                                tag = "searchResults/$query/albums",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(
-                                                query = query,
-                                                params = Innertube.SearchFilter.Album.value
-                                            ),
-                                            fromMusicShelfRendererContent = Innertube.AlbumItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.AlbumItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = albumItemContentList,
-                                itemPlaceholderContent = { AlbumItemListPlaceholder(thumbnailSizeDp = thumbnailSizeDp) }
-                            )
+                        },
+                        itemPlaceholderContent = {
+                            AlbumItemPlaceholder(thumbnailSizeDp = thumbnailSizeDp)
                         }
-                    }
+                    )
                 }
 
                 2 -> {
@@ -437,12 +433,8 @@ fun SearchResultScreen(
                                 disableScrollingText = disableScrollingText
                             )
                         },
-                        itemPlaceholderContent = { 
-                            Column {
-                                repeat(8) {
-                                    ArtistItemPlaceholder(thumbnailSizeDp = thumbnailSizeDp)
-                                }
-                            }
+                        itemPlaceholderContent = {
+                            ArtistItemPlaceholder(thumbnailSizeDp = thumbnailSizeDp)
                         }
                     )
                 }
@@ -500,7 +492,7 @@ fun SearchResultScreen(
                                                         onDismiss = menuState::hide,
                                                         disableScrollingText = disableScrollingText
                                                     )
-                                                }
+                                                };
                                                 hapticFeedback.performHapticFeedback(
                                                     HapticFeedbackType.LongPress
                                                 )
@@ -526,418 +518,97 @@ fun SearchResultScreen(
                     )
                 }
 
-                4 -> {
-                    val thumbnailSizeDp = Dimensions.thumbnails.playlist + 8.dp
+                4, 5 -> {
+                    val thumbnailSizeDp = Dimensions.thumbnails.playlist
                     val thumbnailSizePx = thumbnailSizeDp.px
 
-                    val playlistItemContentGrid: @Composable androidx.compose.foundation.lazy.grid.LazyGridItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(
-                                vertical = Dimensions.itemsVerticalPadding,
-                                horizontal = 0.dp
-                            )
-                        ) {
+                    ItemsPage(
+                        tag = "searchResults/$query/${
+                            when (currentTabIndex) {
+                                4 -> "playlists"
+                                else -> "featured"
+                            }
+                        }",
+                        itemsPageProvider = { continuation ->
+                            if (continuation == null) {
+                                val filter = when (currentTabIndex) {
+                                    4 -> Innertube.SearchFilter.CommunityPlaylist
+                                    else -> Innertube.SearchFilter.FeaturedPlaylist
+                                }
+
+                                Innertube.searchPage(
+                                    body = SearchBody(query = query, params = filter.value),
+                                    fromMusicShelfRendererContent = Innertube.PlaylistItem::from
+                                )
+                            } else {
+                                Innertube.searchPage(
+                                    body = ContinuationBody(continuation = continuation),
+                                    fromMusicShelfRendererContent = Innertube.PlaylistItem::from
+                                )
+                            }
+                        },
+                        emptyItemsText = emptyItemsText,
+                        headerContent = headerContent,
+                        itemContent = { playlist ->
                             PlaylistItem(
                                 playlist = playlist,
                                 thumbnailSizePx = thumbnailSizePx,
                                 thumbnailSizeDp = thumbnailSizeDp,
                                 showSongsCount = false,
-                                modifier = Modifier.clickable {
-                                    navController.navigate("${NavRoutes.playlist.name}/${playlist.key}")
-                                },
+                                modifier = Modifier
+                                    .clickable(onClick = {
+                                        navController.navigate("${NavRoutes.playlist.name}/${playlist.key}")
+                                    }),
                                 disableScrollingText = disableScrollingText
                             )
-                            BasicText(
-                                text = playlist.title ?: "",
-                                style = typography().s.copy(textAlign = TextAlign.Center),
-                                maxLines = 2,
-                                modifier = Modifier
-                                    .width((thumbnailSizeDp - 8.dp) * 0.8f)
-                                    .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                            )
+                        },
+                        itemPlaceholderContent = {
+                            PlaylistItemPlaceholder(thumbnailSizeDp = thumbnailSizeDp)
                         }
-                    }
-
-                    val playlistItemContentList: @Composable androidx.compose.foundation.lazy.LazyItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box {
-                                ImageCacheFactory.Thumbnail(
-                                    thumbnailUrl = playlist.thumbnail?.url,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .size(thumbnailSizeDp - 8.dp)
-                                        .clip(thumbnailShape())
-                                )
-                            }
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                BasicText(
-                                    text = playlist.title ?: "",
-                                    style = typography().s,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                                )
-                            }
-                        }
-                    }
-
-                    Column {
-                        Title(
-                            title = stringResource(R.string.search_results_for),
-                            verticalPadding = 4.dp
-                        )
-                        Title(
-                            title = query,
-                            icon = R.drawable.pencil,
-                            onClick = {
-                                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode(query)}")
-                            },
-                            verticalPadding = 4.dp,
-                            trailingIcon = {
-                                IconButton(onClick = { setUseGrid(!useGrid) }) {
-                                    Icon(
-                                        painter = painterResource(id = if (useGrid) R.drawable.sort_vertical else R.drawable.sort_grid),
-                                        contentDescription = "Switch Mode",
-                                        tint = colorPalette().text
-                                    )
-                                }
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        if (useGrid) {
-                            ItemsGridPage(
-                                tag = "searchResults/$query/playlists",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.CommunityPlaylist.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentGrid,
-                                itemPlaceholderContent = { AlbumItemGridPlaceholder(thumbnailSizeDp = thumbnailSizeDp) },
-                                thumbnailSizeDp = thumbnailSizeDp
-                            )
-                        } else {
-                            ItemsPage(
-                                tag = "searchResults/$query/playlists",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.CommunityPlaylist.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentList,
-                                itemPlaceholderContent = { AlbumItemListPlaceholder(thumbnailSizeDp = thumbnailSizeDp) }
-                            )
-                        }
-                    }
-                }
-
-                5 -> {
-                    val thumbnailSizeDp = Dimensions.thumbnails.playlist + 8.dp
-                    val thumbnailSizePx = thumbnailSizeDp.px
-
-                    val playlistItemContentGrid: @Composable androidx.compose.foundation.lazy.grid.LazyGridItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(
-                                vertical = Dimensions.itemsVerticalPadding,
-                                horizontal = 0.dp
-                            )
-                        ) {
-                            PlaylistItem(
-                                playlist = playlist,
-                                thumbnailSizePx = thumbnailSizePx,
-                                thumbnailSizeDp = thumbnailSizeDp,
-                                showSongsCount = false,
-                                modifier = Modifier.clickable {
-                                    navController.navigate("${NavRoutes.playlist.name}/${playlist.key}")
-                                },
-                                disableScrollingText = disableScrollingText
-                            )
-                            BasicText(
-                                text = playlist.title ?: "",
-                                style = typography().s.copy(textAlign = TextAlign.Center),
-                                maxLines = 2,
-                                modifier = Modifier
-                                    .width((thumbnailSizeDp - 8.dp) * 0.8f)
-                                    .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                            )
-                        }
-                    }
-
-                    val playlistItemContentList: @Composable androidx.compose.foundation.lazy.LazyItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box {
-                                ImageCacheFactory.Thumbnail(
-                                    thumbnailUrl = playlist.thumbnail?.url,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .size(thumbnailSizeDp - 8.dp)
-                                        .clip(thumbnailShape())
-                                )
-                            }
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                BasicText(
-                                    text = playlist.title ?: "",
-                                    style = typography().s,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                                )
-                            }
-                        }
-                    }
-
-                    Column {
-                        Title(
-                            title = stringResource(R.string.search_results_for),
-                            verticalPadding = 4.dp
-                        )
-                        Title(
-                            title = query,
-                            icon = R.drawable.pencil,
-                            onClick = {
-                                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode(query)}")
-                            },
-                            verticalPadding = 4.dp,
-                            trailingIcon = {
-                                IconButton(onClick = { setUseGrid(!useGrid) }) {
-                                    Icon(
-                                        painter = painterResource(id = if (useGrid) R.drawable.sort_vertical else R.drawable.sort_grid),
-                                        contentDescription = "Switch Mode",
-                                        tint = colorPalette().text
-                                    )
-                                }
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        if (useGrid) {
-                            ItemsGridPage(
-                                tag = "searchResults/$query/featured",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.FeaturedPlaylist.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentGrid,
-                                itemPlaceholderContent = { AlbumItemGridPlaceholder(thumbnailSizeDp = thumbnailSizeDp) },
-                                thumbnailSizeDp = thumbnailSizeDp
-                            )
-                        } else {
-                            ItemsPage(
-                                tag = "searchResults/$query/featured",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.FeaturedPlaylist.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentList,
-                                itemPlaceholderContent = { AlbumItemListPlaceholder(thumbnailSizeDp = thumbnailSizeDp) }
-                            )
-                        }
-                    }
+                    )
                 }
 
                 6 -> {
-                    val thumbnailSizeDp = Dimensions.thumbnails.playlist + 8.dp
+                    val thumbnailSizeDp = Dimensions.thumbnails.playlist
                     val thumbnailSizePx = thumbnailSizeDp.px
 
-                    val playlistItemContentGrid: @Composable androidx.compose.foundation.lazy.grid.LazyGridItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(
-                                vertical = Dimensions.itemsVerticalPadding,
-                                horizontal = 0.dp
-                            )
-                        ) {
+                    ItemsPage(
+                        tag = "searchResults/$query/podcasts",
+                        itemsPageProvider = { continuation ->
+                            if (continuation == null) {
+                                val filter = Innertube.SearchFilter.Podcast
+
+                                Innertube.searchPage(
+                                    body = SearchBody(query = query, params = filter.value),
+                                    fromMusicShelfRendererContent = Innertube.PlaylistItem::from
+                                )
+                            } else {
+                                Innertube.searchPage(
+                                    body = ContinuationBody(continuation = continuation),
+                                    fromMusicShelfRendererContent = Innertube.PlaylistItem::from
+                                )
+                            }
+                        },
+                        emptyItemsText = emptyItemsText,
+                        headerContent = headerContent,
+                        itemContent = { playlist ->
                             PlaylistItem(
                                 playlist = playlist,
                                 thumbnailSizePx = thumbnailSizePx,
                                 thumbnailSizeDp = thumbnailSizeDp,
                                 showSongsCount = false,
-                                modifier = Modifier.clickable {
-                                    navController.navigate("${NavRoutes.podcast.name}/${playlist.key}")
-                                },
+                                modifier = Modifier
+                                    .clickable(onClick = {
+                                        println("mediaItem searchResultScreen playlist key ${playlist.key}")
+                                        navController.navigate("${NavRoutes.podcast.name}/${playlist.key}")
+                                    }),
                                 disableScrollingText = disableScrollingText
                             )
-                            BasicText(
-                                text = playlist.title ?: "",
-                                style = typography().s.copy(textAlign = TextAlign.Center),
-                                maxLines = 2,
-                                modifier = Modifier
-                                    .width((thumbnailSizeDp - 8.dp) * 0.8f)
-                                    .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                            )
+                        },
+                        itemPlaceholderContent = {
+                            PlaylistItemPlaceholder(thumbnailSizeDp = thumbnailSizeDp)
                         }
-                    }
-
-                    val playlistItemContentList: @Composable androidx.compose.foundation.lazy.LazyItemScope.(Innertube.PlaylistItem) -> Unit = { playlist ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box {
-                                ImageCacheFactory.Thumbnail(
-                                    thumbnailUrl = playlist.thumbnail?.url,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .size(thumbnailSizeDp - 8.dp)
-                                        .clip(thumbnailShape())
-                                )
-                            }
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                BasicText(
-                                    text = playlist.title ?: "",
-                                    style = typography().s,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .conditional(!disableScrollingText) { basicMarquee(iterations = Int.MAX_VALUE) }
-                                )
-                            }
-                        }
-                    }
-
-                    Column {
-                        Title(
-                            title = stringResource(R.string.search_results_for),
-                            verticalPadding = 4.dp
-                        )
-                        Title(
-                            title = query,
-                            icon = R.drawable.pencil,
-                            onClick = {
-                                navController.navigate("${NavRoutes.search.name}?text=${Uri.encode(query)}")
-                            },
-                            verticalPadding = 4.dp,
-                            trailingIcon = {
-                                IconButton(onClick = { setUseGrid(!useGrid) }) {
-                                    Icon(
-                                        painter = painterResource(id = if (useGrid) R.drawable.sort_vertical else R.drawable.sort_grid),
-                                        contentDescription = "Switch Mode",
-                                        tint = colorPalette().text
-                                    )
-                                }
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        if (useGrid) {
-                            ItemsGridPage(
-                                tag = "searchResults/$query/podcasts",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.Podcast.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentGrid,
-                                itemPlaceholderContent = { AlbumItemGridPlaceholder(thumbnailSizeDp = thumbnailSizeDp) },
-                                thumbnailSizeDp = thumbnailSizeDp
-                            )
-                        } else {
-                            ItemsPage(
-                                tag = "searchResults/$query/podcasts",
-                                itemsPageProvider = { continuation ->
-                                    if (continuation == null) {
-                                        Innertube.searchPage(
-                                            body = SearchBody(query = query, params = Innertube.SearchFilter.Podcast.value),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    } else {
-                                        Innertube.searchPage(
-                                            body = ContinuationBody(continuation = continuation),
-                                            fromMusicShelfRendererContent = Innertube.PlaylistItem::from
-                                        )
-                                    }
-                                },
-                                emptyItemsText = emptyItemsText,
-                                headerContent = {},
-                                itemContent = playlistItemContentList,
-                                itemPlaceholderContent = { AlbumItemListPlaceholder(thumbnailSizeDp = thumbnailSizeDp) }
-                            )
-                        }
-                    }
+                    )
                 }
             }
         }

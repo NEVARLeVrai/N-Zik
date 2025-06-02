@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import io.ktor.client.call.body
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.BrowseResponse
@@ -31,8 +32,6 @@ import it.fast4x.rimusic.ui.components.Skeleton
 import it.fast4x.rimusic.ui.items.AlbumItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +47,7 @@ fun ArtistAlbums(
 ) {
     val lazyGridState = rememberLazyGridState()
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     var isRefreshing by remember { mutableStateOf( false ) }
     val thumbnailSizeDp = Dimensions.thumbnails.album + 24.dp

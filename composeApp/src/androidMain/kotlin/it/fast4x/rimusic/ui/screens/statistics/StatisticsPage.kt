@@ -80,16 +80,13 @@ import it.fast4x.rimusic.utils.UpdateYoutubeArtist
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.color
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlayAtIndex
 import it.fast4x.rimusic.utils.formatAsTime
 import it.fast4x.rimusic.utils.getDownloadState
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showStatsListeningTimeKey
 import it.fast4x.rimusic.utils.thumbnail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -129,8 +126,8 @@ fun StatisticsPage(
 
     val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
-    val showStatsListeningTime by rememberPreference(showStatsListeningTimeKey, true)
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val showStatsListeningTime by Settings.SHOW_LISTENING_STATS
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val context = LocalContext.current
 

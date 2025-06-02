@@ -10,9 +10,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,34 +25,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
-import it.fast4x.rimusic.thumbnailShape
+import app.kreate.android.Settings.PLAYER_VISUALIZER
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import it.fast4x.rimusic.utils.hasPermission
 import it.fast4x.rimusic.utils.isCompositionLaunched
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showvisthumbnailKey
-import it.fast4x.rimusic.utils.visualizerEnabledKey
 
 @UnstableApi
 @Composable
 fun NextVisualizer(
     isDisplayed: Boolean
 ) {
+
     val context = LocalContext.current
-    val visualizerEnabled by rememberPreference(visualizerEnabledKey, false)
-    var showvisthumbnail by rememberPreference(showvisthumbnailKey, false)
+    val visualizerEnabled by PLAYER_VISUALIZER
 
     if (visualizerEnabled) {
-        val permission = Manifest.permission.RECORD_AUDIO
+
+        val permission =  Manifest.permission.RECORD_AUDIO
 
         var relaunchPermission by remember {
             mutableStateOf(false)
@@ -70,12 +64,11 @@ fun NextVisualizer(
         )
 
         if (!hasPermission) {
+
             LaunchedEffect(Unit, relaunchPermission) { launcher.launch(permission) }
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(if (!showvisthumbnail) Color.Transparent else Color.Black.copy(0.8f)),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -104,22 +97,20 @@ fun NextVisualizer(
                         )
                     }
                 )
+
             }
+
         } else {
-            AnimatedVisibility(
-                visible = isDisplayed,
-                enter = fadeIn(tween(500)),
-                exit = fadeOut(tween(500))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(if (!showvisthumbnail) Color.Transparent else Color.Black.copy(0.6f))
-                        .clip(thumbnailShape())
-                ) {
-                    it.fast4x.rimusic.extensions.nextvisualizer.NextVisualizer()
-                }
-            }
+        AnimatedVisibility(
+            visible = isDisplayed,
+            enter = fadeIn(tween(500)),
+            exit = fadeOut(tween(500)),
+        ) {
+            it.fast4x.rimusic.extensions.nextvisualizer.NextVisualizer()
         }
+
     }
+
+}
+
 }

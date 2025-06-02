@@ -69,18 +69,14 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.dropShadow
-import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playerInfoShowIconsKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
-import it.fast4x.rimusic.utils.textoutlineKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -106,12 +102,11 @@ fun InfoAlbumAndArtistModern(
 ) {
     val colorPaletteMode by Settings.THEME_MODE
     val playerControlsType by Settings.PLAYER_CONTROLS_TYPE
-    var showthumbnail by rememberPreference(showthumbnailKey, true)
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
     var isRotated by rememberSaveable { mutableStateOf(false) }
     var showSelectDialog by remember { mutableStateOf(false) }
     val playerBackgroundColors by Settings.PLAYER_BACKGROUND
-    val playerInfoShowIcon by rememberPreference(playerInfoShowIconsKey, true)
+    val playerInfoShowIcon by Settings.PLAYER_SONG_INFO_ICON
     val currentMediaItem = binder.player.currentMediaItem
 
     Row(
@@ -167,7 +162,7 @@ fun InfoAlbumAndArtistModern(
                 )
 
 
-            val textoutline by rememberPreference(textoutlineKey, false)
+            val textoutline by Settings.TEXT_OUTLINE
 
             if (!disableScrollingText) modifierTitle = modifierTitle.basicMarquee()
             Row(
@@ -327,7 +322,7 @@ fun InfoAlbumAndArtistModern(
                 }
             )
 
-        var textoutline by rememberPreference(textoutlineKey, false)
+        var textoutline by Settings.TEXT_OUTLINE
         if (!disableScrollingText) modifierArtist = modifierArtist.basicMarquee()
         Box(
 
@@ -383,7 +378,7 @@ fun ControlsModern(
     isGradientBackgroundEnabled: Boolean,
     onShowSpeedPlayerDialog: () -> Unit,
 ) {
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
     var isRotated by rememberSaveable { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(
         targetValue = if (isRotated) 360F else 0f,

@@ -67,8 +67,6 @@ import it.fast4x.rimusic.utils.downloadedStateMedia
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.isExplicit
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.playlistindicatorKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.shimmerEffect
@@ -342,7 +340,7 @@ fun SongItem(
     val authors = mediaItem.mediaMetadata.artist.toString()
     val duration = mediaItem.mediaMetadata.extras?.getString("durationText")
 
-    val playlistindicator by rememberPreference(playlistindicatorKey,false)
+    val playlistindicator by Settings.SHOW_PLAYLIST_INDICATOR
     val isSongMappedToPlaylist by remember {
         Database.songPlaylistMapTable.isMapped( mediaItem.mediaId )
     }.collectAsState( false, Dispatchers.IO )

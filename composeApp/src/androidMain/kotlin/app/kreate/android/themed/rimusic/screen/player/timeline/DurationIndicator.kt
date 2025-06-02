@@ -49,8 +49,6 @@ import it.fast4x.rimusic.utils.formatAsDuration
 import it.fast4x.rimusic.utils.positionAndDurationState
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showRemainingSongTimeKey
-import it.fast4x.rimusic.utils.textoutlineKey
 import kotlinx.coroutines.delay
 
 /**
@@ -104,7 +102,7 @@ private fun RowScope.SkipTimeButton(
 @Composable
 private fun outlineColorState(): State<Color> {
     val colorPaletteMode by Settings.THEME_MODE
-    val textOutline by rememberPreference( textoutlineKey, false )
+    val textOutline by Settings.TEXT_OUTLINE
     val isDarkTheme = isSystemInDarkTheme()
 
     return remember {
@@ -187,7 +185,7 @@ fun DurationIndicator(
         }
 
         // Remaining duration
-        val showRemainingSongTime by rememberPreference( showRemainingSongTimeKey, true )
+        val showRemainingSongTime by Settings.PLAYER_SHOW_SONGS_REMAINING_TIME
         if( showRemainingSongTime ) {
             Box(
                 modifier = Modifier.weight( 1f )

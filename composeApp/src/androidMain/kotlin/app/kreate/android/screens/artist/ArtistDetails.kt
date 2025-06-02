@@ -49,6 +49,7 @@ import androidx.compose.ui.util.fastMap
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImagePainter
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.requests.ArtistPage
@@ -81,14 +82,12 @@ import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.fadingEdge
 import it.fast4x.rimusic.utils.forcePlayAtIndex
 import it.fast4x.rimusic.utils.getHttpClient
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.languageDestination
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import kotlinx.coroutines.Dispatchers
@@ -123,7 +122,7 @@ fun ArtistDetails(
     val lazyListState = rememberLazyListState()
 
     // Settings
-    val disableScrollingText by rememberPreference( disableScrollingTextKey, false )
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val sectionTextModifier = Modifier
         .padding( horizontal = 16.dp )

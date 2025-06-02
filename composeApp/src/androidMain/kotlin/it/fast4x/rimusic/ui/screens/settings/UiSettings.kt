@@ -68,14 +68,6 @@ import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.DefaultDarkColorPalette
 import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.actionspacedevenlyKey
-import it.fast4x.rimusic.utils.applyFontPaddingKey
-import it.fast4x.rimusic.utils.blackgradientKey
-import it.fast4x.rimusic.utils.buttonzoomoutKey
-import it.fast4x.rimusic.utils.carouselKey
-import it.fast4x.rimusic.utils.clickOnLyricsTextKey
-import it.fast4x.rimusic.utils.closeWithBackButtonKey
-import it.fast4x.rimusic.utils.closebackgroundPlayerKey
 import it.fast4x.rimusic.utils.customColorKey
 import it.fast4x.rimusic.utils.customThemeDark_Background0Key
 import it.fast4x.rimusic.utils.customThemeDark_Background1Key
@@ -97,66 +89,8 @@ import it.fast4x.rimusic.utils.customThemeLight_accentKey
 import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
 import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
 import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
-import it.fast4x.rimusic.utils.disableIconButtonOnTopKey
-import it.fast4x.rimusic.utils.disablePlayerHorizontalSwipeKey
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.discoverKey
-import it.fast4x.rimusic.utils.effectRotationKey
-import it.fast4x.rimusic.utils.enableCreateMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.expandedplayertoggleKey
-import it.fast4x.rimusic.utils.fadingedgeKey
-import it.fast4x.rimusic.utils.isPauseOnVolumeZeroEnabledKey
-import it.fast4x.rimusic.utils.isSwipeToActionEnabledKey
-import it.fast4x.rimusic.utils.keepPlayerMinimizedKey
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
-import it.fast4x.rimusic.utils.pauseListenHistoryKey
-import it.fast4x.rimusic.utils.persistentQueueKey
-import it.fast4x.rimusic.utils.playerEnableLyricsPopupMessageKey
-import it.fast4x.rimusic.utils.playerInfoShowIconsKey
-import it.fast4x.rimusic.utils.playerSwapControlsWithTimelineKey
-import it.fast4x.rimusic.utils.playlistindicatorKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.resumePlaybackOnStartKey
-import it.fast4x.rimusic.utils.resumePlaybackWhenDeviceConnectedKey
-import it.fast4x.rimusic.utils.shakeEventEnabledKey
-import it.fast4x.rimusic.utils.showButtonPlayerAddToPlaylistKey
-import it.fast4x.rimusic.utils.showButtonPlayerArrowKey
-import it.fast4x.rimusic.utils.showButtonPlayerDiscoverKey
-import it.fast4x.rimusic.utils.showButtonPlayerDownloadKey
-import it.fast4x.rimusic.utils.showButtonPlayerLoopKey
-import it.fast4x.rimusic.utils.showButtonPlayerLyricsKey
-import it.fast4x.rimusic.utils.showButtonPlayerMenuKey
-import it.fast4x.rimusic.utils.showButtonPlayerShuffleKey
-import it.fast4x.rimusic.utils.showButtonPlayerSleepTimerKey
-import it.fast4x.rimusic.utils.showButtonPlayerSystemEqualizerKey
-import it.fast4x.rimusic.utils.showCachedPlaylistKey
-import it.fast4x.rimusic.utils.showDownloadedPlaylistKey
-import it.fast4x.rimusic.utils.showFavoritesPlaylistKey
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.showMyTopPlaylistKey
-import it.fast4x.rimusic.utils.showNextSongsInPlayerKey
-import it.fast4x.rimusic.utils.showOnDevicePlaylistKey
-import it.fast4x.rimusic.utils.showPinnedPlaylistsKey
-import it.fast4x.rimusic.utils.showPipedPlaylistsKey
-import it.fast4x.rimusic.utils.showRemainingSongTimeKey
-import it.fast4x.rimusic.utils.showSearchTabKey
-import it.fast4x.rimusic.utils.showStatsInNavbarKey
-import it.fast4x.rimusic.utils.showStatsListeningTimeKey
-import it.fast4x.rimusic.utils.showTopActionsBarKey
-import it.fast4x.rimusic.utils.showTotalTimeQueueKey
-import it.fast4x.rimusic.utils.showthumbnailKey
-import it.fast4x.rimusic.utils.skipMediaOnErrorKey
-import it.fast4x.rimusic.utils.skipSilenceKey
-import it.fast4x.rimusic.utils.swipeUpQueueKey
-import it.fast4x.rimusic.utils.tapqueueKey
-import it.fast4x.rimusic.utils.thumbnailTapEnabledKey
-import it.fast4x.rimusic.utils.transparentBackgroundPlayerActionBarKey
-import it.fast4x.rimusic.utils.useSystemFontKey
-import it.fast4x.rimusic.utils.useVolumeKeysToChangeSongKey
-import it.fast4x.rimusic.utils.visualizerEnabledKey
-import it.fast4x.rimusic.utils.volumeNormalizationKey
 import me.knighthat.component.dialog.RestartAppDialog
 import me.knighthat.component.tab.Search
 import me.knighthat.utils.Toaster
@@ -165,35 +99,30 @@ import me.knighthat.utils.Toaster
 fun DefaultUiSettings() {
     var exoPlayerMinTimeForEvent by Settings.QUICK_PICKS_MIN_DURATION
     exoPlayerMinTimeForEvent = ExoPlayerMinTimeForEvent.`20s`
-    var persistentQueue by rememberPreference(persistentQueueKey, false)
+    var persistentQueue by Settings.ENABLE_PERSISTENT_QUEUE
     persistentQueue = false
-    var resumePlaybackOnStart by rememberPreference(resumePlaybackOnStartKey, false)
+    var resumePlaybackOnStart by Settings.RESUME_PLAYBACK_ON_STARTUP
     resumePlaybackOnStart = false
-    var closebackgroundPlayer by rememberPreference(closebackgroundPlayerKey, false)
+    var closebackgroundPlayer by Settings.CLOSE_BACKGROUND_JOB_IN_TASK_MANAGER
     closebackgroundPlayer = false
-    var closeWithBackButton by rememberPreference(closeWithBackButtonKey, true)
+    var closeWithBackButton by Settings.CLOSE_APP_ON_BACK
     closeWithBackButton = true
-    var resumePlaybackWhenDeviceConnected by rememberPreference(
-        resumePlaybackWhenDeviceConnectedKey,
-        false
-    )
+    var resumePlaybackWhenDeviceConnected by Settings.RESUME_PLAYBACK_WHEN_CONNECT_TO_AUDIO_DEVICE
     resumePlaybackWhenDeviceConnected = false
 
-    var skipSilence by rememberPreference(skipSilenceKey, false)
+    var skipSilence by Settings.AUDIO_SKIP_SILENCE
     skipSilence = false
-    var skipMediaOnError by rememberPreference(skipMediaOnErrorKey, false)
+    var skipMediaOnError by Settings.PLAYBACK_SKIP_ON_ERROR
     skipMediaOnError = false
-    var volumeNormalization by rememberPreference(volumeNormalizationKey, false)
+    var volumeNormalization by Settings.AUDIO_VOLUME_NORMALIZATION
     volumeNormalization = false
     var recommendationsNumber by Settings.MAX_NUMBER_OF_SMART_RECOMMENDATIONS
     recommendationsNumber = RecommendationsNumber.`5`
-    var keepPlayerMinimized by rememberPreference(keepPlayerMinimizedKey,   false)
+    var keepPlayerMinimized by Settings.PLAYER_KEEP_MINIMIZED
     keepPlayerMinimized = false
-    var disableIconButtonOnTop by rememberPreference(disableIconButtonOnTopKey, false)
-    disableIconButtonOnTop = false
     var uiType by Settings.MAIN_THEME
     uiType = UiType.RiMusic
-    var disablePlayerHorizontalSwipe by rememberPreference(disablePlayerHorizontalSwipeKey, false)
+    var disablePlayerHorizontalSwipe by Settings.PLAYER_THUMBNAIL_HORIZONTAL_SWIPE_DISABLED
     disablePlayerHorizontalSwipe = false
     var colorPaletteName by Settings.COLOR_PALETTE
     colorPaletteName = ColorPaletteName.Dynamic
@@ -203,21 +132,21 @@ fun DefaultUiSettings() {
     indexNavigationTab = HomeScreenTabs.Default
     var fontType by Settings.FONT
     fontType = FontType.Rubik
-    var useSystemFont by rememberPreference(useSystemFontKey, false)
+    var useSystemFont by Settings.USE_SYSTEM_FONT
     useSystemFont = false
-    var applyFontPadding by rememberPreference(applyFontPaddingKey, false)
+    var applyFontPadding by Settings.APPLY_FONT_PADDING
     applyFontPadding = false
-    var isSwipeToActionEnabled by rememberPreference(isSwipeToActionEnabledKey, true)
+    var isSwipeToActionEnabled by Settings.ENABLE_SWIPE_ACTION
     isSwipeToActionEnabled = true
-    var disableClosingPlayerSwipingDown by rememberPreference(disableClosingPlayerSwipingDownKey, false)
+    var disableClosingPlayerSwipingDown by Settings.MINI_DISABLE_SWIPE_DOWN_TO_DISMISS
     disableClosingPlayerSwipingDown = false
-    var showSearchTab by rememberPreference(showSearchTabKey, false)
+    var showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
     showSearchTab = false
-    var showStatsInNavbar by rememberPreference(showStatsInNavbarKey, false)
+    var showStatsInNavbar by Settings.SHOW_STATS_IN_NAVIGATION_BAR
     showStatsInNavbar = false
     var maxStatisticsItems by Settings.MAX_NUMBER_OF_STATISTIC_ITEMS
     maxStatisticsItems = MaxStatisticsItems.`10`
-    var showStatsListeningTime by rememberPreference(showStatsListeningTimeKey,   true)
+    var showStatsListeningTime by Settings.SHOW_LISTENING_STATS
     showStatsListeningTime = true
     var maxTopPlaylistItems by Settings.MAX_NUMBER_OF_TOP_PLAYED
     maxTopPlaylistItems = MaxTopPlaylistItems.`10`
@@ -231,31 +160,31 @@ fun DefaultUiSettings() {
     maxSongsInQueue = MaxSongs.`500`
     var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
     thumbnailRoundness = ThumbnailRoundness.Heavy
-    var showFavoritesPlaylist by rememberPreference(showFavoritesPlaylistKey, true)
+    var showFavoritesPlaylist by Settings.HOME_SONGS_SHOW_FAVORITES_CHIP
     showFavoritesPlaylist = true
-    var showMyTopPlaylist by rememberPreference(showMyTopPlaylistKey, true)
-    showMyTopPlaylist = true
-    var showDownloadedPlaylist by rememberPreference(showDownloadedPlaylistKey, true)
+    var showDownloadedPlaylist by Settings.HOME_SONGS_SHOW_DOWNLOADED_CHIP
     showDownloadedPlaylist = true
-    var showOnDevicePlaylist by rememberPreference(showOnDevicePlaylistKey, true)
+    var showMyTopPlaylist by Settings.HOME_SONGS_SHOW_MOST_PLAYED_CHIP
+    showMyTopPlaylist = true
+    var showOnDevicePlaylist by Settings.HOME_SONGS_SHOW_ON_DEVICE_CHIP
     showOnDevicePlaylist = true
-    var shakeEventEnabled by rememberPreference(shakeEventEnabledKey, false)
+    var shakeEventEnabled by Settings.AUDIO_SHAKE_TO_SKIP
     shakeEventEnabled = false
-    var useVolumeKeysToChangeSong by rememberPreference(useVolumeKeysToChangeSongKey, false)
+    var useVolumeKeysToChangeSong by Settings.AUDIO_VOLUME_BUTTONS_CHANGE_SONG
     useVolumeKeysToChangeSong = false
-    var showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+    var showFloatingIcon by Settings.SHOW_FLOATING_ICON
     showFloatingIcon = false
     var menuStyle by Settings.MENU_STYLE
     menuStyle = MenuStyle.List
     var transitionEffect by Settings.TRANSITION_EFFECT
     transitionEffect = TransitionEffect.Scale
-    var enableCreateMonthlyPlaylists by rememberPreference(enableCreateMonthlyPlaylistsKey, true)
+    var enableCreateMonthlyPlaylists by Settings.MONTHLY_PLAYLIST_COMPILATION
     enableCreateMonthlyPlaylists = true
-    var showPipedPlaylists by rememberPreference(showPipedPlaylistsKey, true)
+    var showPipedPlaylists by Settings.SHOW_PIPED_PLAYLISTS
     showPipedPlaylists = true
-    var showPinnedPlaylists by rememberPreference(showPinnedPlaylistsKey, true)
+    var showPinnedPlaylists by Settings.SHOW_PINNED_PLAYLISTS
     showPinnedPlaylists = true
-    var showMonthlyPlaylists by rememberPreference(showMonthlyPlaylistsKey, true)
+    var showMonthlyPlaylists by Settings.SHOW_MONTHLY_PLAYLISTS
     showMonthlyPlaylists = true
     var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
     customThemeLight_Background0 = DefaultLightColorPalette.background0.hashCode()
@@ -307,17 +236,17 @@ fun DefaultUiSettings() {
     playerPosition = PlayerPosition.Bottom
     var excludeSongWithDurationLimit by Settings.LIMIT_SONGS_WITH_DURATION
     excludeSongWithDurationLimit = DurationInMinutes.Disabled
-    var playlistindicator by rememberPreference(playlistindicatorKey, false)
+    var playlistindicator by Settings.SHOW_PLAYLIST_INDICATOR
     playlistindicator = false
-    var discoverIsEnabled by rememberPreference(discoverKey, false)
+    var discoverIsEnabled by Settings.ENABLE_DISCOVER
     discoverIsEnabled = false
-    var isPauseOnVolumeZeroEnabled by rememberPreference(isPauseOnVolumeZeroEnabledKey, false)
+    var isPauseOnVolumeZeroEnabled by Settings.PAUSE_WHEN_VOLUME_SET_TO_ZERO
     isPauseOnVolumeZeroEnabled = false
     var minimumSilenceDuration by rememberPreference(minimumSilenceDurationKey, 2_000_000L)
     minimumSilenceDuration = 2_000_000L
-    var pauseListenHistory by rememberPreference(pauseListenHistoryKey, false)
+    var pauseListenHistory by Settings.PAUSE_HISTORY
     pauseListenHistory = false
-    var showTopActionsBar by rememberPreference(showTopActionsBarKey, true)
+    var showTopActionsBar by Settings.PLAYER_SHOW_TOP_ACTIONS_BAR
     showTopActionsBar = true
     var playerControlsType by Settings.PLAYER_CONTROLS_TYPE
     playerControlsType = PlayerControlsType.Modern
@@ -327,9 +256,9 @@ fun DefaultUiSettings() {
     playerType = PlayerType.Essential
     var queueType by Settings.QUEUE_TYPE
     queueType = QueueType.Essential
-    var fadingedge by rememberPreference(fadingedgeKey, false)
+    var fadingedge by Settings.PLAYER_BACKGROUND_FADING_EDGE
     fadingedge = false
-    var carousel by rememberPreference(carouselKey, true)
+    var carousel by Settings.PLAYER_THUMBNAILS_CAROUSEL
     carousel = true
     var carouselSize by Settings.CAROUSEL_SIZE
     carouselSize = CarouselSize.Biggest
@@ -341,74 +270,65 @@ fun DefaultUiSettings() {
     playerThumbnailSize = PlayerThumbnailSize.Biggest
     var playerTimelineSize by Settings.PLAYER_TIMELINE_SIZE
     playerTimelineSize = PlayerTimelineSize.Biggest
-    var playerInfoShowIcons by rememberPreference(playerInfoShowIconsKey, true)
+    var playerInfoShowIcons by Settings.PLAYER_SONG_INFO_ICON
     playerInfoShowIcons = true
     var miniPlayerType by Settings.MINI_PLAYER_TYPE
     miniPlayerType = MiniPlayerType.Modern
-    var playerSwapControlsWithTimeline by rememberPreference(
-        playerSwapControlsWithTimelineKey,
-        false
-    )
+    var playerSwapControlsWithTimeline by Settings.PLAYER_IS_CONTROL_AND_TIMELINE_SWAPPED
     playerSwapControlsWithTimeline = false
     var playerPlayButtonType by Settings.PLAYER_PLAY_BUTTON_TYPE
     playerPlayButtonType = PlayerPlayButtonType.Disabled
-    var buttonzoomout by rememberPreference(buttonzoomoutKey, false)
+    var buttonzoomout by Settings.ZOOM_OUT_ANIMATION
     buttonzoomout = false
     var iconLikeType by Settings.LIKE_ICON
     iconLikeType = IconLikeType.Essential
     var playerBackgroundColors by Settings.PLAYER_BACKGROUND
     playerBackgroundColors = PlayerBackgroundColors.BlurredCoverColor
-    var blackgradient by rememberPreference(blackgradientKey, false)
+    var blackgradient by Settings.BLACK_GRADIENT
     blackgradient = false
-    var showTotalTimeQueue by rememberPreference(showTotalTimeQueueKey, true)
+    var showTotalTimeQueue by Settings.PLAYER_SHOW_TOTAL_QUEUE_TIME
     showTotalTimeQueue = true
-    var showNextSongsInPlayer by rememberPreference(showNextSongsInPlayerKey, false)
+    var showNextSongsInPlayer by Settings.PLAYER_SHOW_NEXT_IN_QUEUE
     showNextSongsInPlayer = false
-    var showRemainingSongTime by rememberPreference(showRemainingSongTimeKey, true)
+    var showRemainingSongTime by Settings.PLAYER_SHOW_SONGS_REMAINING_TIME
     showRemainingSongTime = true
-    var disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    var disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
     disableScrollingText = false
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
     effectRotationEnabled = true
-    var thumbnailTapEnabled by rememberPreference(thumbnailTapEnabledKey, true)
+    var thumbnailTapEnabled by Settings.PLAYER_TAP_THUMBNAIL_FOR_LYRICS
     thumbnailTapEnabled = true
-    var clickLyricsText by rememberPreference(clickOnLyricsTextKey, true)
+    var clickLyricsText by Settings.LYRICS_JUMP_ON_TAP
     clickLyricsText = true
     var backgroundProgress by Settings.MINI_PLAYER_PROGRESS_BAR
     backgroundProgress = BackgroundProgress.MiniPlayer
-    var transparentBackgroundActionBarPlayer by rememberPreference(
-        transparentBackgroundPlayerActionBarKey,
-        false
-    )
+    var transparentBackgroundActionBarPlayer by Settings.PLAYER_TRANSPARENT_ACTIONS_BAR
     transparentBackgroundActionBarPlayer = false
-    var actionspacedevenly by rememberPreference(actionspacedevenlyKey, false)
+    var actionspacedevenly by Settings.PLAYER_ACTION_BUTTONS_SPACED_EVENLY
     actionspacedevenly = false
-    var tapqueue by rememberPreference(tapqueueKey, true)
+    var tapqueue by Settings.PLAYER_ACTIONS_BAR_TAP_TO_OPEN_QUEUE
     tapqueue = true
-    var swipeUpQueue by rememberPreference(swipeUpQueueKey, true)
+    var swipeUpQueue by Settings.PLAYER_ACTIONS_BAR_SWIPE_UP_TO_OPEN_QUEUE
     swipeUpQueue = true
-    var showButtonPlayerAddToPlaylist by rememberPreference(showButtonPlayerAddToPlaylistKey, true)
+    var showButtonPlayerAddToPlaylist by Settings.PLAYER_ACTION_ADD_TO_PLAYLIST
     showButtonPlayerAddToPlaylist = true
-    var showButtonPlayerArrow by rememberPreference(showButtonPlayerArrowKey, true)
+    var showButtonPlayerArrow by Settings.PLAYER_ACTION_OPEN_QUEUE_ARROW
     showButtonPlayerArrow = false
-    var showButtonPlayerDownload by rememberPreference(showButtonPlayerDownloadKey, true)
+    var showButtonPlayerDownload by Settings.PLAYER_ACTION_DOWNLOAD
     showButtonPlayerDownload = true
-    var showButtonPlayerLoop by rememberPreference(showButtonPlayerLoopKey, true)
+    var showButtonPlayerLoop by Settings.PLAYER_ACTION_LOOP
     showButtonPlayerLoop = true
-    var showButtonPlayerLyrics by rememberPreference(showButtonPlayerLyricsKey, true)
+    var showButtonPlayerLyrics by Settings.PLAYER_ACTION_SHOW_LYRICS
     showButtonPlayerLyrics = true
-    var expandedplayertoggle by rememberPreference(expandedplayertoggleKey, true)
+    var expandedplayertoggle by Settings.PLAYER_ACTION_TOGGLE_EXPAND
     expandedplayertoggle = true
-    var showButtonPlayerShuffle by rememberPreference(showButtonPlayerShuffleKey, true)
+    var showButtonPlayerShuffle by Settings.PLAYER_ACTION_SHUFFLE
     showButtonPlayerShuffle = true
-    var showButtonPlayerSleepTimer by rememberPreference(showButtonPlayerSleepTimerKey, false)
+    var showButtonPlayerSleepTimer by Settings.PLAYER_ACTION_SLEEP_TIMER
     showButtonPlayerSleepTimer = false
-    var showButtonPlayerMenu by rememberPreference(showButtonPlayerMenuKey, false)
+    var showButtonPlayerMenu by Settings.PLAYER_ACTION_SHOW_MENU
     showButtonPlayerMenu = false
-    var showButtonPlayerSystemEqualizer by rememberPreference(
-        showButtonPlayerSystemEqualizerKey,
-        false
-    )
+    var showButtonPlayerSystemEqualizer by Settings.PLAYER_ACTION_OPEN_EQUALIZER
     showButtonPlayerSystemEqualizer = false
     var queueSwipeLeftAction by Settings.QUEUE_SWIPE_LEFT_ACTION
     queueSwipeLeftAction = QueueSwipeAction.RemoveFromQueue
@@ -425,16 +345,13 @@ fun DefaultUiSettings() {
     var albumSwipeRightAction by Settings.ALBUM_SWIPE_RIGHT_ACTION
     albumSwipeRightAction = AlbumSwipeAction.Bookmark
 
-    var showButtonPlayerDiscover by rememberPreference(showButtonPlayerDiscoverKey, false)
+    var showButtonPlayerDiscover by Settings.PLAYER_ACTION_DISCOVER
     showButtonPlayerDiscover = false
-    var playerEnableLyricsPopupMessage by rememberPreference(
-        playerEnableLyricsPopupMessageKey,
-        true
-    )
+    var playerEnableLyricsPopupMessage by Settings.PLAYER_ACTION_LYRICS_POPUP_MESSAGE
     playerEnableLyricsPopupMessage = true
-    var visualizerEnabled by rememberPreference(visualizerEnabledKey, false)
+    var visualizerEnabled by Settings.PLAYER_VISUALIZER
     visualizerEnabled = false
-    var showthumbnail by rememberPreference(showthumbnailKey, true)
+    var showthumbnail by Settings.PLAYER_SHOW_THUMBNAIL
     showthumbnail = true
 }
 
@@ -450,43 +367,38 @@ fun UiSettings(
 
     var recommendationsNumber by Settings.MAX_NUMBER_OF_SMART_RECOMMENDATIONS
 
-    var keepPlayerMinimized by rememberPreference(keepPlayerMinimizedKey,   false)
+    var keepPlayerMinimized by Settings.PLAYER_KEEP_MINIMIZED
 
-    var disableIconButtonOnTop by rememberPreference(disableIconButtonOnTopKey, false)
-    var disablePlayerHorizontalSwipe by rememberPreference(disablePlayerHorizontalSwipeKey, false)
+    var disablePlayerHorizontalSwipe by Settings.PLAYER_THUMBNAIL_HORIZONTAL_SWIPE_DISABLED
 
     var colorPaletteName by Settings.COLOR_PALETTE
     var colorPaletteMode by Settings.THEME_MODE
     var indexNavigationTab by Settings.STARTUP_SCREEN
     var fontType by Settings.FONT
-    var useSystemFont by rememberPreference(useSystemFontKey, false)
-    var applyFontPadding by rememberPreference(applyFontPaddingKey, false)
-    var isSwipeToActionEnabled by rememberPreference(isSwipeToActionEnabledKey, true)
-    var showSearchTab by rememberPreference(showSearchTabKey, false)
-    var showStatsInNavbar by rememberPreference(showStatsInNavbarKey, false)
-
+    var useSystemFont by Settings.USE_SYSTEM_FONT
+    var applyFontPadding by Settings.APPLY_FONT_PADDING
+    var isSwipeToActionEnabled by Settings.ENABLE_SWIPE_ACTION
+    var showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
+    var showStatsInNavbar by Settings.SHOW_STATS_IN_NAVIGATION_BAR
     var maxStatisticsItems by Settings.MAX_NUMBER_OF_STATISTIC_ITEMS
-
-    var showStatsListeningTime by rememberPreference(showStatsListeningTimeKey,   true)
-
+    var showStatsListeningTime by Settings.SHOW_LISTENING_STATS
     var maxTopPlaylistItems by Settings.MAX_NUMBER_OF_TOP_PLAYED
-
     var navigationBarPosition by Settings.NAVIGATION_BAR_POSITION
     var navigationBarType by Settings.NAVIGATION_BAR_TYPE
     val search = Search()
 
-    var showFavoritesPlaylist by rememberPreference(showFavoritesPlaylistKey, true)
-    var showCachedPlaylist by rememberPreference(showCachedPlaylistKey, true)
-    var showMyTopPlaylist by rememberPreference(showMyTopPlaylistKey, true)
-    var showDownloadedPlaylist by rememberPreference(showDownloadedPlaylistKey, true)
-    var showOnDevicePlaylist by rememberPreference(showOnDevicePlaylistKey, true)
-    var showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+    var showFavoritesPlaylist by Settings.HOME_SONGS_SHOW_FAVORITES_CHIP
+    var showCachedPlaylist by Settings.HOME_SONGS_SHOW_CACHED_CHIP
+    var showDownloadedPlaylist by Settings.HOME_SONGS_SHOW_DOWNLOADED_CHIP
+    var showMyTopPlaylist by Settings.HOME_SONGS_SHOW_MOST_PLAYED_CHIP
+    var showOnDevicePlaylist by Settings.HOME_SONGS_SHOW_ON_DEVICE_CHIP
+    var showFloatingIcon by Settings.SHOW_FLOATING_ICON
     var menuStyle by Settings.MENU_STYLE
     var transitionEffect by Settings.TRANSITION_EFFECT
-    var enableCreateMonthlyPlaylists by rememberPreference(enableCreateMonthlyPlaylistsKey, true)
-    var showPipedPlaylists by rememberPreference(showPipedPlaylistsKey, true)
-    var showPinnedPlaylists by rememberPreference(showPinnedPlaylistsKey, true)
-    var showMonthlyPlaylists by rememberPreference(showMonthlyPlaylistsKey, true)
+    var enableCreateMonthlyPlaylists by Settings.MONTHLY_PLAYLIST_COMPILATION
+    var showPipedPlaylists by Settings.SHOW_PIPED_PLAYLISTS
+    var showPinnedPlaylists by Settings.SHOW_PINNED_PLAYLISTS
+    var showMonthlyPlaylists by Settings.SHOW_MONTHLY_PLAYLISTS
 
     var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
     var customThemeLight_Background1 by rememberPreference(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())
@@ -515,63 +427,51 @@ fun UiSettings(
     var playerPosition by Settings.MINI_PLAYER_POSITION
 
     /*  ViMusic Mode Settings  */
-    var showTopActionsBar by rememberPreference(showTopActionsBarKey, true)
+    var showTopActionsBar by Settings.PLAYER_SHOW_TOP_ACTIONS_BAR
     var playerControlsType by Settings.PLAYER_CONTROLS_TYPE
     var playerType by Settings.PLAYER_TYPE
     var queueType by Settings.QUEUE_TYPE
-    var fadingedge by rememberPreference(fadingedgeKey, false)
-    var carousel by rememberPreference(carouselKey, true)
+    var fadingedge by Settings.PLAYER_BACKGROUND_FADING_EDGE
+    var carousel by Settings.PLAYER_THUMBNAILS_CAROUSEL
     var carouselSize by Settings.CAROUSEL_SIZE
     var thumbnailType by Settings.THUMBNAIL_TYPE
     var playerTimelineType by Settings.PLAYER_TIMELINE_TYPE
     var playerThumbnailSize by Settings.PLAYER_PORTRAIT_THUMBNAIL_SIZE
     var playerTimelineSize by Settings.PLAYER_TIMELINE_SIZE
-    var playerInfoShowIcons by rememberPreference(playerInfoShowIconsKey, true)
+    var playerInfoShowIcons by Settings.PLAYER_SONG_INFO_ICON
     var miniPlayerType by Settings.MINI_PLAYER_TYPE
-    var playerSwapControlsWithTimeline by rememberPreference(
-        playerSwapControlsWithTimelineKey,
-        false
-    )
+    var playerSwapControlsWithTimeline by Settings.PLAYER_IS_CONTROL_AND_TIMELINE_SWAPPED
     var playerPlayButtonType by Settings.PLAYER_PLAY_BUTTON_TYPE
-    var buttonzoomout by rememberPreference(buttonzoomoutKey, false)
+    var buttonzoomout by Settings.ZOOM_OUT_ANIMATION
     var iconLikeType by Settings.LIKE_ICON
     var playerBackgroundColors by Settings.PLAYER_BACKGROUND
-    var blackgradient by rememberPreference(blackgradientKey, false)
-    var showTotalTimeQueue by rememberPreference(showTotalTimeQueueKey, true)
-    var showNextSongsInPlayer by rememberPreference(showNextSongsInPlayerKey, false)
-    var showRemainingSongTime by rememberPreference(showRemainingSongTimeKey, true)
-    var disableScrollingText by rememberPreference(disableScrollingTextKey, false)
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
-    var thumbnailTapEnabled by rememberPreference(thumbnailTapEnabledKey, true)
-    var clickLyricsText by rememberPreference(clickOnLyricsTextKey, true)
+    var blackgradient by Settings.BLACK_GRADIENT
+    var showTotalTimeQueue by Settings.PLAYER_SHOW_TOTAL_QUEUE_TIME
+    var showNextSongsInPlayer by Settings.PLAYER_SHOW_NEXT_IN_QUEUE
+    var showRemainingSongTime by Settings.PLAYER_SHOW_SONGS_REMAINING_TIME
+    var disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
+    var thumbnailTapEnabled by Settings.PLAYER_TAP_THUMBNAIL_FOR_LYRICS
+    var clickLyricsText by Settings.LYRICS_JUMP_ON_TAP
     var backgroundProgress by Settings.MINI_PLAYER_PROGRESS_BAR
-    var transparentBackgroundActionBarPlayer by rememberPreference(
-        transparentBackgroundPlayerActionBarKey,
-        false
-    )
-    var actionspacedevenly by rememberPreference(actionspacedevenlyKey, false)
-    var tapqueue by rememberPreference(tapqueueKey, true)
-    var swipeUpQueue by rememberPreference(swipeUpQueueKey, true)
-    var showButtonPlayerAddToPlaylist by rememberPreference(showButtonPlayerAddToPlaylistKey, true)
-    var showButtonPlayerArrow by rememberPreference(showButtonPlayerArrowKey, true)
-    var showButtonPlayerDownload by rememberPreference(showButtonPlayerDownloadKey, true)
-    var showButtonPlayerLoop by rememberPreference(showButtonPlayerLoopKey, true)
-    var showButtonPlayerLyrics by rememberPreference(showButtonPlayerLyricsKey, true)
-    var expandedplayertoggle by rememberPreference(expandedplayertoggleKey, true)
-    var showButtonPlayerShuffle by rememberPreference(showButtonPlayerShuffleKey, true)
-    var showButtonPlayerSleepTimer by rememberPreference(showButtonPlayerSleepTimerKey, false)
-    var showButtonPlayerMenu by rememberPreference(showButtonPlayerMenuKey, false)
-    var showButtonPlayerSystemEqualizer by rememberPreference(
-        showButtonPlayerSystemEqualizerKey,
-        false
-    )
-    var showButtonPlayerDiscover by rememberPreference(showButtonPlayerDiscoverKey, false)
-    var playerEnableLyricsPopupMessage by rememberPreference(
-        playerEnableLyricsPopupMessageKey,
-        true
-    )
-    var visualizerEnabled by rememberPreference(visualizerEnabledKey, false)
-    var showthumbnail by rememberPreference(showthumbnailKey, true)
+    var transparentBackgroundActionBarPlayer by Settings.PLAYER_TRANSPARENT_ACTIONS_BAR
+    var actionspacedevenly by Settings.PLAYER_ACTION_BUTTONS_SPACED_EVENLY
+    var tapqueue by Settings.PLAYER_ACTIONS_BAR_TAP_TO_OPEN_QUEUE
+    var swipeUpQueue by Settings.PLAYER_ACTIONS_BAR_SWIPE_UP_TO_OPEN_QUEUE
+    var showButtonPlayerAddToPlaylist by Settings.PLAYER_ACTION_ADD_TO_PLAYLIST
+    var showButtonPlayerArrow by Settings.PLAYER_ACTION_OPEN_QUEUE_ARROW
+    var showButtonPlayerDownload by Settings.PLAYER_ACTION_DOWNLOAD
+    var showButtonPlayerLoop by Settings.PLAYER_ACTION_LOOP
+    var showButtonPlayerLyrics by Settings.PLAYER_ACTION_SHOW_LYRICS
+    var expandedplayertoggle by Settings.PLAYER_ACTION_TOGGLE_EXPAND
+    var showButtonPlayerShuffle by Settings.PLAYER_ACTION_SHUFFLE
+    var showButtonPlayerSleepTimer by Settings.PLAYER_ACTION_SLEEP_TIMER
+    var showButtonPlayerMenu by Settings.PLAYER_ACTION_SHOW_MENU
+    var showButtonPlayerSystemEqualizer by Settings.PLAYER_ACTION_OPEN_EQUALIZER
+    var showButtonPlayerDiscover by Settings.PLAYER_ACTION_DISCOVER
+    var playerEnableLyricsPopupMessage by Settings.PLAYER_ACTION_LYRICS_POPUP_MESSAGE
+    var visualizerEnabled by Settings.PLAYER_VISUALIZER
+    var showthumbnail by Settings.PLAYER_SHOW_THUMBNAIL
     /*  ViMusic Mode Settings  */
 
     var queueSwipeLeftAction by Settings.QUEUE_SWIPE_LEFT_ACTION
@@ -668,7 +568,6 @@ fun UiSettings(
                     uiType = it
                     if (uiType == UiType.ViMusic) {
                         disablePlayerHorizontalSwipe = true
-                        disableIconButtonOnTop = true
                         playerTimelineType = PlayerTimelineType.FakeAudioBar
                         visualizerEnabled = false
                         playerThumbnailSize = PlayerThumbnailSize.Medium
@@ -722,7 +621,6 @@ fun UiSettings(
                         keepPlayerMinimized = false
                     } else {
                         disablePlayerHorizontalSwipe = false
-                        disableIconButtonOnTop = false
                         navigationBarPosition = NavigationBarPosition.Bottom
                     }
 

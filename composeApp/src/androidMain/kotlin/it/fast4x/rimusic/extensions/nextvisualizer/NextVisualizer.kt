@@ -37,6 +37,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings.PLAYER_VISUALIZER
 import app.kreate.android.drawable.APP_ICON_BITMAP
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
@@ -73,7 +74,6 @@ import it.fast4x.rimusic.utils.isCompositionLaunched
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.visualizerEnabledKey
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -82,7 +82,7 @@ import timber.log.Timber
 fun NextVisualizer() {
 
     val context = LocalContext.current
-    val visualizerEnabled by rememberPreference(visualizerEnabledKey, false)
+    val visualizerEnabled by PLAYER_VISUALIZER
 
     if (visualizerEnabled) {
 

@@ -38,6 +38,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.compose.persist.persist
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.YtMusic
@@ -61,15 +62,9 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.WelcomeMessage
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.loadedDataKey
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showSearchTabKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -107,10 +102,8 @@ fun HomePage(
     val context = LocalContext.current
     val refreshScope = rememberCoroutineScope()
 
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
-
     //var loadedData by rememberSaveable { mutableStateOf(false) }
-    var loadedData by rememberPreference(loadedDataKey, false)
+    var loadedData by Settings.IS_DATA_KEY_LOADED
 
     suspend fun loadData() {
 
@@ -175,8 +168,8 @@ fun HomePage(
 
     val hapticFeedback = LocalHapticFeedback.current
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
-    val showSearchTab by rememberPreference(showSearchTabKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
+    val showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
 
     PullToRefreshBox(
         isRefreshing = refreshing,
@@ -316,7 +309,7 @@ fun HomePage(
             }
 
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if (UiType.ViMusic.isCurrent() && showFloatingIcon)
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.search,

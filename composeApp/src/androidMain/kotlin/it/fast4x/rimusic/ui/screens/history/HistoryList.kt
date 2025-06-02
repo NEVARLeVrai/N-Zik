@@ -54,10 +54,7 @@ import it.fast4x.rimusic.ui.screens.settings.isYouTubeLoggedIn
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlay
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -87,8 +84,8 @@ fun HistoryList(
     val menuState = LocalMenuState.current
     val lazyListState = rememberLazyListState()
 
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val search = Search(lazyListState)
 

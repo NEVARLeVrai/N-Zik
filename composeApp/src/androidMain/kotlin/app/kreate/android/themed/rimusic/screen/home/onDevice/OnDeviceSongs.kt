@@ -45,7 +45,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
 import app.kreate.android.Settings.HOME_ON_DEVICE_SONGS_SORT_BY
+import app.kreate.android.Settings.HOME_SONGS_ON_DEVICE_SHOW_FOLDERS
 import app.kreate.android.Settings.HOME_SONGS_SORT_ORDER
+import app.kreate.android.Settings.PARENTAL_CONTROL
 import app.kreate.android.themed.rimusic.component.tab.Sort
 import it.fast4x.rimusic.EXPLICIT_PREFIX
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -62,9 +64,6 @@ import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.forcePlayAtIndex
 import it.fast4x.rimusic.utils.isAtLeastAndroid13
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showFoldersOnDeviceKey
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import me.knighthat.component.FolderItem
@@ -93,8 +92,8 @@ fun OnDeviceSong(
     val menuState = LocalMenuState.current
 
     //<editor-fold defaultstate="collapsed" desc="Settings">
-    val parentalControlEnabled by rememberPreference( parentalControlEnabledKey, false )
-    val showFolder4LocalSongs by rememberPreference( showFoldersOnDeviceKey, true )
+    val parentalControlEnabled by PARENTAL_CONTROL
+    val showFolder4LocalSongs by HOME_SONGS_ON_DEVICE_SHOW_FOLDERS
     //</editor-fold>
 
     var songsOnDevice by remember {

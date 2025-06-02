@@ -84,13 +84,9 @@ import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.addToYtPlaylist
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.autoSyncToolbutton
-import it.fast4x.rimusic.utils.autosyncKey
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.importYTMLikedAlbums
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -121,7 +117,7 @@ fun HomeAlbums(
     val lazyGridState = rememberLazyGridState()
 
     // Settings
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
     var albumType by Settings.HOME_ALBUM_TYPE
 
     var items by persistList<Album>( "home/albums" )
@@ -211,7 +207,7 @@ fun HomeAlbums(
 
     val sync = autoSyncToolbutton(R.string.autosync_albums)
 
-    val doAutoSync by rememberPreference(autosyncKey, false)
+    val doAutoSync by Settings.AUTO_SYNC
     var justSynced by rememberSaveable { mutableStateOf(!doAutoSync) }
 
     var refreshing by remember { mutableStateOf(false) }
@@ -481,7 +477,7 @@ fun HomeAlbums(
 
             FloatingActionsContainerWithScrollToTop( lazyGridState )
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if ( UiType.ViMusic.isCurrent() && showFloatingIcon )
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.search,

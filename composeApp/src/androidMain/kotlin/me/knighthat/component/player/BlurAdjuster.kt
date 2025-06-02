@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.ui.components.themed.IconButton
 import it.fast4x.rimusic.ui.components.themed.SliderControl
@@ -26,7 +27,6 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.blurStrengthKey
 import it.fast4x.rimusic.utils.playerBackdropKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.rotatingAlbumCoverKey
 import me.knighthat.component.dialog.Dialog
 
 class BlurAdjuster private constructor(
@@ -42,7 +42,7 @@ class BlurAdjuster private constructor(
             remember { mutableStateOf( false ) },
             rememberPreference( blurStrengthKey, 25f ),
             rememberPreference( playerBackdropKey, 0f ),
-            rememberPreference( rotatingAlbumCoverKey, false )
+            Settings.PLAYER_ROTATING_ALBUM_COVER
         )
     }
 

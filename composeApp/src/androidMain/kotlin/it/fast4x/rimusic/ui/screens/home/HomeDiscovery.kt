@@ -71,12 +71,9 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.ui.styling.shimmer
 import it.fast4x.rimusic.utils.center
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showSearchTabKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -113,11 +110,11 @@ fun HomeDiscovery(
     LaunchedEffect(key1 = Unit) {
         discoverPage = Innertube.discoverPage()
     }
-    val showSearchTab by rememberPreference(showSearchTabKey, false)
+    val showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
 
     //Log.d("mediaItemArtists",preferitesArtists.toString())
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     BoxWithConstraints {
 

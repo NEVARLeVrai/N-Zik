@@ -99,11 +99,9 @@ import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.getPipedSession
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isNetworkConnected
-import it.fast4x.rimusic.utils.isPipedEnabledKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.medium
 import it.fast4x.rimusic.utils.positionAndDurationState
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.removeFromPipedPlaylist
 import it.fast4x.rimusic.utils.removeYTSongFromPlaylist
 import it.fast4x.rimusic.utils.semiBold
@@ -175,7 +173,7 @@ fun InPlaylistMediaItemMenu(
     modifier: Modifier = Modifier,
     disableScrollingText: Boolean
 ) {
-    val isPipedEnabled by rememberPreference(isPipedEnabledKey, false)
+    val isPipedEnabled by Settings.ENABLE_PIPED
     val coroutineScope = rememberCoroutineScope()
     val pipedSession = getPipedSession()
     val context = LocalContext.current
@@ -541,7 +539,7 @@ fun BaseMediaItemMenu(
     val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
-    val isPipedEnabled by rememberPreference(isPipedEnabledKey, false)
+    val isPipedEnabled by Settings.ENABLE_PIPED
     val pipedSession = getPipedSession()
 
     //println("mediaItem in BaseMediaItemMenu albumId ${mediaItem.mediaMetadata.extras?.getString("albumId")}")

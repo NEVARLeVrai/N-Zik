@@ -60,11 +60,8 @@ import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.durationTextToMillis
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.forcePlayAtIndex
-import it.fast4x.rimusic.utils.includeLocalSongsKey
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -100,9 +97,9 @@ fun HomeSongs(
     val menuState = LocalMenuState.current
 
     //<editor-fold defaultstate="collapsed" desc="Settings">
-    val parentalControlEnabled by rememberPreference( parentalControlEnabledKey, false )
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
     val maxTopPlaylistItems by Settings.MAX_NUMBER_OF_TOP_PLAYED
-    val includeLocalSongs by rememberPreference( includeLocalSongsKey, true )
+    val includeLocalSongs by Settings.HOME_SONGS_INCLUDE_ON_DEVICE_IN_ALL
     val excludeSongWithDurationLimit by Settings.LIMIT_SONGS_WITH_DURATION
     //</editor-fold>
 

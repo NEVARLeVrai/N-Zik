@@ -42,6 +42,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.EXPLICIT_PREFIX
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -63,14 +64,11 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.ui.styling.favoritesOverlay
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.downloadedStateMedia
 import it.fast4x.rimusic.utils.getDownloadState
 import it.fast4x.rimusic.utils.getLikedIcon
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.playlistindicatorKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import kotlinx.coroutines.Dispatchers
@@ -161,7 +159,7 @@ fun SongItem(
     // Essentials
     val context = LocalContext.current
     val binder = LocalPlayerServiceBinder.current
-    val disableScrollingText by rememberPreference( disableScrollingTextKey, false )
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
     val hapticFeedback = LocalHapticFeedback.current
 
     val colorPalette = colorPalette()
@@ -235,7 +233,7 @@ fun SongItem(
                         override val iconId: Int = R.drawable.smart_shuffle
                     }.ToolBarButton()
 
-                val showInPlaylistIndicator by rememberPreference( playlistindicatorKey,false )
+                val showInPlaylistIndicator by Settings.SHOW_PLAYLIST_INDICATOR
                 val isInPlaylistScreen = navController != null && NavRoutes.localPlaylist.isHere( navController )
                 // Show icon if song belongs to a playlist,
                 // except when in playlist.

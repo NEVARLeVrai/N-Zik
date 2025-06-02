@@ -62,14 +62,6 @@ import it.fast4x.rimusic.ui.items.PlaylistItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.CheckMonthlyPlaylist
 import it.fast4x.rimusic.utils.autoSyncToolbutton
-import it.fast4x.rimusic.utils.autosyncKey
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.enableCreateMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.showPinnedPlaylistsKey
-import it.fast4x.rimusic.utils.showPipedPlaylistsKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -97,7 +89,7 @@ fun HomeLibrary(
 
     // Non-vital
     var playlistType by Settings.HOME_LIBRARY_TYPE
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     var items by persistList<PlaylistPreview>("home/playlists")
 
@@ -150,9 +142,9 @@ fun HomeLibrary(
     }
 
     // START: Additional playlists
-    val showPinnedPlaylists by rememberPreference(showPinnedPlaylistsKey, true)
-    val showMonthlyPlaylists by rememberPreference(showMonthlyPlaylistsKey, true)
-    val showPipedPlaylists by rememberPreference(showPipedPlaylistsKey, true)
+    val showPinnedPlaylists by Settings.SHOW_PINNED_PLAYLISTS
+    val showMonthlyPlaylists by Settings.SHOW_MONTHLY_PLAYLISTS
+    val showPipedPlaylists by Settings.SHOW_PIPED_PLAYLISTS
 
     val buttonsList = mutableListOf(PlaylistsType.Playlist to stringResource(R.string.playlists))
     buttonsList += PlaylistsType.YTPlaylist to stringResource(R.string.yt_playlists)
@@ -170,12 +162,12 @@ fun HomeLibrary(
     // END - New playlist
 
     // START - Monthly playlist
-    val enableCreateMonthlyPlaylists by rememberPreference(enableCreateMonthlyPlaylistsKey, true)
+    val enableCreateMonthlyPlaylists by Settings.MONTHLY_PLAYLIST_COMPILATION
     if (enableCreateMonthlyPlaylists)
         CheckMonthlyPlaylist()
     // END - Monthly playlist
 
-    val doAutoSync by rememberPreference(autosyncKey, false)
+    val doAutoSync by Settings.AUTO_SYNC
     var justSynced by rememberSaveable { mutableStateOf(!doAutoSync) }
 
     var refreshing by remember { mutableStateOf(false) }
@@ -285,7 +277,7 @@ fun HomeLibrary(
 
             FloatingActionsContainerWithScrollToTop(lazyGridState = lazyGridState)
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if (UiType.ViMusic.isCurrent() && showFloatingIcon)
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.search,

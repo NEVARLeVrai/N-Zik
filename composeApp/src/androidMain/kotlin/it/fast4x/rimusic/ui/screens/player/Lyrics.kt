@@ -133,25 +133,16 @@ import it.fast4x.rimusic.utils.SynchronizedLyrics
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.effectRotationKey
-import it.fast4x.rimusic.utils.expandedplayerKey
 import it.fast4x.rimusic.utils.getHttpClient
-import it.fast4x.rimusic.utils.isShowingSynchronizedLyricsKey
 import it.fast4x.rimusic.utils.jumpPreviousKey
-import it.fast4x.rimusic.utils.landscapeControlsKey
 import it.fast4x.rimusic.utils.languageDestination
 import it.fast4x.rimusic.utils.languageDestinationName
-import it.fast4x.rimusic.utils.lyricsSizeAnimateKey
 import it.fast4x.rimusic.utils.lyricsSizeKey
 import it.fast4x.rimusic.utils.lyricsSizeLKey
 import it.fast4x.rimusic.utils.medium
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playerEnableLyricsPopupMessageKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showBackgroundLyricsKey
-import it.fast4x.rimusic.utils.showSecondLineKey
-import it.fast4x.rimusic.utils.showlyricsthumbnailKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.verticalFadingEdge
 import kotlinx.coroutines.Dispatchers
@@ -203,8 +194,8 @@ fun Lyrics(
         val currentView = LocalView.current
         val binder = LocalPlayerServiceBinder.current
 
-        var showlyricsthumbnail by rememberPreference(showlyricsthumbnailKey, false)
-        var isShowingSynchronizedLyrics by rememberPreference(isShowingSynchronizedLyricsKey, false)
+        var showlyricsthumbnail by Settings.LYRICS_SHOW_THUMBNAIL
+        var isShowingSynchronizedLyrics by Settings.LYRICS_SYNCHRONIZED
         var invalidLrc by remember(mediaId, isShowingSynchronizedLyrics) { mutableStateOf(false) }
         var isPicking by remember(mediaId, isShowingSynchronizedLyrics) { mutableStateOf(false) }
         var lyricsColor by Settings.LYRICS_COLOR
@@ -244,7 +235,7 @@ fun Lyrics(
         }
 
         var romanization by Settings.LYRICS_ROMANIZATION_TYPE
-        var showSecondLine by rememberPreference(showSecondLineKey, false)
+        var showSecondLine by Settings.LYRICS_SHOW_SECOND_LINE
 
         var otherLanguageApp by Settings.OTHER_APP_LANGUAGE
         var lyricsBackground by Settings.LYRICS_BACKGROUND
@@ -317,12 +308,8 @@ fun Lyrics(
         }
 
         var fontSize by Settings.LYRICS_FONT_SIZE
-        val showBackgroundLyrics by rememberPreference(showBackgroundLyricsKey, false)
-        val playerEnableLyricsPopupMessage by rememberPreference(
-            playerEnableLyricsPopupMessageKey,
-            true
-        )
-        var expandedplayer by rememberPreference(expandedplayerKey, false)
+        val showBackgroundLyrics by Settings.LYRICS_SHOW_ACCENT_BACKGROUND
+        val playerEnableLyricsPopupMessage by Settings.PLAYER_ACTION_LYRICS_POPUP_MESSAGE
 
         var checkedLyricsLrc by remember {
             mutableStateOf(false)
@@ -338,7 +325,7 @@ fun Lyrics(
         }
         var lyricsHighlight by Settings.LYRICS_HIGHLIGHT
         var lyricsAlignment by Settings.LYRICS_ALIGNMENT
-        var lyricsSizeAnimate by rememberPreference(lyricsSizeAnimateKey, false)
+        var lyricsSizeAnimate by Settings.LYRICS_ANIMATE_SIZE
         val mediaMetadata = mediaMetadataProvider()
         var artistName by rememberSaveable { mutableStateOf(cleanPrefix(mediaMetadata.artist?.toString().orEmpty()))}
         var title by rememberSaveable { mutableStateOf(cleanPrefix(mediaMetadata.title?.toString().orEmpty()))}
@@ -349,8 +336,8 @@ fun Lyrics(
             mutableStateOf(false)
         }
         val lightTheme = colorPaletteMode == ColorPaletteMode.Light || (colorPaletteMode == ColorPaletteMode.System && (!isSystemInDarkTheme()))
-        val effectRotationEnabled by rememberPreference(effectRotationKey, true)
-        var landscapeControls by rememberPreference(landscapeControlsKey, true)
+        val effectRotationEnabled by Settings.ROTATION_EFFECT
+        var landscapeControls by Settings.LYRICS_LANDSCAPE_CONTROLS
         var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
         var isRotated by rememberSaveable { mutableStateOf(false) }
         val rotationAngle by animateFloatAsState(

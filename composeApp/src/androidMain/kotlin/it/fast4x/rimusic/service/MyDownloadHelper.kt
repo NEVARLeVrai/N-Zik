@@ -32,13 +32,9 @@ import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.service.modern.isLocal
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.autoDownloadSongKey
-import it.fast4x.rimusic.utils.autoDownloadSongWhenAlbumBookmarkedKey
-import it.fast4x.rimusic.utils.autoDownloadSongWhenLikedKey
 import it.fast4x.rimusic.utils.download
 import it.fast4x.rimusic.utils.downloadSyncedLyrics
 import it.fast4x.rimusic.utils.isNetworkConnected
-import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.removeDownload
 import it.fast4x.rimusic.utils.thumbnail
 import kotlinx.coroutines.CancellationException
@@ -297,14 +293,14 @@ object MyDownloadHelper {
     }
 
     fun autoDownload(context: Context, mediaItem: MediaItem) {
-        if (context.preferences.getBoolean(autoDownloadSongKey, false)) {
+        if ( Settings.AUTO_DOWNLOAD.value ) {
             if (downloads.value[mediaItem.mediaId]?.state != Download.STATE_COMPLETED)
                 addDownload(context, mediaItem)
         }
     }
 
     fun autoDownloadWhenLiked(context: Context, mediaItem: MediaItem) {
-        if (context.preferences.getBoolean(autoDownloadSongWhenLikedKey, false)) {
+        if ( Settings.AUTO_DOWNLOAD_ON_LIKE.value ) {
             Database.asyncQuery {
                 runBlocking {
                     if( songTable.isLiked( mediaItem.mediaId ).first() )
@@ -318,7 +314,7 @@ object MyDownloadHelper {
 
     fun downloadOnLike( mediaItem: MediaItem, likeState: Boolean?, context: Context ) {
         // Only continues when this setting is enabled
-        val isSettingEnabled = context.preferences.getBoolean( autoDownloadSongWhenLikedKey, false )
+        val isSettingEnabled by Settings.AUTO_DOWNLOAD_ON_LIKE
         if( !isSettingEnabled || !isNetworkConnected( context ) )
             return
 
@@ -332,7 +328,7 @@ object MyDownloadHelper {
     }
 
     fun autoDownloadWhenAlbumBookmarked(context: Context, mediaItems: List<MediaItem>) {
-        if (context.preferences.getBoolean(autoDownloadSongWhenAlbumBookmarkedKey, false)) {
+        if ( Settings.AUTO_DOWNLOAD_ON_LIKE.value ) {
             mediaItems.forEach { mediaItem ->
                 autoDownload(context, mediaItem)
             }

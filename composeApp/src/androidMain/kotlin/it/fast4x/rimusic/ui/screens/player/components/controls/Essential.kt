@@ -72,7 +72,6 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.HorizontalfadingEdge2
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.jumpPreviousKey
@@ -80,9 +79,7 @@ import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
-import it.fast4x.rimusic.utils.textoutlineKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -108,11 +105,10 @@ fun InfoAlbumAndArtistEssential(
 ) {
     val playerControlsType by Settings.PLAYER_CONTROLS_TYPE
     val colorPaletteMode by Settings.THEME_MODE
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
-    var showthumbnail by rememberPreference(showthumbnailKey, true)
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
     var isRotated by rememberSaveable { mutableStateOf(false) }
     var showSelectDialog by remember { mutableStateOf(false) }
-    var textoutline by rememberPreference(textoutlineKey, false)
+    var textoutline by Settings.TEXT_OUTLINE
     val playerBackgroundColors by Settings.PLAYER_BACKGROUND
     var likeButtonWidth by remember{ mutableStateOf(0.dp) }
     val currentMediaItem = binder.player.currentMediaItem
@@ -378,7 +374,7 @@ fun ControlsEssential(
 ) {
     val colorPaletteName by Settings.COLOR_PALETTE
     val colorPaletteMode by Settings.THEME_MODE
-    var effectRotationEnabled by rememberPreference(effectRotationKey, true)
+    var effectRotationEnabled by Settings.ROTATION_EFFECT
     var isRotated by rememberSaveable { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(
         targetValue = if (isRotated) 360F else 0f,

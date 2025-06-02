@@ -67,8 +67,6 @@ import it.fast4x.rimusic.ui.screens.settings.SettingsScreen
 import it.fast4x.rimusic.ui.screens.statistics.StatisticsScreen
 import it.fast4x.rimusic.utils.clearPreference
 import it.fast4x.rimusic.utils.homeScreenTabIndexKey
-import it.fast4x.rimusic.utils.pauseSearchHistoryKey
-import it.fast4x.rimusic.utils.preferences
 
 @androidx.annotation.OptIn()
 @OptIn(
@@ -313,7 +311,7 @@ fun AppNavigation(
                         route = "${NavRoutes.searchResults.name}/${Uri.encode( query )}",
                     )
 
-                    if ( !context.preferences.getBoolean(pauseSearchHistoryKey, false) )
+                    if ( !Settings.PAUSE_SEARCH_HISTORY.value )
                         Database.asyncTransaction {
                             // Must ignore to prevent "UNIQUE constraint" exception
                             searchTable.insertIgnore( SearchQuery(query = query) )

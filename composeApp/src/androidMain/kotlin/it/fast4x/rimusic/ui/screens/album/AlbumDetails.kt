@@ -47,6 +47,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImagePainter
 import it.fast4x.compose.persist.PersistMapCleanup
 import it.fast4x.innertube.Innertube
@@ -83,7 +84,6 @@ import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.durationTextToMillis
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.fadingEdge
@@ -93,11 +93,8 @@ import it.fast4x.rimusic.utils.getHttpClient
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.languageDestination
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
@@ -140,8 +137,7 @@ fun AlbumDetails(
     val lazyListState = rememberLazyListState()
 
     // Settings
-    val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     val items by remember {
         Database.songAlbumMapTable
@@ -543,7 +539,7 @@ fun AlbumDetails(
                     }
             }
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if ( UiType.ViMusic.isCurrent() && showFloatingIcon )
                 MultiFloatingActionsContainer(
                     iconId = R.drawable.shuffle,

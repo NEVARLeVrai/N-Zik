@@ -61,15 +61,9 @@ import it.fast4x.rimusic.ui.components.themed.RotateThumbnailCoverAnimation
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.DisposableListener
-import it.fast4x.rimusic.utils.clickOnLyricsTextKey
 import it.fast4x.rimusic.utils.currentWindow
 import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
-import it.fast4x.rimusic.utils.showlyricsthumbnailKey
-import it.fast4x.rimusic.utils.showvisthumbnailKey
-import it.fast4x.rimusic.utils.thumbnailpauseKey
 import me.knighthat.coil.ImageCacheFactory
 import me.knighthat.utils.Toaster
 import timber.log.Timber
@@ -103,7 +97,7 @@ fun Thumbnail(
         it to (it - 64.dp).px
     }
 
-    var showlyricsthumbnail by rememberPreference(showlyricsthumbnailKey, false)
+    var showlyricsthumbnail by Settings.LYRICS_SHOW_THUMBNAIL
     var nullableWindow by remember {
         mutableStateOf(player.currentWindow)
     }
@@ -135,8 +129,8 @@ fun Thumbnail(
         mutableStateOf(true)
     }
 
-    val clickLyricsText by rememberPreference(clickOnLyricsTextKey, true)
-    var showvisthumbnail by rememberPreference(showvisthumbnailKey, false)
+    val clickLyricsText by Settings.LYRICS_JUMP_ON_TAP
+    var showvisthumbnail by Settings.PLAYER_SHOW_THUMBNAIL_ON_VISUALIZER
     //var expandedlyrics by rememberPreference(expandedlyricsKey,false)
 
     player.DisposableListener {
@@ -166,7 +160,7 @@ fun Thumbnail(
         onSuccess = { artImageAvailable = true }
     )
 
-    val showCoverThumbnailAnimation by rememberPreference(showCoverThumbnailAnimationKey, false)
+    val showCoverThumbnailAnimation by Settings.PLAYER_THUMBNAIL_ANIMATION
     var coverThumbnailAnimation by Settings.PLAYER_THUMBNAIL_TYPE
 
 
@@ -433,7 +427,7 @@ fun Thumbnail(
 fun Modifier.thumbnailpause(
     shouldBePlaying: Boolean
 ) = composed {
-    var thumbnailpause by rememberPreference(thumbnailpauseKey, false)
+    var thumbnailpause by Settings.PLAYER_SHRINK_THUMBNAIL_ON_PAUSE
     val scale by animateFloatAsState(if ((thumbnailpause) && (!shouldBePlaying)) 0.9f else 1f)
 
     this

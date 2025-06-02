@@ -51,14 +51,7 @@ import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartActivity
 import it.fast4x.rimusic.utils.RestartPlayerService
-import it.fast4x.rimusic.utils.autoDownloadSongKey
-import it.fast4x.rimusic.utils.autoDownloadSongWhenAlbumBookmarkedKey
-import it.fast4x.rimusic.utils.autoDownloadSongWhenLikedKey
-import it.fast4x.rimusic.utils.autoLoadSongsInQueueKey
-import it.fast4x.rimusic.utils.bassboostEnabledKey
 import it.fast4x.rimusic.utils.bassboostLevelKey
-import it.fast4x.rimusic.utils.closeWithBackButtonKey
-import it.fast4x.rimusic.utils.closebackgroundPlayerKey
 import it.fast4x.rimusic.utils.customThemeDark_Background0Key
 import it.fast4x.rimusic.utils.customThemeDark_Background1Key
 import it.fast4x.rimusic.utils.customThemeDark_Background2Key
@@ -79,33 +72,15 @@ import it.fast4x.rimusic.utils.customThemeLight_accentKey
 import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
 import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
 import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
-import it.fast4x.rimusic.utils.discoverKey
-import it.fast4x.rimusic.utils.enablePictureInPictureAutoKey
-import it.fast4x.rimusic.utils.enablePictureInPictureKey
-import it.fast4x.rimusic.utils.handleAudioFocusEnabledKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
-import it.fast4x.rimusic.utils.isConnectionMeteredEnabledKey
-import it.fast4x.rimusic.utils.isPauseOnVolumeZeroEnabledKey
 import it.fast4x.rimusic.utils.jumpPreviousKey
-import it.fast4x.rimusic.utils.keepPlayerMinimizedKey
 import it.fast4x.rimusic.utils.languageDestinationName
 import it.fast4x.rimusic.utils.loudnessBaseGainKey
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
-import it.fast4x.rimusic.utils.pauseListenHistoryKey
-import it.fast4x.rimusic.utils.persistentQueueKey
-import it.fast4x.rimusic.utils.playlistindicatorKey
 import it.fast4x.rimusic.utils.rememberEqualizerLauncher
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.resumePlaybackOnStartKey
-import it.fast4x.rimusic.utils.resumePlaybackWhenDeviceConnectedKey
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.shakeEventEnabledKey
-import it.fast4x.rimusic.utils.skipMediaOnErrorKey
-import it.fast4x.rimusic.utils.skipSilenceKey
-import it.fast4x.rimusic.utils.useVolumeKeysToChangeSongKey
-import it.fast4x.rimusic.utils.volumeNormalizationKey
 import me.knighthat.component.dialog.RestartAppDialog
 import me.knighthat.component.tab.Search
 import me.knighthat.updater.Updater
@@ -123,34 +98,26 @@ fun GeneralSettings(
     val systemLocale = LocaleListCompat.getDefault().get(0).toString()
 
     var exoPlayerMinTimeForEvent by Settings.QUICK_PICKS_MIN_DURATION
-    var persistentQueue by rememberPreference(persistentQueueKey, false)
-    var resumePlaybackOnStart by rememberPreference(resumePlaybackOnStartKey, false)
-    var closebackgroundPlayer by rememberPreference(closebackgroundPlayerKey, false)
-    var closeWithBackButton by rememberPreference(closeWithBackButtonKey, true)
-    var resumePlaybackWhenDeviceConnected by rememberPreference(
-        resumePlaybackWhenDeviceConnectedKey,
-        false
-    )
-
-    var skipSilence by rememberPreference(skipSilenceKey, false)
-    var skipMediaOnError by rememberPreference(skipMediaOnErrorKey, false)
-    var volumeNormalization by rememberPreference(volumeNormalizationKey, false)
+    var persistentQueue by Settings.ENABLE_PERSISTENT_QUEUE
+    var resumePlaybackOnStart by Settings.RESUME_PLAYBACK_ON_STARTUP
+    var closebackgroundPlayer by Settings.CLOSE_BACKGROUND_JOB_IN_TASK_MANAGER
+    var closeWithBackButton by Settings.CLOSE_APP_ON_BACK
+    var resumePlaybackWhenDeviceConnected by Settings.RESUME_PLAYBACK_WHEN_CONNECT_TO_AUDIO_DEVICE
+    var skipSilence by Settings.AUDIO_SKIP_SILENCE
+    var skipMediaOnError by Settings.PLAYBACK_SKIP_ON_ERROR
+    var volumeNormalization by Settings.AUDIO_VOLUME_NORMALIZATION
     var audioQualityFormat by Settings.AUDIO_QUALITY
-    var isConnectionMeteredEnabled by rememberPreference(isConnectionMeteredEnabledKey, true)
-
-
-    var keepPlayerMinimized by rememberPreference(keepPlayerMinimizedKey,   false)
-
-    var disableClosingPlayerSwipingDown by rememberPreference(disableClosingPlayerSwipingDownKey, false)
-
+    var isConnectionMeteredEnabled by Settings.IS_CONNECTION_METERED
+    var keepPlayerMinimized by Settings.PLAYER_KEEP_MINIMIZED
+    var disableClosingPlayerSwipingDown by Settings.MINI_DISABLE_SWIPE_DOWN_TO_DISMISS
     var navigationBarPosition by Settings.NAVIGATION_BAR_POSITION
     var pauseBetweenSongs by Settings.PAUSE_BETWEEN_SONGS
     var maxSongsInQueue by Settings.MAX_NUMBER_OF_SONG_IN_QUEUE
 
     val search = Search()
 
-    var shakeEventEnabled by rememberPreference(shakeEventEnabledKey, false)
-    var useVolumeKeysToChangeSong by rememberPreference(useVolumeKeysToChangeSongKey, false)
+    var shakeEventEnabled by Settings.AUDIO_SHAKE_TO_SKIP
+    var useVolumeKeysToChangeSong by Settings.AUDIO_VOLUME_BUTTONS_CHANGE_SONG
 
     var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
     var customThemeLight_Background1 by rememberPreference(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())
@@ -178,38 +145,36 @@ fun GeneralSettings(
     var resetCustomDarkThemeDialog by rememberSaveable { mutableStateOf(false) }
     var playbackFadeAudioDuration by Settings.AUDIO_FADE_DURATION
     var excludeSongWithDurationLimit by Settings.LIMIT_SONGS_WITH_DURATION
-    var playlistindicator by rememberPreference(playlistindicatorKey, false)
+    var playlistindicator by Settings.SHOW_PLAYLIST_INDICATOR
     var nowPlayingIndicator by Settings.NOW_PLAYING_INDICATOR
-    var discoverIsEnabled by rememberPreference(discoverKey, false)
-    var isPauseOnVolumeZeroEnabled by rememberPreference(isPauseOnVolumeZeroEnabledKey, false)
+    var discoverIsEnabled by Settings.ENABLE_DISCOVER
+    var isPauseOnVolumeZeroEnabled by Settings.PAUSE_WHEN_VOLUME_SET_TO_ZERO
 
 
     val launchEqualizer by rememberEqualizerLauncher(audioSessionId = { binder?.player?.audioSessionId })
 
     var minimumSilenceDuration by rememberPreference(minimumSilenceDurationKey, 2_000_000L)
 
-    var pauseListenHistory by rememberPreference(pauseListenHistoryKey, false)
+    var pauseListenHistory by Settings.PAUSE_HISTORY
     var restartService by rememberSaveable { mutableStateOf(false) }
     var restartActivity by rememberSaveable { mutableStateOf(false) }
 
     var loudnessBaseGain by rememberPreference(loudnessBaseGainKey, 5.00f)
-    var autoLoadSongsInQueue by rememberPreference(autoLoadSongsInQueueKey, true)
+    var autoLoadSongsInQueue by Settings.QUEUE_AUTO_APPEND
 
-    var bassboostEnabled by rememberPreference(bassboostEnabledKey,false)
+    var bassboostEnabled by Settings.AUDIO_BASS_BOOSTED
     var bassboostLevel by rememberPreference(bassboostLevelKey, 0.5f)
     var audioReverb by Settings.AUDIO_REVERB_PRESET
-    var audioFocusEnabled by rememberPreference(handleAudioFocusEnabledKey, true)
+    var audioFocusEnabled by Settings.AUDIO_SMART_PAUSE_DURING_CALLS
 
-    var enablePictureInPicture by rememberPreference(enablePictureInPictureKey, false)
-    var enablePictureInPictureAuto by rememberPreference(enablePictureInPictureAutoKey, false)
+    var enablePictureInPicture by Settings.IS_PIP_ENABLED
+    var enablePictureInPictureAuto by Settings.IS_AUTO_PIP_ENABLED
     var pipModule by Settings.PIP_MODULE
     var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
     var notificationType by Settings.NOTIFICATION_TYPE
-    var autoDownloadSong by rememberPreference(autoDownloadSongKey, false)
-    var autoDownloadSongWhenLiked by rememberPreference(autoDownloadSongWhenLikedKey, false)
-    var autoDownloadSongWhenAlbumBookmarked by rememberPreference(autoDownloadSongWhenAlbumBookmarkedKey, false)
-
-
+    var autoDownloadSong by Settings.AUTO_DOWNLOAD
+    var autoDownloadSongWhenLiked by Settings.AUTO_DOWNLOAD_ON_LIKE
+    var autoDownloadSongWhenAlbumBookmarked by Settings.AUTO_DOWNLOAD_ON_ALBUM_BOOKMARKED
 
     Column(
         modifier = Modifier

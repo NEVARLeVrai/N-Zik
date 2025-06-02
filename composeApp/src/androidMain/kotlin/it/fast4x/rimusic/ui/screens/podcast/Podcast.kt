@@ -102,7 +102,6 @@ import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.addToYtPlaylist
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.durationTextToMillis
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.fadingEdge
@@ -115,11 +114,9 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -191,8 +188,7 @@ fun Podcast(
     }
 
     var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
-
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
     var totalPlayTimes = 0L
     podcastPage?.listEpisode?.forEach {
@@ -786,7 +782,7 @@ fun Podcast(
                 }
             }
 
-            val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+            val showFloatingIcon by Settings.SHOW_FLOATING_ICON
             if( UiType.ViMusic.isCurrent() && showFloatingIcon )
             FloatingActionsContainerWithScrollToTop(
                 lazyListState = lazyListState,

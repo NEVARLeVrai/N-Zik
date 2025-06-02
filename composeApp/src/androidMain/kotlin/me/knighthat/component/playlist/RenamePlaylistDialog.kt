@@ -8,14 +8,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.PIPED_PREFIX
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.utils.getPipedSession
-import it.fast4x.rimusic.utils.isPipedEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.renamePipedPlaylist
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +36,7 @@ class RenamePlaylistDialog private constructor(
                 remember( getPlaylist()?.name ) {
                     mutableStateOf( TextFieldValue(getPlaylist()?.name ?: "") )
                 },
-                rememberPreference( isPipedEnabledKey, false ),
+                Settings.ENABLE_PIPED,
                 getPlaylist
             )
     }

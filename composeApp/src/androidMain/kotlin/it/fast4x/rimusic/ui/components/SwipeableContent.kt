@@ -42,8 +42,6 @@ import it.fast4x.rimusic.service.MyDownloadService
 import it.fast4x.rimusic.service.modern.isLocal
 import it.fast4x.rimusic.utils.downloadedStateMedia
 import it.fast4x.rimusic.utils.getDownloadState
-import it.fast4x.rimusic.utils.isSwipeToActionEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -69,7 +67,7 @@ fun SwipeableContent(
             return@rememberSwipeToDismissBoxState false
         }
     )
-    val isSwipeToActionEnabled by rememberPreference(isSwipeToActionEnabledKey, true)
+    val isSwipeToActionEnabled by Settings.ENABLE_SWIPE_ACTION
 
     val current = LocalViewConfiguration.current
     CompositionLocalProvider(LocalViewConfiguration provides object : ViewConfiguration by current{

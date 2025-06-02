@@ -27,11 +27,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.ui.components.themed.GridMenuItemHeight
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.rememberPreference
 import me.knighthat.component.menu.MenuConstants.CONTENT_HEIGHT_FRACTION
 import me.knighthat.component.menu.MenuConstants.CONTENT_HORIZONTAL_PADDING
 import me.knighthat.component.menu.MenuConstants.CONTENT_TOP_PADDING
@@ -83,7 +82,7 @@ object GridMenu {
             content = icon
         )
 
-        val isScrollingTextDisabled by rememberPreference( disableScrollingTextKey, false )
+        val isScrollingTextDisabled by Settings.SCROLLING_TEXT_DISABLED
         Text(
             text = text,
             overflow = TextOverflow.Ellipsis,

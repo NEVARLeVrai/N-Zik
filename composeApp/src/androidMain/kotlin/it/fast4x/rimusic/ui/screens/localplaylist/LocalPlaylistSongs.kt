@@ -105,14 +105,12 @@ import it.fast4x.rimusic.utils.PositionLock
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.addToPipedPlaylist
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.autosyncKey
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.checkFileExists
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.completed
 import it.fast4x.rimusic.utils.deleteFileIfExists
 import it.fast4x.rimusic.utils.deletePipedPlaylist
-import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.durationTextToMillis
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.forcePlayAtIndex
@@ -121,15 +119,10 @@ import it.fast4x.rimusic.utils.formatAsTime
 import it.fast4x.rimusic.utils.getPipedSession
 import it.fast4x.rimusic.utils.isAtLeastAndroid14
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.isPipedEnabledKey
-import it.fast4x.rimusic.utils.isRecommendationEnabledKey
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.removeFromPipedPlaylist
 import it.fast4x.rimusic.utils.saveImageToInternalStorage
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
 import it.fast4x.rimusic.utils.syncSongsInPipedPlaylist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -177,10 +170,10 @@ fun LocalPlaylistSongs(
     val menuState = LocalMenuState.current
 
     // Settings
-    val parentalControlEnabled by rememberPreference( parentalControlEnabledKey, false )
-    val isPipedEnabled by rememberPreference( isPipedEnabledKey, false )
-    val disableScrollingText by rememberPreference( disableScrollingTextKey, false )
-    var isRecommendationEnabled by rememberPreference( isRecommendationEnabledKey, false )
+    val parentalControlEnabled by Settings.PARENTAL_CONTROL
+    val isPipedEnabled by Settings.ENABLE_PIPED
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
+    var isRecommendationEnabled by Settings.LOCAL_PLAYLIST_SMART_RECOMMENDATION
 
     // Non-vital
     val pipedSession = getPipedSession()
@@ -478,7 +471,7 @@ fun LocalPlaylistSongs(
         }
     }
 
-    var autosync by rememberPreference(autosyncKey, false)
+    var autosync by Settings.AUTO_SYNC
 
     val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
@@ -863,7 +856,7 @@ fun LocalPlaylistSongs(
 
         FloatingActionsContainerWithScrollToTop(lazyListState = lazyListState)
 
-        val showFloatingIcon by rememberPreference(showFloatingIconKey, false)
+        val showFloatingIcon by Settings.SHOW_FLOATING_ICON
         if ( UiType.ViMusic.isCurrent() && showFloatingIcon )
             FloatingActionsContainerWithScrollToTop(
                 lazyListState = lazyListState,

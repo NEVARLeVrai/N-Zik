@@ -37,9 +37,6 @@ import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.items.AlbumItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showSearchTabKey
 
 @ExperimentalTextApi
 @UnstableApi
@@ -60,11 +57,11 @@ fun NewAlbums(
 
     val navigationBarPosition by Settings.NAVIGATION_BAR_POSITION
 
-    val showSearchTab by rememberPreference(showSearchTabKey, false)
+    val showSearchTab by Settings.SHOW_SEARCH_IN_NAVIGATION_BAR
 
     val lazyGridState = rememberLazyGridState()
 
-    val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
+    val disableScrollingText by Settings.SCROLLING_TEXT_DISABLED
 
 
     Column(

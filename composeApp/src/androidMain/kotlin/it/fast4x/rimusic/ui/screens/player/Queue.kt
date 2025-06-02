@@ -90,9 +90,7 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.shouldBePlaying
-import it.fast4x.rimusic.utils.showButtonPlayerDiscoverKey
 import me.knighthat.component.SongItem
 import me.knighthat.component.tab.ExportSongsToCSVDialog
 import me.knighthat.component.tab.ItemSelector
@@ -428,7 +426,7 @@ fun Queue(
                         buttons = mutableListOf<Button>().apply {
                             add( locator )
                             add( search )
-                            if( rememberPreference( showButtonPlayerDiscoverKey, false ).value )
+                            if( Settings.PLAYER_ACTION_DISCOVER.value )
                                 add( discover )
                             add( positionLock )
                             add( repeat )
