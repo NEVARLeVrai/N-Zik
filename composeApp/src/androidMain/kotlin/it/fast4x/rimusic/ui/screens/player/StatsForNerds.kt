@@ -37,6 +37,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheSpan
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
@@ -52,8 +53,6 @@ import it.fast4x.rimusic.utils.blackgradientKey
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.playerBackgroundColorsKey
-import it.fast4x.rimusic.utils.playerTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.statsfornerdsKey
@@ -95,16 +94,13 @@ fun StatsForNerds(
         }.collectAsState( null, Dispatchers.IO )
         val showThumbnail by rememberPreference(showthumbnailKey, true)
         val statsForNerds by rememberPreference(statsfornerdsKey, false)
-        val playerType by rememberPreference(playerTypeKey, PlayerType.Essential)
+        val playerType by Settings.PLAYER_TYPE
         val transparentBackgroundActionBarPlayer by rememberPreference(
             transparentBackgroundPlayerActionBarKey,
             false
         )
         var blackgradient by rememberPreference(blackgradientKey, false)
-        val playerBackgroundColors by rememberPreference(
-            playerBackgroundColorsKey,
-            PlayerBackgroundColors.BlurredCoverColor
-        )
+        val playerBackgroundColors by Settings.PLAYER_BACKGROUND
         var statsfornerdsfull by remember {mutableStateOf(false)}
         val rotationAngle by animateFloatAsState(
             targetValue = if (statsfornerdsfull) 180f else 0f,

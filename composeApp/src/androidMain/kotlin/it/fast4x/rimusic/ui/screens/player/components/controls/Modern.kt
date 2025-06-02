@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
@@ -66,7 +67,6 @@ import it.fast4x.rimusic.ui.components.themed.SelectorArtistsDialog
 import it.fast4x.rimusic.ui.screens.player.bounceClick
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.bold
-import it.fast4x.rimusic.utils.colorPaletteModeKey
 import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.dropShadow
 import it.fast4x.rimusic.utils.effectRotationKey
@@ -75,8 +75,6 @@ import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playerBackgroundColorsKey
-import it.fast4x.rimusic.utils.playerControlsTypeKey
 import it.fast4x.rimusic.utils.playerInfoShowIconsKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -106,13 +104,13 @@ fun InfoAlbumAndArtistModern(
     onCollapse: () -> Unit,
     disableScrollingText: Boolean = false
 ) {
-    val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
-    val playerControlsType by rememberPreference(playerControlsTypeKey, PlayerControlsType.Essential)
+    val colorPaletteMode by Settings.THEME_MODE
+    val playerControlsType by Settings.PLAYER_CONTROLS_TYPE
     var showthumbnail by rememberPreference(showthumbnailKey, true)
     var effectRotationEnabled by rememberPreference(effectRotationKey, true)
     var isRotated by rememberSaveable { mutableStateOf(false) }
     var showSelectDialog by remember { mutableStateOf(false) }
-    val playerBackgroundColors by rememberPreference(playerBackgroundColorsKey,PlayerBackgroundColors.BlurredCoverColor)
+    val playerBackgroundColors by Settings.PLAYER_BACKGROUND
     val playerInfoShowIcon by rememberPreference(playerInfoShowIconsKey, true)
     val currentMediaItem = binder.player.currentMediaItem
 

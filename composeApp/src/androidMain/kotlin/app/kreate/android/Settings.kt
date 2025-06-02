@@ -9,8 +9,87 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
+import it.fast4x.rimusic.enums.AlbumSortBy
+import it.fast4x.rimusic.enums.AlbumSwipeAction
+import it.fast4x.rimusic.enums.AlbumsType
+import it.fast4x.rimusic.enums.AnimatedGradient
+import it.fast4x.rimusic.enums.ArtistSortBy
+import it.fast4x.rimusic.enums.ArtistsType
+import it.fast4x.rimusic.enums.AudioQualityFormat
+import it.fast4x.rimusic.enums.BackgroundProgress
+import it.fast4x.rimusic.enums.BuiltInPlaylist
+import it.fast4x.rimusic.enums.CarouselSize
+import it.fast4x.rimusic.enums.CheckUpdateState
+import it.fast4x.rimusic.enums.CoilDiskCacheMaxSize
+import it.fast4x.rimusic.enums.ColorPaletteMode
+import it.fast4x.rimusic.enums.ColorPaletteName
+import it.fast4x.rimusic.enums.DurationInMilliseconds
+import it.fast4x.rimusic.enums.DurationInMinutes
+import it.fast4x.rimusic.enums.ExoPlayerCacheLocation
+import it.fast4x.rimusic.enums.ExoPlayerDiskCacheMaxSize
+import it.fast4x.rimusic.enums.ExoPlayerDiskDownloadCacheMaxSize
+import it.fast4x.rimusic.enums.ExoPlayerMinTimeForEvent
+import it.fast4x.rimusic.enums.FilterBy
+import it.fast4x.rimusic.enums.FontType
+import it.fast4x.rimusic.enums.HistoryType
+import it.fast4x.rimusic.enums.HomeItemSize
+import it.fast4x.rimusic.enums.HomeScreenTabs
+import it.fast4x.rimusic.enums.IconLikeType
+import it.fast4x.rimusic.enums.Languages
+import it.fast4x.rimusic.enums.LyricsAlignment
+import it.fast4x.rimusic.enums.LyricsBackground
+import it.fast4x.rimusic.enums.LyricsColor
+import it.fast4x.rimusic.enums.LyricsFontSize
+import it.fast4x.rimusic.enums.LyricsHighlight
+import it.fast4x.rimusic.enums.LyricsOutline
+import it.fast4x.rimusic.enums.MaxSongs
+import it.fast4x.rimusic.enums.MaxStatisticsItems
+import it.fast4x.rimusic.enums.MaxTopPlaylistItems
+import it.fast4x.rimusic.enums.MenuStyle
+import it.fast4x.rimusic.enums.MiniPlayerType
+import it.fast4x.rimusic.enums.MusicAnimationType
+import it.fast4x.rimusic.enums.NavigationBarPosition
+import it.fast4x.rimusic.enums.NavigationBarType
+import it.fast4x.rimusic.enums.NotificationButtons
+import it.fast4x.rimusic.enums.NotificationType
+import it.fast4x.rimusic.enums.OnDeviceSongSortBy
+import it.fast4x.rimusic.enums.PauseBetweenSongs
+import it.fast4x.rimusic.enums.PipModule
+import it.fast4x.rimusic.enums.PlayEventsType
+import it.fast4x.rimusic.enums.PlayerBackgroundColors
+import it.fast4x.rimusic.enums.PlayerControlsType
+import it.fast4x.rimusic.enums.PlayerInfoType
+import it.fast4x.rimusic.enums.PlayerPlayButtonType
+import it.fast4x.rimusic.enums.PlayerPosition
+import it.fast4x.rimusic.enums.PlayerThumbnailSize
+import it.fast4x.rimusic.enums.PlayerTimelineSize
+import it.fast4x.rimusic.enums.PlayerTimelineType
+import it.fast4x.rimusic.enums.PlayerType
+import it.fast4x.rimusic.enums.PlaylistSongSortBy
+import it.fast4x.rimusic.enums.PlaylistSortBy
+import it.fast4x.rimusic.enums.PlaylistSwipeAction
+import it.fast4x.rimusic.enums.PlaylistsType
+import it.fast4x.rimusic.enums.PresetsReverb
+import it.fast4x.rimusic.enums.QueueLoopType
+import it.fast4x.rimusic.enums.QueueSwipeAction
+import it.fast4x.rimusic.enums.QueueType
+import it.fast4x.rimusic.enums.RecommendationsNumber
+import it.fast4x.rimusic.enums.Romanization
+import it.fast4x.rimusic.enums.SongSortBy
+import it.fast4x.rimusic.enums.SongsNumber
+import it.fast4x.rimusic.enums.SortOrder
+import it.fast4x.rimusic.enums.StatisticsCategory
+import it.fast4x.rimusic.enums.StatisticsType
+import it.fast4x.rimusic.enums.SwipeAnimationNoThumbnail
+import it.fast4x.rimusic.enums.ThumbnailCoverType
+import it.fast4x.rimusic.enums.ThumbnailRoundness
+import it.fast4x.rimusic.enums.ThumbnailType
+import it.fast4x.rimusic.enums.TransitionEffect
+import it.fast4x.rimusic.enums.UiType
+import it.fast4x.rimusic.enums.WallpaperType
 import org.jetbrains.annotations.Blocking
 import org.jetbrains.annotations.NonBlocking
+import java.net.Proxy
 
 /**
  * A set of lazily initialized singleton preferences.
@@ -28,6 +107,303 @@ import org.jetbrains.annotations.NonBlocking
 object Settings {
 
     private lateinit var preferences: SharedPreferences
+
+    //<editor-fold defaultstate="collapsed" desc="Item size">
+    val HOME_ARTIST_ITEM_SIZE by lazy {
+        Preference.EnumPreference( preferences, "HomeAristItemSize", "AristItemSizeEnum", HomeItemSize.SMALL )
+    }
+    val HOME_ALBUM_ITEM_SIZE by lazy {
+        Preference.EnumPreference( preferences, "HomeAlbumItemSize", "AlbumItemSizeEnum", HomeItemSize.SMALL )
+    }
+    val HOME_LIBRARY_ITEM_SIZE by lazy {
+        Preference.EnumPreference( preferences, "HomeLibraryItemSize", "LibraryItemSizeEnum", HomeItemSize.SMALL )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Sort by">
+    val HOME_SONGS_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "HomeSongsSortBy", "", SongSortBy.Title )
+    }
+    val HOME_ON_DEVICE_SONGS_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "HomeOnDeviceSongsSortBy", "", OnDeviceSongSortBy.Title )
+    }
+    val HOME_ARTISTS_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "HomeArtistsSortBy", "", ArtistSortBy.Name )
+    }
+    val HOME_ALBUMS_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "HomeAlbumsSortBy", "", AlbumSortBy.Title )
+    }
+    val HOME_LIBRARY_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "HomeLibrarySortBy", "", PlaylistSortBy.SongCount )
+    }
+    val PLAYLIST_SONGS_SORT_BY by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSongsSortBy", "", PlaylistSongSortBy.Title )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Sort order">
+    val HOME_SONGS_SORT_ORDER by lazy {
+        Preference.EnumPreference( preferences, "HomeSongsSortOrder", "", SortOrder.Ascending )
+    }
+    val HOME_ARTISTS_SORT_ORDER by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSongsSortOrder", "", SortOrder.Ascending )
+    }
+    val HOME_ALBUM_SORT_ORDER by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSongsSortOrder", "", SortOrder.Ascending )
+    }
+    val HOME_LIBRARY_SORT_ORDER by lazy {
+        Preference.EnumPreference( preferences, "HomeLibrarySortOrder", "", SortOrder.Ascending )
+    }
+    val PLAYLIST_SONGS_SORT_ORDER by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSongsSortOrder", "", SortOrder.Ascending )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Max # of ...">
+    val MAX_NUMBER_OF_SMART_RECOMMENDATIONS by lazy {
+        Preference.EnumPreference( preferences, "MaxNumberOfSmartRecommendations", "recommendationsNumber", RecommendationsNumber.`5` )
+    }
+    val MAX_NUMBER_OF_STATISTIC_ITEMS by lazy {
+        Preference.EnumPreference( preferences, "MaxNumberOfStatisticItems", "maxStatisticsItems", MaxStatisticsItems.`10` )
+    }
+    val MAX_NUMBER_OF_TOP_PLAYED by lazy {
+        Preference.EnumPreference( preferences, "MaxNumberOfTopPlayed", "MaxTopPlaylistItems", MaxTopPlaylistItems.`10` )
+    }
+    val MAX_NUMBER_OF_SONG_IN_QUEUE by lazy {
+        Preference.EnumPreference( preferences, "MaxNumberOfTopPlayed", "MaxTopPlaylistItems", MaxSongs.Unlimited )
+    }
+    val MAX_NUMBER_OF_NEXT_IN_QUEUE by lazy {
+        Preference.EnumPreference( preferences, "MaxNumberOfNextInQueue", "showsongs", SongsNumber.`2` )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Swipe action">
+    val QUEUE_SWIPE_LEFT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "QueueSwipeLeftAction", "queueSwipeLeftAction", QueueSwipeAction.RemoveFromQueue )
+    }
+    val QUEUE_SWIPE_RIGHT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "QueueSwipeRightAction", "queueSwipeRightAction", QueueSwipeAction.PlayNext )
+    }
+    val PLAYLIST_SWIPE_LEFT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSwipeLeftAction", "playlistSwipeLeftAction", PlaylistSwipeAction.Favourite )
+    }
+    val PLAYLIST_SWIPE_RIGHT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "PlaylistSwipeRightAction", "playlistSwipeRightAction", PlaylistSwipeAction.PlayNext )
+    }
+    val ALBUM_SWIPE_LEFT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "AlbumSwipeLeftAction", "albumSwipeLeftAction", AlbumSwipeAction.PlayNext )
+    }
+    val ALBUM_SWIPE_RIGHT_ACTION by lazy {
+        Preference.EnumPreference( preferences, "AlbumSwipeRightAction", "albumSwipeRightAction", AlbumSwipeAction.Bookmark )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Mini player">
+    val MINI_PLAYER_POSITION by lazy {
+        Preference.EnumPreference( preferences, "MiniPlayerPosition", "playerPosition", PlayerPosition.Bottom )
+    }
+    val MINI_PLAYER_TYPE by lazy {
+        Preference.EnumPreference( preferences, "MiniPlayerType", "miniPlayerType", MiniPlayerType.Modern )
+    }
+    val MINI_PLAYER_PROGRESS_BAR by lazy {
+        Preference.EnumPreference( preferences, "MiniPlayerProgressBar", "backgroundProgress", BackgroundProgress.MiniPlayer )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Player">
+    val PLAYER_CONTROLS_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerControlsType", "playerControlsType", PlayerControlsType.Essential )
+    }
+    val PLAYER_INFO_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerInfoType", "playerInfoType", PlayerInfoType.Essential )
+    }
+    val PLAYER_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerType", "playerType", PlayerType.Essential )
+    }
+    val PLAYER_TIMELINE_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerTimelineType", "playerTimelineType", PlayerTimelineType.FakeAudioBar )
+    }
+    val PLAYER_PORTRAIT_THUMBNAIL_SIZE by lazy {
+        Preference.EnumPreference( preferences, "PlayerThumbnailSize", "playerThumbnailSize", PlayerThumbnailSize.Biggest )
+    }
+    val PLAYER_LANDSCAPE_THUMBNAIL_SIZE by lazy {
+        Preference.EnumPreference( preferences, "PlayerLandscapeThumbnailSize", "playerThumbnailSizeL", PlayerThumbnailSize.Biggest )
+    }
+    val PLAYER_TIMELINE_SIZE by lazy {
+        Preference.EnumPreference( preferences, "PlayerTimelineSize", "playerTimelineSize", PlayerTimelineSize.Biggest )
+    }
+    val PLAYER_PLAY_BUTTON_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerPlayButtonType", "playerPlayButtonType", PlayerPlayButtonType.Disabled )
+    }
+    val PLAYER_BACKGROUND by lazy {
+        Preference.EnumPreference( preferences, "PlayerBackground", "playerBackgroundColors", PlayerBackgroundColors.BlurredCoverColor )
+    }
+    val PLAYER_THUMBNAIL_TYPE by lazy {
+        Preference.EnumPreference( preferences, "PlayerThumbnailType", "coverThumbnailAnimation", ThumbnailCoverType.Vinyl )
+    }
+    val PLAYER_NO_THUMBNAIL_SWIPE_ANIMATION by lazy {
+        Preference.EnumPreference( preferences, "PlayerNoThumbnailSwipeAnimation", "swipeAnimationsNoThumbnail", SwipeAnimationNoThumbnail.Sliding )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Cache">
+    val THUMBNAIL_CACHE_SIZE by lazy {
+        Preference.EnumPreference( preferences, "ThumbnailCacheSize", "coilDiskCacheMaxSize", CoilDiskCacheMaxSize.`128MB` )
+    }
+    val SONG_CACHE_SIZE by lazy {
+        Preference.EnumPreference( preferences, "SongCacheSize", "exoPlayerDiskCacheMaxSize", ExoPlayerDiskCacheMaxSize.`2GB` )
+    }
+    val SONG_DOWNLOAD_SIZE by lazy {
+        Preference.EnumPreference( preferences, "SongDownloadSize", "exoPlayerDiskDownloadCacheMaxSize", ExoPlayerDiskDownloadCacheMaxSize.`2GB` )
+    }
+    val EXO_CACHE_LOCATION by lazy {
+        Preference.EnumPreference( preferences, "ExoCacheLocation", "exoPlayerCacheLocationKey", ExoPlayerCacheLocation.System )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Notification">
+    val MEDIA_NOTIFICATION_FIRST_ICON by lazy {
+        Preference.EnumPreference( preferences, "MediaNotificationFirstIcon", "notificationPlayerFirstIcon", NotificationButtons.Download )
+    }
+    val MEDIA_NOTIFICATION_SECOND_ICON by lazy {
+        Preference.EnumPreference( preferences, "MediaNotificationSecondIcon", "notificationPlayerSecondIcon", NotificationButtons.Favorites )
+    }
+    val NOTIFICATION_TYPE by lazy {
+        Preference.EnumPreference( preferences, "NotificationType", "notificationType", NotificationType.Default )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Lyrics">
+    val LYRICS_COLOR by lazy {
+        Preference.EnumPreference( preferences, "LyricsColor", "lyricsColor", LyricsColor.Thememode )
+    }
+    val LYRICS_OUTLINE by lazy {
+        Preference.EnumPreference( preferences, "HomeAlbumType", "albumType", LyricsOutline.None )
+    }
+    val LYRICS_FONT_SIZE by lazy {
+        Preference.EnumPreference( preferences, "LyricsFontSize", "lyricsFontSize", LyricsFontSize.Medium )
+    }
+    val LYRICS_ROMANIZATION_TYPE by lazy {
+        Preference.EnumPreference( preferences, "LyricsRomanizationType", "romanization", Romanization.Off )
+    }
+    val LYRICS_BACKGROUND by lazy {
+        Preference.EnumPreference( preferences, "LyricsBackground", "lyricsBackground", LyricsBackground.Black )
+    }
+    val LYRICS_HIGHLIGHT by lazy {
+        Preference.EnumPreference( preferences, "LyricsHighlight", "lyricsHighlight", LyricsHighlight.None )
+    }
+    val LYRICS_ALIGNMENT by lazy {
+        Preference.EnumPreference( preferences, "LyricsAlignment", "lyricsAlignment", LyricsAlignment.Center )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Page type">
+    val QUICK_PICKS_TYPE by lazy {
+        Preference.EnumPreference( preferences, "QuickPicksType", "playEventsType", PlayEventsType.MostPlayed )
+    }
+    val HOME_ARTIST_TYPE by lazy {
+        Preference.EnumPreference( preferences, "HomeArtistType", "artistType", ArtistsType.Favorites )
+    }
+    val HOME_ALBUM_TYPE by lazy {
+        Preference.EnumPreference( preferences, "HomeAlbumType", "albumType", AlbumsType.Favorites )
+    }
+    val HOME_SONGS_TYPE by lazy {
+        Preference.EnumPreference( preferences, "HomeSongsType", "builtInPlaylist", BuiltInPlaylist.Favorites )
+    }
+    val HISTORY_PAGE_TYPE by lazy {
+        Preference.EnumPreference( preferences, "HistoryPageType", "historyType", HistoryType.History )
+    }
+    val HOME_LIBRARY_TYPE by lazy {
+        Preference.EnumPreference( preferences, "HomePlaylistType", "playlistType", PlaylistsType.Playlist )
+    }
+    //</editor-fold>
+
+    val HOME_SONGS_TOP_PLAYLIST_PERIOD by lazy {
+        Preference.EnumPreference( preferences, "HomeSongsTopPlaylistPeriod", "", StatisticsType.All )
+    }
+    val MENU_STYLE by lazy {
+        Preference.EnumPreference( preferences, "MenuStyle", "menuStyle", MenuStyle.List )
+    }
+    val QUICK_PICKS_MIN_DURATION by lazy {
+        Preference.EnumPreference( preferences, "QuickPicksMinDuration", "exoPlayerMinTimeForEvent", ExoPlayerMinTimeForEvent.`20s` )
+    }
+    val MAIN_THEME by lazy {
+        Preference.EnumPreference( preferences, "MainTheme", "UiType", UiType.RiMusic )
+    }
+    val COLOR_PALETTE by lazy {
+        Preference.EnumPreference( preferences, "ColorPalette", "colorPaletteName", ColorPaletteName.Dynamic )
+    }
+    val THEME_MODE by lazy {
+        Preference.EnumPreference( preferences, "ThemeMode", "colorPaletteMode", ColorPaletteMode.Dark )
+    }
+    val STARTUP_SCREEN by lazy {
+        Preference.EnumPreference( preferences, "StartupScreen", "indexNavigationTab", HomeScreenTabs.Songs )
+    }
+    val FONT by lazy {
+        Preference.EnumPreference( preferences, "Font", "fontType", FontType.Rubik )
+    }
+    val NAVIGATION_BAR_POSITION by lazy {
+        Preference.EnumPreference( preferences, "NavigationBarPosition", "navigationBarPosition", NavigationBarPosition.Bottom )
+    }
+    val NAVIGATION_BAR_TYPE by lazy {
+        Preference.EnumPreference( preferences, "NavigationBarType", "navigationBarType", NavigationBarType.IconAndText )
+    }
+    val PAUSE_BETWEEN_SONGS by lazy {
+        Preference.EnumPreference( preferences, "PauseBetweenSongs", "pauseBetweenSongs", PauseBetweenSongs.`0` )
+    }
+    val THUMBNAIL_BORDER_RADIUS by lazy {
+        Preference.EnumPreference( preferences, "ThumbnailBorderRadius", "thumbnailRoundness", ThumbnailRoundness.Heavy )
+    }
+    val TRANSITION_EFFECT by lazy {
+        Preference.EnumPreference( preferences, "TransitionEffect", "transitionEffect", TransitionEffect.Scale )
+    }
+    val AUDIO_FADE_DURATION by lazy {
+        Preference.EnumPreference( preferences, "AudioFadeDuration", "playbackFadeAudioDuration", DurationInMilliseconds.Disabled )
+    }
+    val AUDIO_QUALITY by lazy {
+        Preference.EnumPreference( preferences, "AudioQuality", "audioQualityFormat", AudioQualityFormat.Auto )
+    }
+    val AUDIO_REVERB_PRESET by lazy {
+        Preference.EnumPreference( preferences, "AudioReverbPreset", "audioReverbPreset", PresetsReverb.NONE )
+    }
+    val LIMIT_SONGS_WITH_DURATION by lazy {
+        Preference.EnumPreference( preferences, "LimitSongsWithDuration", "excludeSongsWithDurationLimit", DurationInMinutes.Disabled )
+    }
+    val QUEUE_TYPE by lazy {
+        Preference.EnumPreference( preferences, "QueueType", "queueType", QueueType.Essential )
+    }
+    val QUEUE_LOOP_TYPE by lazy {
+        Preference.EnumPreference( preferences, "QueueLoopType", "queueLoopType", QueueLoopType.Default )
+    }
+    val CAROUSEL_SIZE by lazy {
+        Preference.EnumPreference( preferences, "CarouselSize", "carouselSize", CarouselSize.Biggest )
+    }
+    val THUMBNAIL_TYPE by lazy {
+        Preference.EnumPreference( preferences, "ThumbnailType", "thumbnailType", ThumbnailType.Modern )
+    }
+    val LIKE_ICON by lazy {
+        Preference.EnumPreference( preferences, "LikeIcon", "iconLikeType", IconLikeType.Essential )
+    }
+    val WALLPAPER_TYPE by lazy {
+        Preference.EnumPreference( preferences, "WallpaperType", "wallpaperType", WallpaperType.Lockscreen )
+    }
+    val ANIMATED_GRADIENT by lazy {
+        Preference.EnumPreference( preferences, "AnimatedGradient", "animatedGradient", AnimatedGradient.Linear )
+    }
+    val NOW_PLAYING_INDICATOR by lazy {
+        Preference.EnumPreference( preferences, "NowPlayingIndicator", "nowPlayingIndicator", MusicAnimationType.Bubbles )
+    }
+    val PIP_MODULE by lazy {
+        Preference.EnumPreference( preferences, "PipModule", "pipModule", PipModule.Cover )
+    }
+    val CHECK_UPDATE by lazy {
+        Preference.EnumPreference( preferences, "CheckUpdateState", "checkUpdateState", CheckUpdateState.Disabled )
+    }
+    val APP_LANGUAGE by lazy {
+        Preference.EnumPreference( preferences, "AppLanguage", "languageApp", Languages.System )
+    }
+    val OTHER_APP_LANGUAGE by lazy {
+        Preference.EnumPreference( preferences, "OtherAppLanguage", "otherLanguageApp", Languages.System )
+    }
+    val HOME_ARTIST_AND_ALBUM_FILTER by lazy {
+        Preference.EnumPreference( preferences, "filterBy", "", FilterBy.All )
+    }
+    val STATISTIC_PAGE_CATEGORY by lazy {
+        Preference.EnumPreference( preferences, "StatisticPageCategory", "statisticsCategory", StatisticsCategory.Songs )
+    }
+    val PROXY_SCHEME by lazy {
+        Preference.EnumPreference( preferences, "ProxyScheme", "ProxyMode", Proxy.Type.HTTP )
+    }
 
     /**
      * Initialize needed properties for settings to use.

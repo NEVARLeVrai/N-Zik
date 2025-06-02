@@ -44,16 +44,18 @@ import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings.HOME_ON_DEVICE_SONGS_SORT_BY
+import app.kreate.android.Settings.HOME_SONGS_SORT_ORDER
+import app.kreate.android.themed.rimusic.component.tab.Sort
 import it.fast4x.rimusic.EXPLICIT_PREFIX
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.typography
+import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.SwipeablePlaylistItem
 import it.fast4x.rimusic.ui.components.tab.toolbar.Button
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.Preference.HOME_ON_DEVICE_SONGS_SORT_BY
-import it.fast4x.rimusic.utils.Preference.HOME_SONGS_SORT_ORDER
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.bold
@@ -67,7 +69,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import me.knighthat.component.FolderItem
 import me.knighthat.component.SongItem
-import me.knighthat.component.Sort
 import me.knighthat.component.tab.ItemSelector
 import me.knighthat.component.tab.Search
 import me.knighthat.utils.PathUtils
@@ -89,6 +90,7 @@ fun OnDeviceSong(
     // Essentials
     val context = LocalContext.current
     val binder = LocalPlayerServiceBinder.current
+    val menuState = LocalMenuState.current
 
     //<editor-fold defaultstate="collapsed" desc="Settings">
     val parentalControlEnabled by rememberPreference( parentalControlEnabledKey, false )
@@ -129,7 +131,9 @@ fun OnDeviceSong(
     }
     //</editor-fold>
 
-    val odSort = Sort( HOME_ON_DEVICE_SONGS_SORT_BY, HOME_SONGS_SORT_ORDER )
+    val odSort = remember {
+        Sort(menuState, HOME_ON_DEVICE_SONGS_SORT_BY, HOME_SONGS_SORT_ORDER)
+    }
 
     LaunchedEffect( isPermissionGranted, odSort.sortBy, odSort.sortOrder ) {
         if( !isPermissionGranted ) return@LaunchedEffect

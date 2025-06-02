@@ -39,6 +39,7 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.compose.rememberNavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.innertube.Innertube
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -61,7 +62,6 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.ui.styling.favoritesOverlay
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.colorPaletteNameKey
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.downloadedStateMedia
 import it.fast4x.rimusic.utils.getLikeState
@@ -346,7 +346,7 @@ fun SongItem(
     val isSongMappedToPlaylist by remember {
         Database.songPlaylistMapTable.isMapped( mediaItem.mediaId )
     }.collectAsState( false, Dispatchers.IO )
-    val colorPaletteName by rememberPreference(colorPaletteNameKey, ColorPaletteName.Dynamic)
+    val colorPaletteName by Settings.COLOR_PALETTE
 
     val context = LocalContext.current
     val colorPalette = LocalAppearance.current.colorPalette

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.cleanPrefix
@@ -42,7 +43,6 @@ import it.fast4x.rimusic.enums.ButtonState
 import it.fast4x.rimusic.enums.PlayerControlsType
 import it.fast4x.rimusic.enums.PlayerInfoType
 import it.fast4x.rimusic.enums.PlayerPlayButtonType
-import it.fast4x.rimusic.enums.PlayerTimelineSize
 import it.fast4x.rimusic.enums.PlayerType
 import it.fast4x.rimusic.models.Info
 import it.fast4x.rimusic.models.ui.UiMedia
@@ -58,12 +58,7 @@ import it.fast4x.rimusic.utils.isCompositionLaunched
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isExplicit
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.playerControlsTypeKey
-import it.fast4x.rimusic.utils.playerInfoTypeKey
-import it.fast4x.rimusic.utils.playerPlayButtonTypeKey
 import it.fast4x.rimusic.utils.playerSwapControlsWithTimelineKey
-import it.fast4x.rimusic.utils.playerTimelineSizeKey
-import it.fast4x.rimusic.utils.playerTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showlyricsthumbnailKey
 import it.fast4x.rimusic.utils.showthumbnailKey
@@ -202,10 +197,7 @@ fun Controls(
 
     var showSelectDialog by remember { mutableStateOf(false) }
 
-    var playerTimelineSize by rememberPreference(
-        playerTimelineSizeKey,
-        PlayerTimelineSize.Biggest
-    )
+    var playerTimelineSize by Settings.PLAYER_TIMELINE_SIZE
 
 
     /*
@@ -236,7 +228,7 @@ fun Controls(
         mutableStateOf(false)
     }
      */
-    val playerInfoType by rememberPreference(playerInfoTypeKey, PlayerInfoType.Essential)
+    val playerInfoType by Settings.PLAYER_INFO_TYPE
     var playerSwapControlsWithTimeline by rememberPreference(
         playerSwapControlsWithTimelineKey,
         false
@@ -246,10 +238,10 @@ fun Controls(
         transparentBackgroundPlayerActionBarKey,
         false
     )
-    var playerControlsType by rememberPreference(playerControlsTypeKey, PlayerControlsType.Essential)
-    var playerPlayButtonType by rememberPreference(playerPlayButtonTypeKey, PlayerPlayButtonType.Disabled)
+    var playerControlsType by Settings.PLAYER_CONTROLS_TYPE
+    var playerPlayButtonType by Settings.PLAYER_PLAY_BUTTON_TYPE
     var showthumbnail by rememberPreference(showthumbnailKey, true)
-    var playerType by rememberPreference(playerTypeKey, PlayerType.Essential)
+    var playerType by Settings.PLAYER_TYPE
     val expandedlandscape = (isLandscape && playerType == PlayerType.Modern) || (expandedplayer && !showthumbnail)
 
     Box(

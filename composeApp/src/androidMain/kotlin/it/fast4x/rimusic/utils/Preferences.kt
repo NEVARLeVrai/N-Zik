@@ -597,16 +597,6 @@ fun rememberPreference(key: String, defaultValue: String): MutableState<String> 
     }
 }
 
-@Composable
-inline fun <reified T : Enum<T>> rememberPreference(key: String, defaultValue: T): MutableState<T> {
-    val context = LocalContext.current
-    return remember {
-        mutableStatePreferenceOf(context.preferences.getEnum(key, defaultValue)) {
-            context.preferences.edit { putEnum(key, it) }
-        }
-    }
-}
-
 fun clearPreference(context: Context, key: String): Unit {
     try {
         context.preferences.edit { remove(key) }

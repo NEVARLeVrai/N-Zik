@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import app.kreate.android.themed.rimusic.screen.home.onDevice.OnDeviceSong
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.appContext
@@ -48,7 +49,6 @@ import it.fast4x.rimusic.ui.components.themed.PlaylistsMenu
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.builtInPlaylistKey
 import it.fast4x.rimusic.utils.enqueue
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showCachedPlaylistKey
@@ -75,7 +75,7 @@ fun HomeSongsScreen(navController: NavController ) {
     val binder = LocalPlayerServiceBinder.current
     val lazyListState = rememberLazyListState()
 
-    var builtInPlaylist by rememberPreference( builtInPlaylistKey, BuiltInPlaylist.Favorites )
+    var builtInPlaylist by Settings.HOME_SONGS_TYPE
 
     val itemsOnDisplayState = remember { mutableStateListOf<Song>() }
 

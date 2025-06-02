@@ -32,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.AuxEffectInfo
 import androidx.media3.common.C
@@ -76,6 +75,7 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaStyleNotificationHelper
 import androidx.media3.session.SessionToken
 import app.kreate.android.R
+import app.kreate.android.Settings
 import app.kreate.android.service.createDataSourceFactory
 import app.kreate.android.widget.Widget
 import com.google.common.collect.ImmutableList
@@ -89,10 +89,8 @@ import it.fast4x.rimusic.MainActivity
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.enums.AudioQualityFormat
-import it.fast4x.rimusic.enums.DurationInMilliseconds
 import it.fast4x.rimusic.enums.ExoPlayerCacheLocation
 import it.fast4x.rimusic.enums.ExoPlayerDiskCacheMaxSize
-import it.fast4x.rimusic.enums.ExoPlayerMinTimeForEvent
 import it.fast4x.rimusic.enums.NotificationButtons
 import it.fast4x.rimusic.enums.NotificationType
 import it.fast4x.rimusic.enums.PresetsReverb
@@ -117,8 +115,6 @@ import it.fast4x.rimusic.utils.TimerJob
 import it.fast4x.rimusic.utils.YouTubeRadio
 import it.fast4x.rimusic.utils.activityPendingIntent
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.audioQualityFormatKey
-import it.fast4x.rimusic.utils.audioReverbPresetKey
 import it.fast4x.rimusic.utils.autoLoadSongsInQueueKey
 import it.fast4x.rimusic.utils.bassboostEnabledKey
 import it.fast4x.rimusic.utils.bassboostLevelKey
@@ -128,14 +124,10 @@ import it.fast4x.rimusic.utils.collect
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
 import it.fast4x.rimusic.utils.enableWallpaperKey
 import it.fast4x.rimusic.utils.encryptedPreferences
-import it.fast4x.rimusic.utils.exoPlayerCacheLocationKey
 import it.fast4x.rimusic.utils.exoPlayerCustomCacheKey
-import it.fast4x.rimusic.utils.exoPlayerDiskCacheMaxSizeKey
-import it.fast4x.rimusic.utils.exoPlayerMinTimeForEventKey
 import it.fast4x.rimusic.utils.fadeInEffect
 import it.fast4x.rimusic.utils.fadeOutEffect
 import it.fast4x.rimusic.utils.forcePlay
-import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.intent
 import it.fast4x.rimusic.utils.isAtLeastAndroid10
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
@@ -146,20 +138,14 @@ import it.fast4x.rimusic.utils.loudnessBaseGainKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
-import it.fast4x.rimusic.utils.notificationPlayerFirstIconKey
-import it.fast4x.rimusic.utils.notificationPlayerSecondIconKey
-import it.fast4x.rimusic.utils.notificationTypeKey
 import it.fast4x.rimusic.utils.pauseListenHistoryKey
 import it.fast4x.rimusic.utils.persistentQueueKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playbackFadeAudioDurationKey
 import it.fast4x.rimusic.utils.playbackPitchKey
 import it.fast4x.rimusic.utils.playbackSpeedKey
 import it.fast4x.rimusic.utils.playbackVolumeKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.putEnum
-import it.fast4x.rimusic.utils.queueLoopTypeKey
 import it.fast4x.rimusic.utils.resumePlaybackOnStartKey
 import it.fast4x.rimusic.utils.resumePlaybackWhenDeviceConnectedKey
 import it.fast4x.rimusic.utils.setGlobalVolume
@@ -171,7 +157,6 @@ import it.fast4x.rimusic.utils.timer
 import it.fast4x.rimusic.utils.toggleRepeatMode
 import it.fast4x.rimusic.utils.toggleShuffleMode
 import it.fast4x.rimusic.utils.volumeNormalizationKey
-import it.fast4x.rimusic.utils.wallpaperTypeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -299,8 +284,7 @@ class PlayerServiceModern : MediaLibraryService(),
             }
         }
 
-        val notificationType = preferences.getEnum(notificationTypeKey, NotificationType.Default)
-        when(notificationType){
+        when( Settings.NOTIFICATION_TYPE.value ){
             NotificationType.Default -> {
                 // DEFAULT NOTIFICATION PROVIDER
                 //        setMediaNotificationProvider(
@@ -356,11 +340,11 @@ class PlayerServiceModern : MediaLibraryService(),
         val preferences = preferences
         isPersistentQueueEnabled = preferences.getBoolean(persistentQueueKey, false)
 
-        audioQualityFormat = preferences.getEnum(audioQualityFormatKey, AudioQualityFormat.Auto)
+        audioQualityFormat = Settings.AUDIO_QUALITY.value
         showLikeButton = preferences.getBoolean(showLikeButtonBackgroundPlayerKey, true)
         showDownloadButton = preferences.getBoolean(showDownloadButtonBackgroundPlayerKey, true)
 
-        val cacheSize = preferences.getEnum( exoPlayerDiskCacheMaxSizeKey, ExoPlayerDiskCacheMaxSize.`2GB` )
+        val cacheSize by Settings.SONG_CACHE_SIZE
 
         val cacheEvictor = when( cacheSize ) {
             ExoPlayerDiskCacheMaxSize.Unlimited -> NoOpCacheEvictor()
@@ -382,8 +366,8 @@ class PlayerServiceModern : MediaLibraryService(),
                 // Looks a bit ugly but what it does is
                 // check location set by user and return
                 // appropriate path with [CACHE_DIRNAME] appended.
-                when( preferences.getEnum( exoPlayerCacheLocationKey, ExoPlayerCacheLocation.System ) ) {
-                    ExoPlayerCacheLocation.System -> cacheDir
+                when( Settings.EXO_CACHE_LOCATION.value ) {
+                    ExoPlayerCacheLocation.System  -> cacheDir
                     ExoPlayerCacheLocation.Private -> filesDir
                 }.resolve( CACHE_DIRNAME )
         }
@@ -465,7 +449,7 @@ class PlayerServiceModern : MediaLibraryService(),
         player.addListener(this@PlayerServiceModern)
         player.addAnalyticsListener(PlaybackStatsListener(false, this@PlayerServiceModern))
 
-        player.repeatMode = preferences.getEnum(queueLoopTypeKey, QueueLoopType.Default).type
+        player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
 
         binder.player.playbackParameters = PlaybackParameters(
             preferences.getFloat(playbackSpeedKey, 1f),
@@ -572,9 +556,7 @@ class PlayerServiceModern : MediaLibraryService(),
 
     override fun onRepeatModeChanged(repeatMode: Int) {
         updateDefaultNotification()
-        preferences.edit {
-            putEnum(queueLoopTypeKey, QueueLoopType.from(repeatMode))
-        }
+        Settings.QUEUE_LOOP_TYPE.value = QueueLoopType.from( repeatMode )
     }
 
 
@@ -598,8 +580,7 @@ class PlayerServiceModern : MediaLibraryService(),
             }
 
 
-        val minTimeForEvent =
-            preferences.getEnum(exoPlayerMinTimeForEventKey, ExoPlayerMinTimeForEvent.`20s`)
+        val minTimeForEvent by Settings.QUICK_PICKS_MIN_DURATION
 
         if ( totalPlayTimeMs > minTimeForEvent.asMillis ) {
             Database.asyncTransaction {
@@ -681,14 +662,13 @@ class PlayerServiceModern : MediaLibraryService(),
                 player.skipSilenceEnabled = sharedPreferences.getBoolean(key, false)
             }
 
-            queueLoopTypeKey -> {
-                player.repeatMode =
-                    sharedPreferences?.getEnum(queueLoopTypeKey, QueueLoopType.Default)?.type
-                        ?: QueueLoopType.Default.type
+            Settings.QUEUE_LOOP_TYPE.key -> {
+                if( ::player.isInitialized )
+                    player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
             }
 
             bassboostLevelKey, bassboostEnabledKey -> maybeBassBoost()
-            audioReverbPresetKey -> maybeReverb()
+            Settings.AUDIO_REVERB_PRESET.key -> maybeReverb()
         }
     }
 
@@ -911,7 +891,7 @@ class PlayerServiceModern : MediaLibraryService(),
     }
 
     private fun maybeReverb() {
-        val presetType = preferences.getEnum(audioReverbPresetKey, PresetsReverb.NONE)
+        val presetType by Settings.AUDIO_REVERB_PRESET
         println("PlayerServiceModern maybeReverb presetType $presetType")
         if (presetType == PresetsReverb.NONE) {
             runCatching {
@@ -1068,8 +1048,8 @@ class PlayerServiceModern : MediaLibraryService(),
 
 
     private fun buildCustomCommandButtons(): MutableList<CommandButton> {
-        val notificationPlayerFirstIcon = preferences.getEnum(notificationPlayerFirstIconKey, NotificationButtons.Download)
-        val notificationPlayerSecondIcon = preferences.getEnum(notificationPlayerSecondIconKey, NotificationButtons.Favorites)
+        val notificationPlayerFirstIcon by Settings.MEDIA_NOTIFICATION_FIRST_ICON
+        val notificationPlayerSecondIcon by Settings.MEDIA_NOTIFICATION_SECOND_ICON
 
         val commandButtonsList = mutableListOf<CommandButton>()
         val firstCommandButton = NotificationButtons.entries.let { buttons ->
@@ -1195,8 +1175,8 @@ class PlayerServiceModern : MediaLibraryService(),
             .addAction(R.drawable.play_skip_forward, "Skip forward", nextIntent)
 
         //***********************
-        val notificationPlayerFirstIcon = preferences.getEnum(notificationPlayerFirstIconKey, NotificationButtons.Download)
-        val notificationPlayerSecondIcon = preferences.getEnum(notificationPlayerSecondIconKey, NotificationButtons.Favorites)
+        val notificationPlayerFirstIcon by Settings.MEDIA_NOTIFICATION_FIRST_ICON
+        val notificationPlayerSecondIcon by Settings.MEDIA_NOTIFICATION_SECOND_ICON
 
         NotificationButtons.entries.let { buttons ->
             buttons
@@ -1260,7 +1240,7 @@ class PlayerServiceModern : MediaLibraryService(),
 
     private fun updateWallpaper() {
         val wallpaperEnabled = preferences.getBoolean(enableWallpaperKey, false)
-        val wallpaperType = preferences.getEnum(wallpaperTypeKey, WallpaperType.Lockscreen)
+        val wallpaperType by Settings.WALLPAPER_TYPE
         if (isAtLeastAndroid7 && wallpaperEnabled) {
             coroutineScope.launch(Dispatchers.IO) {
                 val wpManager = WallpaperManager.getInstance(this@PlayerServiceModern)
@@ -1782,7 +1762,7 @@ class PlayerServiceModern : MediaLibraryService(),
          */
         @MainThread
         fun gracefulPause() {
-            val duration = preferences.getEnum( playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled )
+            val duration by Settings.AUDIO_FADE_DURATION
             player.fadeOutEffect( duration.asMillis )
         }
 
@@ -1791,7 +1771,7 @@ class PlayerServiceModern : MediaLibraryService(),
          */
         @MainThread
         fun gracefulPlay() {
-            val duration = preferences.getEnum( playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled )
+            val duration by Settings.AUDIO_FADE_DURATION
             player.fadeInEffect( duration.asMillis )
         }
 

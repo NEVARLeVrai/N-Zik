@@ -1,4 +1,4 @@
-package me.knighthat.component.song
+package app.kreate.android.themed.rimusic.component.song
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -14,48 +13,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
-import it.fast4x.rimusic.enums.MaxTopPlaylistItems
+import app.kreate.android.Settings
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.StatisticsType
 import it.fast4x.rimusic.typography
-import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.MenuState
 import it.fast4x.rimusic.ui.components.tab.toolbar.Descriptive
 import it.fast4x.rimusic.ui.components.tab.toolbar.Menu
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
 import it.fast4x.rimusic.ui.components.themed.Menu
 import it.fast4x.rimusic.ui.components.themed.MenuEntry
-import it.fast4x.rimusic.utils.MaxTopPlaylistItemsKey
-import it.fast4x.rimusic.utils.Preference
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 
-class PeriodSelector private constructor(
-    override val menuState: MenuState,
-    periodState: MutableState<StatisticsType>,
-    styleState: MutableState<MenuStyle>,
-): MenuIcon, Descriptive, Menu {
+class PeriodSelector(override val menuState: MenuState): MenuIcon, Descriptive, Menu {
 
-    companion object {
-        @Composable
-        operator fun invoke( prefKey: Preference.Key<StatisticsType> ): PeriodSelector =
-            PeriodSelector(
-                LocalMenuState.current,
-                Preference.remember( prefKey ),
-                rememberPreference( menuStyleKey, MenuStyle.List )
-            )
-    }
+    var period: StatisticsType by Settings.HOME_SONGS_TOP_PLAYLIST_PERIOD
 
-    var period: StatisticsType by periodState
-
-    override val iconId: Int = period.iconId
+    override val iconId: Int
+        get() = period.iconId
     override val messageId: Int = R.string.statistics
     override val menuIconTitle: String
         @Composable
         get() = stringResource( messageId )
 
-    override var menuStyle: MenuStyle by styleState
+    override var menuStyle: MenuStyle = Settings.MENU_STYLE.value
 
     fun onDismiss( period: StatisticsType ) {
         this.period = period
@@ -72,7 +53,7 @@ class PeriodSelector private constructor(
 
     @Composable
     override fun MenuComponent() {
-        val size by rememberPreference( MaxTopPlaylistItemsKey, MaxTopPlaylistItems.`10` )
+        val size by Settings.MAX_NUMBER_OF_TOP_PLAYED
 
         Menu {
             Row(
@@ -94,7 +75,7 @@ class PeriodSelector private constructor(
 
             StatisticsType.entries.forEach {
                 MenuEntry(
-                    icon = R.drawable.time,
+                    icon = it.iconId,
                     text = it.text,
                     onClick = {
                         onDismiss( it )

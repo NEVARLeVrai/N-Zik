@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.appContext
@@ -48,8 +49,6 @@ import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.enqueue
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -86,7 +85,7 @@ class SongItemMenu private constructor(
                 navController = navController,
                 song = song,
                 menuState = LocalMenuState.current,
-                styleState = rememberPreference( menuStyleKey, MenuStyle.List )
+                styleState = Settings.MENU_STYLE
             )
     }
 

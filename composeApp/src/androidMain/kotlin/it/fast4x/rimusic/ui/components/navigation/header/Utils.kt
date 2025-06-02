@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import app.kreate.android.Settings
+import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
-import it.fast4x.rimusic.utils.colorPaletteModeKey
 import it.fast4x.rimusic.utils.logDebugEnabledKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.colorPalette
 
 @Composable
 internal fun HeaderIcon(
@@ -48,8 +48,7 @@ internal class Preference {
             rememberPreference( logDebugEnabledKey, false ).value
 
         @Composable
-        fun colorTheme(): ColorPaletteMode =
-            rememberPreference( colorPaletteModeKey, ColorPaletteMode.Dark ).value
+        fun colorTheme(): ColorPaletteMode = Settings.THEME_MODE.value
     }
 }
 

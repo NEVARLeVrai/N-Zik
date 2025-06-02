@@ -7,18 +7,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.LocalPlayerServiceBinder
-import it.fast4x.rimusic.appContext
-import it.fast4x.rimusic.enums.MaxSongs
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.ui.components.tab.toolbar.Descriptive
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.forcePlayFromBeginning
-import it.fast4x.rimusic.utils.getEnum
-import it.fast4x.rimusic.utils.maxSongsInQueueKey
-import it.fast4x.rimusic.utils.preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -62,9 +58,9 @@ class SongShuffler private constructor(
                 return
             }
 
-            val maxSongsInQueue: Int = appContext().preferences
-                                                   .getEnum( maxSongsInQueueKey, MaxSongs.`500` )
-                                                   .toInt()
+            val maxSongsInQueue: Int = Settings.MAX_NUMBER_OF_SONG_IN_QUEUE
+                                               .value
+                                               .toInt()
 
             /**
              * [take] takes up to this amount of item, if [List.size]

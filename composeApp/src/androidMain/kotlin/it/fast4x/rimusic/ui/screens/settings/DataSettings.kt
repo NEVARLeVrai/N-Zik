@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.Coil
 import coil.annotation.ExperimentalCoilApi
 import it.fast4x.rimusic.Database
@@ -30,7 +31,6 @@ import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.CacheType
 import it.fast4x.rimusic.enums.CoilDiskCacheMaxSize
-import it.fast4x.rimusic.enums.ExoPlayerCacheLocation
 import it.fast4x.rimusic.enums.ExoPlayerDiskCacheMaxSize
 import it.fast4x.rimusic.enums.ExoPlayerDiskDownloadCacheMaxSize
 import it.fast4x.rimusic.enums.NavigationBarPosition
@@ -44,11 +44,7 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartPlayerService
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.coilCustomDiskCacheKey
-import it.fast4x.rimusic.utils.coilDiskCacheMaxSizeKey
-import it.fast4x.rimusic.utils.exoPlayerCacheLocationKey
 import it.fast4x.rimusic.utils.exoPlayerCustomCacheKey
-import it.fast4x.rimusic.utils.exoPlayerDiskCacheMaxSizeKey
-import it.fast4x.rimusic.utils.exoPlayerDiskDownloadCacheMaxSizeKey
 import it.fast4x.rimusic.utils.pauseSearchHistoryKey
 import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
@@ -72,19 +68,9 @@ fun DataSettings() {
     val context = LocalContext.current
     val binder = LocalPlayerServiceBinder.current
 
-    var coilDiskCacheMaxSize by rememberPreference(
-        coilDiskCacheMaxSizeKey,
-        CoilDiskCacheMaxSize.`128MB`
-    )
-    var exoPlayerDiskCacheMaxSize by rememberPreference(
-        exoPlayerDiskCacheMaxSizeKey,
-        ExoPlayerDiskCacheMaxSize.`2GB`
-    )
-
-    var exoPlayerDiskDownloadCacheMaxSize by rememberPreference(
-        exoPlayerDiskDownloadCacheMaxSizeKey,
-        ExoPlayerDiskDownloadCacheMaxSize.`2GB`
-    )
+    var coilDiskCacheMaxSize by Settings.THUMBNAIL_CACHE_SIZE
+    var exoPlayerDiskCacheMaxSize by Settings.SONG_CACHE_SIZE
+    var exoPlayerDiskDownloadCacheMaxSize by Settings.SONG_DOWNLOAD_SIZE
 
     /*
      *    var exoPlayerAlternateCacheLocation by rememberPreference(
@@ -92,9 +78,7 @@ fun DataSettings() {
      *    )
      */
 
-    var exoPlayerCacheLocation by rememberPreference(
-        exoPlayerCacheLocationKey, ExoPlayerCacheLocation.System
-    )
+    var exoPlayerCacheLocation by Settings.EXO_CACHE_LOCATION
 
 
     /*

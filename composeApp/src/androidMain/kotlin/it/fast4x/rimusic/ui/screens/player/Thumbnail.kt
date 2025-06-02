@@ -42,10 +42,10 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.enums.ThumbnailCoverType
 import it.fast4x.rimusic.enums.ThumbnailType
 import it.fast4x.rimusic.service.LoginRequiredException
 import it.fast4x.rimusic.service.NoInternetException
@@ -62,7 +62,6 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.utils.DisposableListener
 import it.fast4x.rimusic.utils.clickOnLyricsTextKey
-import it.fast4x.rimusic.utils.coverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.currentWindow
 import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.isLandscape
@@ -70,7 +69,6 @@ import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.showlyricsthumbnailKey
 import it.fast4x.rimusic.utils.showvisthumbnailKey
-import it.fast4x.rimusic.utils.thumbnailTypeKey
 import it.fast4x.rimusic.utils.thumbnailpauseKey
 import me.knighthat.coil.ImageCacheFactory
 import me.knighthat.utils.Toaster
@@ -169,7 +167,7 @@ fun Thumbnail(
     )
 
     val showCoverThumbnailAnimation by rememberPreference(showCoverThumbnailAnimationKey, false)
-    var coverThumbnailAnimation by rememberPreference(coverThumbnailAnimationKey, ThumbnailCoverType.Vinyl)
+    var coverThumbnailAnimation by Settings.PLAYER_THUMBNAIL_TYPE
 
 
     AnimatedContent(
@@ -205,7 +203,7 @@ fun Thumbnail(
         contentAlignment = Alignment.Center, label = ""
     ) { currentWindow ->
 
-        val thumbnailType by rememberPreference(thumbnailTypeKey, ThumbnailType.Modern)
+        val thumbnailType by Settings.THUMBNAIL_TYPE
 
         var modifierUiType by remember { mutableStateOf(modifier) }
 

@@ -21,6 +21,7 @@ import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
 import app.kreate.android.R
+import app.kreate.android.Settings
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
@@ -31,7 +32,6 @@ import it.fast4x.innertube.requests.searchPage
 import it.fast4x.innertube.utils.from
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.cleanPrefix
-import it.fast4x.rimusic.enums.MaxTopPlaylistItems
 import it.fast4x.rimusic.enums.StatisticsType
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.service.MyDownloadHelper
@@ -40,9 +40,7 @@ import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_DOWNLOADED
 import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_FAVORITES
 import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_ONDEVICE
 import it.fast4x.rimusic.service.modern.MediaSessionConstants.ID_TOP
-import it.fast4x.rimusic.utils.MaxTopPlaylistItemsKey
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.persistentQueueKey
 import it.fast4x.rimusic.utils.preferences
 import kotlinx.coroutines.CoroutineScope
@@ -278,9 +276,7 @@ class MediaLibrarySessionCallback(
                         browsableMediaItem(
                             "${PlayerServiceModern.PLAYLIST}/$ID_TOP",
                             context.getString(R.string.playlist_top),
-                            context.preferences.getEnum(
-                                MaxTopPlaylistItemsKey,
-                                MaxTopPlaylistItems.`10`).name,
+                            Settings.MAX_NUMBER_OF_TOP_PLAYED.value.name,
                             drawableUri(R.drawable.trending),
                             MediaMetadata.MEDIA_TYPE_PLAYLIST
                         ),
@@ -341,9 +337,9 @@ class MediaLibrarySessionCallback(
                                 database.eventTable
                                         .findSongsMostPlayedBetween(
                                             from = 0,
-                                            limit = context.preferences
-                                                           .getEnum(MaxTopPlaylistItemsKey, MaxTopPlaylistItems.`10`)
-                                                           .toInt()
+                                            limit = Settings.MAX_NUMBER_OF_TOP_PLAYED
+                                                            .value
+                                                            .toInt()
                                         )
                             ID_ONDEVICE -> database.songTable.allOnDevice()
                             ID_DOWNLOADED -> {
@@ -443,9 +439,9 @@ class MediaLibrarySessionCallback(
                                            // Already in DESC order
                                            .findSongsMostPlayedBetween(
                                                from = 0,
-                                               limit = context.preferences
-                                                   .getEnum( MaxTopPlaylistItemsKey, MaxTopPlaylistItems.`10` )
-                                                   .toInt()
+                                               limit = Settings.MAX_NUMBER_OF_TOP_PLAYED
+                                                               .value
+                                                               .toInt()
                                            )
                         ID_ONDEVICE -> database.songTable.allOnDevice()
                         ID_DOWNLOADED -> {

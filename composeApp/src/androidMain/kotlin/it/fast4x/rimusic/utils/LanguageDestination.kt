@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.enums.Languages
 import me.bush.translator.Language
 
@@ -14,7 +15,7 @@ fun languageDestination (
     language: Languages? = null,
 ): Language {
     //val languageApp  by rememberPreference(languageAppKey, Languages.English)
-    val otherLanguageApp  by rememberPreference(otherLanguageAppKey, Languages.System)
+    val otherLanguageApp  by Settings.OTHER_APP_LANGUAGE
     //Timber.d("LanguageDestination: language $language otherLanguageApp $otherLanguageApp")
 
     return when (language ?: otherLanguageApp) {
@@ -74,7 +75,7 @@ fun languageDestinationName (
     language: Languages? = null,
 ): String {
     //val languageApp  by rememberPreference(languageAppKey, Languages.English)
-    val otherLanguageApp  by rememberPreference(otherLanguageAppKey, Languages.System)
+    val otherLanguageApp  by Settings.OTHER_APP_LANGUAGE
     //Timber.d("LanguageDestination: language $language otherLanguageApp $otherLanguageApp")
 
     return when (language ?: otherLanguageApp) {

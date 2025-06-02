@@ -32,21 +32,17 @@ import androidx.core.os.LocaleListCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.AudioQualityFormat
 import it.fast4x.rimusic.enums.DurationInMilliseconds
 import it.fast4x.rimusic.enums.DurationInMinutes
 import it.fast4x.rimusic.enums.ExoPlayerMinTimeForEvent
-import it.fast4x.rimusic.enums.Languages
 import it.fast4x.rimusic.enums.MaxSongs
-import it.fast4x.rimusic.enums.MusicAnimationType
 import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.NavigationBarType
-import it.fast4x.rimusic.enums.NotificationType
 import it.fast4x.rimusic.enums.PauseBetweenSongs
 import it.fast4x.rimusic.enums.PipModule
-import it.fast4x.rimusic.enums.PresetsReverb
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.themed.ConfirmationDialog
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
@@ -55,8 +51,6 @@ import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartActivity
 import it.fast4x.rimusic.utils.RestartPlayerService
-import it.fast4x.rimusic.utils.audioQualityFormatKey
-import it.fast4x.rimusic.utils.audioReverbPresetKey
 import it.fast4x.rimusic.utils.autoDownloadSongKey
 import it.fast4x.rimusic.utils.autoDownloadSongWhenAlbumBookmarkedKey
 import it.fast4x.rimusic.utils.autoDownloadSongWhenLikedKey
@@ -89,8 +83,6 @@ import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
 import it.fast4x.rimusic.utils.discoverKey
 import it.fast4x.rimusic.utils.enablePictureInPictureAutoKey
 import it.fast4x.rimusic.utils.enablePictureInPictureKey
-import it.fast4x.rimusic.utils.excludeSongsWithDurationLimitKey
-import it.fast4x.rimusic.utils.exoPlayerMinTimeForEventKey
 import it.fast4x.rimusic.utils.handleAudioFocusEnabledKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
@@ -98,20 +90,11 @@ import it.fast4x.rimusic.utils.isConnectionMeteredEnabledKey
 import it.fast4x.rimusic.utils.isPauseOnVolumeZeroEnabledKey
 import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.keepPlayerMinimizedKey
-import it.fast4x.rimusic.utils.languageAppKey
 import it.fast4x.rimusic.utils.languageDestinationName
 import it.fast4x.rimusic.utils.loudnessBaseGainKey
-import it.fast4x.rimusic.utils.maxSongsInQueueKey
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
-import it.fast4x.rimusic.utils.navigationBarPositionKey
-import it.fast4x.rimusic.utils.navigationBarTypeKey
-import it.fast4x.rimusic.utils.notificationTypeKey
-import it.fast4x.rimusic.utils.nowPlayingIndicatorKey
-import it.fast4x.rimusic.utils.pauseBetweenSongsKey
 import it.fast4x.rimusic.utils.pauseListenHistoryKey
 import it.fast4x.rimusic.utils.persistentQueueKey
-import it.fast4x.rimusic.utils.pipModuleKey
-import it.fast4x.rimusic.utils.playbackFadeAudioDurationKey
 import it.fast4x.rimusic.utils.playlistindicatorKey
 import it.fast4x.rimusic.utils.rememberEqualizerLauncher
 import it.fast4x.rimusic.utils.rememberPreference
@@ -136,13 +119,10 @@ fun GeneralSettings(
 ) {
     val binder = LocalPlayerServiceBinder.current
 
-    var languageApp  by rememberPreference(languageAppKey, Languages.System)
+    var languageApp by Settings.APP_LANGUAGE
     val systemLocale = LocaleListCompat.getDefault().get(0).toString()
 
-    var exoPlayerMinTimeForEvent by rememberPreference(
-        exoPlayerMinTimeForEventKey,
-        ExoPlayerMinTimeForEvent.`20s`
-    )
+    var exoPlayerMinTimeForEvent by Settings.QUICK_PICKS_MIN_DURATION
     var persistentQueue by rememberPreference(persistentQueueKey, false)
     var resumePlaybackOnStart by rememberPreference(resumePlaybackOnStartKey, false)
     var closebackgroundPlayer by rememberPreference(closebackgroundPlayerKey, false)
@@ -155,7 +135,7 @@ fun GeneralSettings(
     var skipSilence by rememberPreference(skipSilenceKey, false)
     var skipMediaOnError by rememberPreference(skipMediaOnErrorKey, false)
     var volumeNormalization by rememberPreference(volumeNormalizationKey, false)
-    var audioQualityFormat by rememberPreference(audioQualityFormatKey, AudioQualityFormat.Auto)
+    var audioQualityFormat by Settings.AUDIO_QUALITY
     var isConnectionMeteredEnabled by rememberPreference(isConnectionMeteredEnabledKey, true)
 
 
@@ -163,10 +143,9 @@ fun GeneralSettings(
 
     var disableClosingPlayerSwipingDown by rememberPreference(disableClosingPlayerSwipingDownKey, false)
 
-    var navigationBarPosition by rememberPreference(navigationBarPositionKey, NavigationBarPosition.Bottom)
-    var navigationBarType by rememberPreference(navigationBarTypeKey, NavigationBarType.IconAndText)
-    var pauseBetweenSongs  by rememberPreference(pauseBetweenSongsKey, PauseBetweenSongs.`0`)
-    var maxSongsInQueue  by rememberPreference(maxSongsInQueueKey, MaxSongs.`500`)
+    var navigationBarPosition by Settings.NAVIGATION_BAR_POSITION
+    var pauseBetweenSongs by Settings.PAUSE_BETWEEN_SONGS
+    var maxSongsInQueue by Settings.MAX_NUMBER_OF_SONG_IN_QUEUE
 
     val search = Search()
 
@@ -197,10 +176,10 @@ fun GeneralSettings(
 
     var resetCustomLightThemeDialog by rememberSaveable { mutableStateOf(false) }
     var resetCustomDarkThemeDialog by rememberSaveable { mutableStateOf(false) }
-    var playbackFadeAudioDuration by rememberPreference(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled)
-    var excludeSongWithDurationLimit by rememberPreference(excludeSongsWithDurationLimitKey, DurationInMinutes.Disabled)
+    var playbackFadeAudioDuration by Settings.AUDIO_FADE_DURATION
+    var excludeSongWithDurationLimit by Settings.LIMIT_SONGS_WITH_DURATION
     var playlistindicator by rememberPreference(playlistindicatorKey, false)
-    var nowPlayingIndicator by rememberPreference(nowPlayingIndicatorKey, MusicAnimationType.Bubbles)
+    var nowPlayingIndicator by Settings.NOW_PLAYING_INDICATOR
     var discoverIsEnabled by rememberPreference(discoverKey, false)
     var isPauseOnVolumeZeroEnabled by rememberPreference(isPauseOnVolumeZeroEnabledKey, false)
 
@@ -218,14 +197,14 @@ fun GeneralSettings(
 
     var bassboostEnabled by rememberPreference(bassboostEnabledKey,false)
     var bassboostLevel by rememberPreference(bassboostLevelKey, 0.5f)
-    var audioReverb by rememberPreference(audioReverbPresetKey,   PresetsReverb.NONE)
+    var audioReverb by Settings.AUDIO_REVERB_PRESET
     var audioFocusEnabled by rememberPreference(handleAudioFocusEnabledKey, true)
 
     var enablePictureInPicture by rememberPreference(enablePictureInPictureKey, false)
     var enablePictureInPictureAuto by rememberPreference(enablePictureInPictureAutoKey, false)
-    var pipModule by rememberPreference(pipModuleKey, PipModule.Cover)
+    var pipModule by Settings.PIP_MODULE
     var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
-    var notificationType by rememberPreference(notificationTypeKey, NotificationType.Default)
+    var notificationType by Settings.NOTIFICATION_TYPE
     var autoDownloadSong by rememberPreference(autoDownloadSongKey, false)
     var autoDownloadSongWhenLiked by rememberPreference(autoDownloadSongWhenLikedKey, false)
     var autoDownloadSongWhenAlbumBookmarked by rememberPreference(autoDownloadSongWhenAlbumBookmarkedKey, false)

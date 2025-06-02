@@ -45,6 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
+import app.kreate.android.Settings.HOME_ALBUMS_SORT_BY
+import app.kreate.android.Settings.HOME_ALBUM_ITEM_SIZE
+import app.kreate.android.Settings.HOME_ALBUM_SORT_ORDER
+import app.kreate.android.themed.rimusic.component.tab.ItemSize
+import app.kreate.android.themed.rimusic.component.tab.Sort
 import it.fast4x.compose.persist.persistList
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -61,7 +67,6 @@ import it.fast4x.rimusic.thumbnailShape
 import it.fast4x.rimusic.ui.components.ButtonsRow
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
-import it.fast4x.rimusic.ui.components.tab.ItemSize
 import it.fast4x.rimusic.ui.components.tab.TabHeader
 import it.fast4x.rimusic.ui.components.tab.toolbar.Randomizer
 import it.fast4x.rimusic.ui.components.themed.AlbumsItemMenu
@@ -75,18 +80,13 @@ import it.fast4x.rimusic.ui.items.AlbumItem
 import it.fast4x.rimusic.ui.screens.settings.isYouTubeSyncEnabled
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.LocalAppearance
-import it.fast4x.rimusic.utils.Preference.HOME_ALBUMS_SORT_BY
-import it.fast4x.rimusic.utils.Preference.HOME_ALBUM_ITEM_SIZE
-import it.fast4x.rimusic.utils.Preference.HOME_ALBUM_SORT_ORDER
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.addToYtPlaylist
-import it.fast4x.rimusic.utils.albumTypeKey
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.autoSyncToolbutton
 import it.fast4x.rimusic.utils.autosyncKey
 import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enqueue
-import it.fast4x.rimusic.utils.filterByKey
 import it.fast4x.rimusic.utils.importYTMLikedAlbums
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -98,7 +98,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import me.knighthat.component.Sort
 import me.knighthat.component.tab.Search
 import me.knighthat.component.tab.SongShuffler
 import me.knighthat.database.AlbumTable
@@ -123,20 +122,21 @@ fun HomeAlbums(
 
     // Settings
     val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
-    var albumType by rememberPreference(albumTypeKey, AlbumsType.Favorites )
+    var albumType by Settings.HOME_ALBUM_TYPE
 
     var items by persistList<Album>( "home/albums" )
     var itemsToFilter by persistList<Album>( "home/artists" )
-    var filterBy by rememberPreference(filterByKey, FilterBy.All)
+    var filterBy by Settings.HOME_ARTIST_AND_ALBUM_FILTER
     val (colorPalette, typography) = LocalAppearance.current
 
     var itemsOnDisplay by persistList<Album>( "home/albums/on_display" )
 
     val search = Search(lazyGridState)
 
-    val sort = Sort( HOME_ALBUMS_SORT_BY, HOME_ALBUM_SORT_ORDER )
-
-    val itemSize = ItemSize.init( HOME_ALBUM_ITEM_SIZE )
+    val sort = remember {
+        Sort(menuState, HOME_ALBUMS_SORT_BY, HOME_ALBUM_SORT_ORDER)
+    }
+    val itemSize = remember { ItemSize(HOME_ALBUM_ITEM_SIZE, menuState) }
 
     val randomizer = object: Randomizer<Album> {
         override fun getItems(): List<Album> = itemsOnDisplay

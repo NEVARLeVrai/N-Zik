@@ -61,6 +61,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.cleanPrefix
@@ -76,7 +77,6 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.ui.styling.favoritesOverlay
 import it.fast4x.rimusic.utils.DisposableListener
-import it.fast4x.rimusic.utils.backgroundProgressKey
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
 import it.fast4x.rimusic.utils.disableScrollingTextKey
@@ -85,7 +85,6 @@ import it.fast4x.rimusic.utils.getLikedIcon
 import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.intent
 import it.fast4x.rimusic.utils.isExplicit
-import it.fast4x.rimusic.utils.miniPlayerTypeKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
 import it.fast4x.rimusic.utils.positionAndDurationState
@@ -160,10 +159,7 @@ fun MiniPlayer(
                 .distinctUntilChanged()
     }.collectAsState( false, Dispatchers.IO )
 
-    var miniPlayerType by rememberPreference(
-        miniPlayerTypeKey,
-        MiniPlayerType.Modern
-    )
+    var miniPlayerType by Settings.MINI_PLAYER_TYPE
 
     fun toggleLike() {
         CoroutineScope( Dispatchers.IO ).launch {
@@ -189,7 +185,7 @@ fun MiniPlayer(
             return@rememberSwipeToDismissBoxState false
         }
     )
-    val backgroundProgress by rememberPreference(backgroundProgressKey, BackgroundProgress.MiniPlayer)
+    val backgroundProgress by Settings.MINI_PLAYER_PROGRESS_BAR
     val effectRotationEnabled by rememberPreference(effectRotationKey, true)
     val shouldBePlayingTransition = updateTransition(shouldBePlaying, label = "shouldBePlaying")
     val playPauseRoundness by shouldBePlayingTransition.animateDp(

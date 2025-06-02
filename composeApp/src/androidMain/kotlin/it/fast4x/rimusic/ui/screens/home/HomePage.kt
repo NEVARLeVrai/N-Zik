@@ -45,7 +45,6 @@ import it.fast4x.innertube.requests.HomePage
 import it.fast4x.rimusic.LocalPlayerAwareWindowInsets
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.enums.Countries
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.UiType
@@ -68,7 +67,6 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.loadedDataKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.selectedCountryCodeKey
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showFloatingIconKey
 import it.fast4x.rimusic.utils.showSearchTabKey
@@ -108,8 +106,6 @@ fun HomePage(
 
     val context = LocalContext.current
     val refreshScope = rememberCoroutineScope()
-
-    var selectedCountryCode by rememberPreference(selectedCountryCodeKey, Countries.ZZ)
 
     val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
 

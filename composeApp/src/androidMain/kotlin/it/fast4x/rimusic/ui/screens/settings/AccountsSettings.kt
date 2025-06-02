@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.compose.rememberNavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImage
 import io.ktor.http.Url
 import it.fast4x.compose.persist.persistList
@@ -49,7 +50,6 @@ import it.fast4x.piped.models.Session
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.extensions.discord.DiscordLoginAndGetToken
 import it.fast4x.rimusic.extensions.youtubelogin.YouTubeLogin
 import it.fast4x.rimusic.thumbnailShape
@@ -78,7 +78,6 @@ import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberEncryptedPreference
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.restartActivityKey
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import it.fast4x.rimusic.utils.ytAccountChannelHandleKey
 import it.fast4x.rimusic.utils.ytAccountEmailKey
 import it.fast4x.rimusic.utils.ytAccountNameKey
@@ -99,10 +98,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun AccountsSettings() {
     val context = LocalContext.current
-    val thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
+    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     var restartActivity by rememberPreference(restartActivityKey, false)
     var restartService by rememberSaveable { mutableStateOf(false) }

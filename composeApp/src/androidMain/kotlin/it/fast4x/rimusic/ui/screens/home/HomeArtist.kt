@@ -40,6 +40,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
+import app.kreate.android.Settings.HOME_ARTISTS_SORT_BY
+import app.kreate.android.Settings.HOME_ARTISTS_SORT_ORDER
+import app.kreate.android.Settings.HOME_ARTIST_ITEM_SIZE
+import app.kreate.android.themed.rimusic.component.tab.ItemSize
+import app.kreate.android.themed.rimusic.component.tab.Sort
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.YtMusic
 import it.fast4x.rimusic.Database
@@ -52,7 +58,6 @@ import it.fast4x.rimusic.models.Artist
 import it.fast4x.rimusic.ui.components.ButtonsRow
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
-import it.fast4x.rimusic.ui.components.tab.ItemSize
 import it.fast4x.rimusic.ui.components.tab.TabHeader
 import it.fast4x.rimusic.ui.components.tab.toolbar.Randomizer
 import it.fast4x.rimusic.ui.components.themed.FilterMenu
@@ -64,14 +69,9 @@ import it.fast4x.rimusic.ui.items.ArtistItem
 import it.fast4x.rimusic.ui.screens.settings.isYouTubeSyncEnabled
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.LocalAppearance
-import it.fast4x.rimusic.utils.Preference.HOME_ARTISTS_SORT_BY
-import it.fast4x.rimusic.utils.Preference.HOME_ARTISTS_SORT_ORDER
-import it.fast4x.rimusic.utils.Preference.HOME_ARTIST_ITEM_SIZE
-import it.fast4x.rimusic.utils.artistTypeKey
 import it.fast4x.rimusic.utils.autoSyncToolbutton
 import it.fast4x.rimusic.utils.autosyncKey
 import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.filterByKey
 import it.fast4x.rimusic.utils.importYTMSubscribedChannels
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -80,7 +80,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.knighthat.component.Sort
 import me.knighthat.component.tab.Search
 import me.knighthat.component.tab.SongShuffler
 
@@ -103,8 +102,8 @@ fun HomeArtists(
     val coroutineScope = rememberCoroutineScope()
 
     // Settings
-    var artistType by rememberPreference(artistTypeKey, ArtistsType.Favorites )
-    var filterBy by rememberPreference(filterByKey, FilterBy.All)
+    var artistType by Settings.HOME_ARTIST_TYPE
+    var filterBy by Settings.HOME_ARTIST_AND_ALBUM_FILTER
 
 
     var items by persistList<Artist>( "")
@@ -116,9 +115,10 @@ fun HomeArtists(
 
     val search = Search(lazyGridState)
 
-    val sort = Sort( HOME_ARTISTS_SORT_BY, HOME_ARTISTS_SORT_ORDER )
-
-    val itemSize = ItemSize.init( HOME_ARTIST_ITEM_SIZE )
+    val sort = remember {
+        Sort(menuState, HOME_ARTISTS_SORT_BY, HOME_ARTISTS_SORT_ORDER)
+    }
+    val itemSize = remember { ItemSize(HOME_ARTIST_ITEM_SIZE, menuState) }
 
     val randomizer = object: Randomizer<Artist> {
         override fun getItems(): List<Artist> = itemsOnDisplay

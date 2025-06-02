@@ -61,6 +61,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.MODIFIED_PREFIX
@@ -73,8 +74,6 @@ import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.context
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.NavRoutes
-import it.fast4x.rimusic.enums.PlaylistSortBy
-import it.fast4x.rimusic.enums.SortOrder
 import it.fast4x.rimusic.models.Info
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.models.PlaylistPreview
@@ -103,9 +102,6 @@ import it.fast4x.rimusic.utils.isNetworkConnected
 import it.fast4x.rimusic.utils.isPipedEnabledKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.playlistSortByKey
-import it.fast4x.rimusic.utils.playlistSortOrderKey
 import it.fast4x.rimusic.utils.positionAndDurationState
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.removeFromPipedPlaylist
@@ -284,10 +280,7 @@ fun NonQueuedMediaItemMenuLibrary(
         )
     }
 
-    val menuStyle by rememberPreference(
-        menuStyleKey,
-        MenuStyle.List
-    )
+    val menuStyle by Settings.MENU_STYLE
 
     if (menuStyle == MenuStyle.Grid) {
 
@@ -380,10 +373,7 @@ fun NonQueuedMediaItemMenu(
     val binder = LocalPlayerServiceBinder.current
     val context = LocalContext.current
 
-    val menuStyle by rememberPreference(
-        menuStyleKey,
-        MenuStyle.List
-    )
+    val menuStyle by Settings.MENU_STYLE
 
     //println("mediaItem in NonQueuedMediaItemMenu albumId ${mediaItem.mediaMetadata.extras?.getString("albumId")}")
 
@@ -448,10 +438,7 @@ fun QueuedMediaItemMenu(
     val binder = LocalPlayerServiceBinder.current
     val context = LocalContext.current
 
-    val menuStyle by rememberPreference(
-        menuStyleKey,
-        MenuStyle.List
-    )
+    val menuStyle by Settings.MENU_STYLE
 
     if (menuStyle == MenuStyle.Grid) {
         BaseMediaItemGridMenu(
@@ -813,10 +800,8 @@ fun MediaItemMenu(
         }, label = ""
     ) { currentIsViewingPlaylists ->
         if (currentIsViewingPlaylists) {
-            val sortBy by rememberPreference(playlistSortByKey, PlaylistSortBy.DateAdded)
-            val sortOrder by rememberPreference(playlistSortOrderKey, SortOrder.Descending)
             val playlistPreviews by remember {
-                Database.playlistTable.sortPreviews( sortBy, sortOrder )
+                Database.playlistTable.sortPreviewsByName()
             }.collectAsState( emptyList(), Dispatchers.IO )
 
             val playlistIds by remember {
@@ -1709,10 +1694,8 @@ fun AddToPlaylistItemMenu(
             }
         )
     }
-    val sortBy by rememberPreference(playlistSortByKey, PlaylistSortBy.DateAdded)
-    val sortOrder by rememberPreference(playlistSortOrderKey, SortOrder.Descending)
     val playlistPreviews by remember {
-        Database.playlistTable.sortPreviews( sortBy, sortOrder )
+        Database.playlistTable.sortPreviewsByName()
     }.collectAsState( emptyList(), Dispatchers.IO )
 
     val playlistIds by remember {
@@ -1970,10 +1953,8 @@ fun AddToPlaylistArtistSongsMenu(
             }
         )
     }
-    val sortBy by rememberPreference(playlistSortByKey, PlaylistSortBy.DateAdded)
-    val sortOrder by rememberPreference(playlistSortOrderKey, SortOrder.Descending)
     val playlistPreviews by remember {
-        Database.playlistTable.sortPreviews( sortBy, sortOrder )
+        Database.playlistTable.sortPreviewsByName()
     }.collectAsState( emptyList(), Dispatchers.IO )
 
     val pinnedPlaylists = playlistPreviews.filter {

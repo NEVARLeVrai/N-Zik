@@ -45,14 +45,12 @@ import it.fast4x.rimusic.utils.isProxyEnabledKey
 import it.fast4x.rimusic.utils.logDebugEnabledKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.proxyHostnameKey
-import it.fast4x.rimusic.utils.proxyModeKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showFoldersOnDeviceKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import me.knighthat.utils.Toaster
 import java.io.File
-import java.net.Proxy
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,7 +94,7 @@ fun OtherSettings() {
     var isProxyEnabled by rememberPreference(isProxyEnabledKey, false)
     var proxyHost by rememberPreference(proxyHostnameKey, "")
     var proxyPort by rememberPreference(proxyPortKey, 1080)
-    var proxyMode by rememberPreference(proxyModeKey, Proxy.Type.HTTP)
+    var proxyMode by app.kreate.android.Settings.PROXY_SCHEME
 
     var defaultFolder by rememberPreference(defaultFolderKey, "/")
 

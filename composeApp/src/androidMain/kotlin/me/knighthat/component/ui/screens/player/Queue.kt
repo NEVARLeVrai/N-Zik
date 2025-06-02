@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.media3.exoplayer.ExoPlayer
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.compose.reordering.ReorderingState
 import it.fast4x.rimusic.enums.QueueLoopType
 import it.fast4x.rimusic.ui.components.tab.toolbar.ConfirmDialog
@@ -20,7 +21,6 @@ import it.fast4x.rimusic.ui.components.tab.toolbar.DynamicColor
 import it.fast4x.rimusic.ui.components.tab.toolbar.Icon
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
 import it.fast4x.rimusic.utils.discoverKey
-import it.fast4x.rimusic.utils.queueLoopTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showButtonPlayerArrowKey
 import it.fast4x.rimusic.utils.shuffleQueue
@@ -54,9 +54,7 @@ class Repeat private constructor(
     companion object {
         @JvmStatic
         @Composable
-        fun init(): Repeat = Repeat(
-            rememberPreference( queueLoopTypeKey, QueueLoopType.Default )
-        )
+        fun init(): Repeat = Repeat(Settings.QUEUE_LOOP_TYPE)
     }
 
     var type: QueueLoopType = typeState.value

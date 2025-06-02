@@ -67,6 +67,7 @@ import androidx.media3.common.Timeline
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.cleanPrefix
@@ -87,8 +88,6 @@ import it.fast4x.rimusic.utils.DisposableListener
 import it.fast4x.rimusic.utils.actionspacedevenlyKey
 import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.blackgradientKey
-import it.fast4x.rimusic.utils.colorPaletteModeKey
-import it.fast4x.rimusic.utils.colorPaletteNameKey
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.effectRotationKey
@@ -100,8 +99,6 @@ import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
 import it.fast4x.rimusic.utils.miniQueueExpandedKey
 import it.fast4x.rimusic.utils.playAtIndex
-import it.fast4x.rimusic.utils.playerBackgroundColorsKey
-import it.fast4x.rimusic.utils.playerTypeKey
 import it.fast4x.rimusic.utils.playlistindicatorKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -121,7 +118,6 @@ import it.fast4x.rimusic.utils.showNextSongsInPlayerKey
 import it.fast4x.rimusic.utils.showPlaybackSpeedButtonKey
 import it.fast4x.rimusic.utils.showalbumcoverKey
 import it.fast4x.rimusic.utils.showlyricsthumbnailKey
-import it.fast4x.rimusic.utils.showsongsKey
 import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.shuffleQueue
 import it.fast4x.rimusic.utils.swipeUpQueueKey
@@ -174,7 +170,7 @@ fun BoxScope.ActionBar(
 
     val mediaItem = binder?.player?.currentMediaItem ?: return
 
-    val playerBackgroundColors by rememberPreference( playerBackgroundColorsKey, PlayerBackgroundColors.BlurredCoverColor )
+    val playerBackgroundColors by Settings.PLAYER_BACKGROUND
     val blackGradient by rememberPreference( blackgradientKey, false )
     val showLyricsThumbnail by rememberPreference(showlyricsthumbnailKey, false)
     val showNextSongsInPlayer by rememberPreference( showNextSongsInPlayerKey, false )
@@ -298,7 +294,7 @@ fun BoxScope.ActionBar(
                         )
                     }
 
-                    val showSongsState = rememberPreference( showsongsKey, SongsNumber.`2` )
+                    val showSongsState = Settings.MAX_NUMBER_OF_NEXT_IN_QUEUE
                     val viewPort = remember {
                         PagerViewPort( showSongsState, pagerStateQueue )
                     }
@@ -348,7 +344,7 @@ fun BoxScope.ActionBar(
                                     .height(40.dp)
                                     .fillMaxWidth()
                             ) {
-                                val colorPaletteMode by rememberPreference( colorPaletteModeKey, ColorPaletteMode.Dark )
+                                val colorPaletteMode by Settings.THEME_MODE
                                 val textOutline by rememberPreference( textoutlineKey, false )
 
                                 //<editor-fold defaultstate="collapsed" desc="Title">
@@ -516,7 +512,7 @@ fun BoxScope.ActionBar(
                 val showButtonPlayerAddToPlaylist by rememberPreference( showButtonPlayerAddToPlaylistKey, true )
                 if (showButtonPlayerAddToPlaylist) {
                     val showPlaylistIndicator by rememberPreference( playlistindicatorKey, false )
-                    val colorPaletteName by rememberPreference( colorPaletteNameKey, ColorPaletteName.Dynamic )
+                    val colorPaletteName by Settings.COLOR_PALETTE
                     val color = colorPalette()
                     val isSongMappedToPlaylist by remember( mediaItem.mediaId ) {
                         Database.songPlaylistMapTable.isMapped( mediaItem.mediaId )
@@ -584,7 +580,7 @@ fun BoxScope.ActionBar(
                         modifier = Modifier.size( 24.dp )
                     )
 
-                val playerType by rememberPreference( playerTypeKey, PlayerType.Essential )
+                val playerType by Settings.PLAYER_TYPE
                 val showThumbnail by rememberPreference( showthumbnailKey, true )
                 if (!isLandscape || ((playerType == PlayerType.Essential) && !showThumbnail)) {
                     val expandedPlayerToggle by rememberPreference( expandedplayertoggleKey, true )

@@ -19,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import app.kreate.android.themed.rimusic.screen.home.HomeSongsScreen
 import it.fast4x.compose.persist.PersistMapCleanup
 import it.fast4x.rimusic.enums.HomeScreenTabs
@@ -26,9 +27,7 @@ import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.toUiMood
 import it.fast4x.rimusic.ui.components.Skeleton
 import it.fast4x.rimusic.utils.enableQuickPicksPageKey
-import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.homeScreenTabIndexKey
-import it.fast4x.rimusic.utils.indexNavigationTabKey
 import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
@@ -63,11 +62,12 @@ fun HomeScreen(
 
     val openTabFromShortcut1 by remember{ mutableIntStateOf(openTabFromShortcut) }
 
+    val startupScreen by Settings.STARTUP_SCREEN
     var initialtabIndex =
         when (openTabFromShortcut1) {
-            -1 -> when (preferences.getEnum(indexNavigationTabKey, HomeScreenTabs.Default)) {
+            -1 -> when (startupScreen) {
                 HomeScreenTabs.Default -> HomeScreenTabs.QuickPics.index
-                else -> preferences.getEnum(indexNavigationTabKey, HomeScreenTabs.QuickPics).index
+                else -> startupScreen.index
             }
             else -> openTabFromShortcut1
         }

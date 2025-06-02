@@ -1,4 +1,4 @@
-package me.knighthat.component
+package app.kreate.android.themed.rimusic.component.tab
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -21,44 +20,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.Drawable
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.SortOrder
 import it.fast4x.rimusic.typography
-import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.MenuState
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
 import it.fast4x.rimusic.ui.components.tab.toolbar.Clickable
 import it.fast4x.rimusic.ui.components.tab.toolbar.Menu
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
-import it.fast4x.rimusic.utils.Preference
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import me.knighthat.component.menu.GridMenu
-import me.knighthat.component.menu.ListMenu
 import me.knighthat.enums.TextView
 
-open class Sort<T: Enum<T>> (
+open class Sort<T: Enum<T>>(
     override val menuState: MenuState,
-    sortByState: MutableState<T>,
-    sortOrderState: MutableState<SortOrder>,
-    styleState: MutableState<MenuStyle>
+    sortByState: Settings.Preference<T>,
+    sortOrderState: Settings.Preference<SortOrder>,
 ): MenuIcon, Clickable, Menu {
 
-    companion object {
-        @Composable
-        inline operator fun<reified T: Enum<T>> invoke(
-            sortByPrefKey: Preference.Key<T>,
-            sortOrderPrefKey: Preference.Key<SortOrder>
-        ) = Sort(
-            LocalMenuState.current,
-            Preference.remember( sortByPrefKey ),
-            Preference.remember( sortOrderPrefKey ),
-            rememberPreference( menuStyleKey, MenuStyle.List )
-        )
-    }
+    open var sortBy: T by sortByState
+    open var sortOrder: SortOrder by sortOrderState
 
     open val arrowDirection: State<Float>
         @Composable
@@ -70,12 +53,9 @@ open class Sort<T: Enum<T>> (
     override val iconId: Int = R.drawable.arrow_up
     override val menuIconTitle: String
         @Composable
-        // TODO: Add string "sort_item"
         get() = stringResource( R.string.sorting_order )
 
-    open var sortBy: T by sortByState
-    open var sortOrder: SortOrder by sortOrderState
-    override var menuStyle: MenuStyle by styleState
+    override var menuStyle: MenuStyle by Settings.MENU_STYLE
 
     /** Flip oder. */
     override fun onShortClick() { sortOrder = !sortOrder }
@@ -83,10 +63,10 @@ open class Sort<T: Enum<T>> (
     override fun onLongClick() = openMenu()
 
     @Composable
-    override fun ListMenu() = ListMenu.Menu {
+    override fun ListMenu() = me.knighthat.component.menu.ListMenu.Menu {
         // Ignore error "Cannot access 'java. lang. constant. Constable' which is a supertype of 'java. lang. Class'"
         sortBy.javaClass.enumConstants.forEach {
-            ListMenu.Entry(
+            me.knighthat.component.menu.ListMenu.Entry(
                 text = if (it is TextView) it.text else it.name,
                 icon = {
                     Icon(
@@ -109,13 +89,13 @@ open class Sort<T: Enum<T>> (
     }
 
     @Composable
-    override fun GridMenu() = GridMenu.Menu {
+    override fun GridMenu() = me.knighthat.component.menu.GridMenu.Menu {
         items(
             // Ignore error "Cannot access 'java. lang. constant. Constable' which is a supertype of 'java. lang. Class'"
             items = sortBy.javaClass.enumConstants,
             key = Enum<T>::ordinal
         ) {
-            GridMenu.Entry(
+            me.knighthat.component.menu.GridMenu.Entry(
                 text = if (it is TextView) it.text else it.name,
                 icon = {
                     Icon(

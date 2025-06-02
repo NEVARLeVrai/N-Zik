@@ -51,17 +51,16 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.enums.ButtonState
 import it.fast4x.rimusic.enums.ColorPaletteMode
 import it.fast4x.rimusic.enums.ColorPaletteName
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.PlayerBackgroundColors
 import it.fast4x.rimusic.enums.PlayerControlsType
 import it.fast4x.rimusic.enums.PlayerPlayButtonType
-import it.fast4x.rimusic.enums.QueueLoopType
 import it.fast4x.rimusic.models.Info
 import it.fast4x.rimusic.models.ui.UiMedia
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
@@ -72,9 +71,6 @@ import it.fast4x.rimusic.ui.screens.player.bounceClick
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.HorizontalfadingEdge2
 import it.fast4x.rimusic.utils.bold
-import it.fast4x.rimusic.utils.buttonStateKey
-import it.fast4x.rimusic.utils.colorPaletteModeKey
-import it.fast4x.rimusic.utils.colorPaletteNameKey
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.getLikeState
@@ -82,9 +78,6 @@ import it.fast4x.rimusic.utils.getUnlikedIcon
 import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playerBackgroundColorsKey
-import it.fast4x.rimusic.utils.playerControlsTypeKey
-import it.fast4x.rimusic.utils.queueLoopTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showthumbnailKey
@@ -113,15 +106,14 @@ fun InfoAlbumAndArtistEssential(
     onCollapse: () -> Unit,
     disableScrollingText: Boolean = false
 ) {
-    val playerControlsType by rememberPreference(playerControlsTypeKey, PlayerControlsType.Essential)
-    val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+    val playerControlsType by Settings.PLAYER_CONTROLS_TYPE
+    val colorPaletteMode by Settings.THEME_MODE
     var effectRotationEnabled by rememberPreference(effectRotationKey, true)
     var showthumbnail by rememberPreference(showthumbnailKey, true)
     var isRotated by rememberSaveable { mutableStateOf(false) }
     var showSelectDialog by remember { mutableStateOf(false) }
     var textoutline by rememberPreference(textoutlineKey, false)
-    val buttonState by rememberPreference(buttonStateKey, ButtonState.Idle)
-    val playerBackgroundColors by rememberPreference(playerBackgroundColorsKey,PlayerBackgroundColors.BlurredCoverColor)
+    val playerBackgroundColors by Settings.PLAYER_BACKGROUND
     var likeButtonWidth by remember{ mutableStateOf(0.dp) }
     val currentMediaItem = binder.player.currentMediaItem
 
@@ -384,8 +376,8 @@ fun ControlsEssential(
     isGradientBackgroundEnabled: Boolean,
     onShowSpeedPlayerDialog: () -> Unit,
 ) {
-    val colorPaletteName by rememberPreference(colorPaletteNameKey, ColorPaletteName.Dynamic)
-    val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+    val colorPaletteName by Settings.COLOR_PALETTE
+    val colorPaletteMode by Settings.THEME_MODE
     var effectRotationEnabled by rememberPreference(effectRotationKey, true)
     var isRotated by rememberSaveable { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(
@@ -399,8 +391,8 @@ fun ControlsEssential(
         targetValueByState = { if (it) 32.dp else 16.dp }
     )
 
-    var queueLoopType by rememberPreference(queueLoopTypeKey, defaultValue = QueueLoopType.Default)
-    val playerBackgroundColors by rememberPreference(playerBackgroundColorsKey,PlayerBackgroundColors.BlurredCoverColor)
+    var queueLoopType by Settings.QUEUE_LOOP_TYPE
+    val playerBackgroundColors by Settings.PLAYER_BACKGROUND
     var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
     val currentMediaItem = binder.player.currentMediaItem
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.util.fastDistinctBy
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.compose.persist.persist
 import it.fast4x.innertube.YtMusic
 import it.fast4x.innertube.requests.HistoryPage
@@ -55,7 +56,6 @@ import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.forcePlay
-import it.fast4x.rimusic.utils.historyTypeKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
@@ -135,7 +135,7 @@ fun HistoryList(
     val buttonsList = mutableListOf(HistoryType.History to stringResource(R.string.history))
     buttonsList += HistoryType.YTMHistory to stringResource(R.string.yt_history)
 
-    var historyType by rememberPreference(historyTypeKey, HistoryType.History)
+    var historyType by Settings.HISTORY_PAGE_TYPE
 
     var historyPage by persist<Result<HistoryPage>>("home/historyPage")
     LaunchedEffect(Unit, historyType) {

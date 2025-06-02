@@ -1,8 +1,7 @@
 package it.fast4x.rimusic.enums
 
 import androidx.compose.runtime.Composable
-import it.fast4x.rimusic.utils.UiTypeKey
-import it.fast4x.rimusic.utils.rememberPreference
+import app.kreate.android.Settings
 
 enum class UiType {
     RiMusic,
@@ -10,8 +9,7 @@ enum class UiType {
 
     companion object {
 
-        @Composable
-        fun current(): UiType = rememberPreference( UiTypeKey, RiMusic ).value
+        fun current(): UiType = Settings.MAIN_THEME.value
     }
 
     @Composable

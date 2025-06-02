@@ -15,9 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.media3.common.util.UnstableApi
+import app.kreate.android.Settings
 import it.fast4x.rimusic.enums.PlayerBackgroundColors
 import it.fast4x.rimusic.enums.PlayerControlsType
-import it.fast4x.rimusic.enums.PlayerPlayButtonType
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.ui.components.themed.PlaybackParamsDialog
 import it.fast4x.rimusic.ui.screens.player.components.controls.ControlsEssential
@@ -34,20 +34,14 @@ fun GetControls(
     mediaId: String,
     onBlurScaleChange: (Float) -> Unit
 ) {
-    val playerControlsType by rememberPreference(playerControlsTypeKey, PlayerControlsType.Essential)
-    val playerPlayButtonType by rememberPreference(
-        playerPlayButtonTypeKey,
-        PlayerPlayButtonType.Disabled
-    )
+    val playerControlsType by Settings.PLAYER_CONTROLS_TYPE
+    val playerPlayButtonType by Settings.PLAYER_PLAY_BUTTON_TYPE
     var isRotated by rememberSaveable { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(
         targetValue = if (isRotated) 360F else 0f,
         animationSpec = tween(durationMillis = 200), label = ""
     )
-    val playerBackgroundColors by rememberPreference(
-        playerBackgroundColorsKey,
-        PlayerBackgroundColors.BlurredCoverColor
-    )
+    val playerBackgroundColors by Settings.PLAYER_BACKGROUND
 
     val isGradientBackgroundEnabled = playerBackgroundColors == PlayerBackgroundColors.ThemeColorGradient ||
             playerBackgroundColors == PlayerBackgroundColors.CoverColorGradient

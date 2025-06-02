@@ -39,11 +39,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import app.kreate.android.Settings
 import app.kreate.android.themed.rimusic.screen.artist.ArtistAlbums
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.StatisticsType
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.TransitionEffect
 import it.fast4x.rimusic.extensions.games.pacman.Pacman
 import it.fast4x.rimusic.extensions.games.snake.SnakeGame
@@ -69,9 +69,6 @@ import it.fast4x.rimusic.utils.clearPreference
 import it.fast4x.rimusic.utils.homeScreenTabIndexKey
 import it.fast4x.rimusic.utils.pauseSearchHistoryKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
-import it.fast4x.rimusic.utils.transitionEffectKey
 
 @androidx.annotation.OptIn()
 @OptIn(
@@ -88,15 +85,12 @@ fun AppNavigation(
     miniPlayer: @Composable () -> Unit = {},
     openTabFromShortcut: Int
 ) {
-    val transitionEffect by rememberPreference(transitionEffectKey, TransitionEffect.Scale)
+    val transitionEffect by Settings.TRANSITION_EFFECT
 
     @Composable
     fun modalBottomSheetPage(content: @Composable () -> Unit) {
         var showSheet by rememberSaveable { mutableStateOf(true) }
-        val thumbnailRoundness by rememberPreference(
-            thumbnailRoundnessKey,
-            ThumbnailRoundness.Heavy
-        )
+        val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
         CustomModalBottomSheet(
             showSheet = showSheet,

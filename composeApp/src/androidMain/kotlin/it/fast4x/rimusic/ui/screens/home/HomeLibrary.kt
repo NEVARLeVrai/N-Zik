@@ -33,6 +33,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
+import app.kreate.android.Settings.HOME_LIBRARY_ITEM_SIZE
+import app.kreate.android.Settings.HOME_LIBRARY_SORT_BY
+import app.kreate.android.Settings.HOME_LIBRARY_SORT_ORDER
+import app.kreate.android.themed.rimusic.component.tab.ItemSize
+import app.kreate.android.themed.rimusic.component.tab.Sort
 import it.fast4x.compose.persist.persistList
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.MONTHLY_PREFIX
@@ -46,8 +52,8 @@ import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.models.PlaylistPreview
 import it.fast4x.rimusic.ui.components.ButtonsRow
+import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
-import it.fast4x.rimusic.ui.components.tab.ItemSize
 import it.fast4x.rimusic.ui.components.tab.TabHeader
 import it.fast4x.rimusic.ui.components.themed.FloatingActionsContainerWithScrollToTop
 import it.fast4x.rimusic.ui.components.themed.HeaderInfo
@@ -55,14 +61,10 @@ import it.fast4x.rimusic.ui.components.themed.MultiFloatingActionsContainer
 import it.fast4x.rimusic.ui.items.PlaylistItem
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.CheckMonthlyPlaylist
-import it.fast4x.rimusic.utils.Preference.HOME_LIBRARY_ITEM_SIZE
-import it.fast4x.rimusic.utils.Preference.HOME_LIBRARY_SORT_BY
-import it.fast4x.rimusic.utils.Preference.HOME_LIBRARY_SORT_ORDER
 import it.fast4x.rimusic.utils.autoSyncToolbutton
 import it.fast4x.rimusic.utils.autosyncKey
 import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enableCreateMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.playlistTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.showFloatingIconKey
 import it.fast4x.rimusic.utils.showMonthlyPlaylistsKey
@@ -72,7 +74,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import me.knighthat.component.Sort
 import me.knighthat.component.playlist.NewPlaylistDialog
 import me.knighthat.component.tab.ImportSongsFromCSV
 import me.knighthat.component.tab.Search
@@ -92,9 +93,10 @@ fun HomeLibrary(
 ) {
     // Essentials
     val lazyGridState = rememberLazyGridState()
+    val menuState = LocalMenuState.current
 
     // Non-vital
-    var playlistType by rememberPreference(playlistTypeKey, PlaylistsType.Playlist)
+    var playlistType by Settings.HOME_LIBRARY_TYPE
     val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
 
     var items by persistList<PlaylistPreview>("home/playlists")
@@ -103,8 +105,10 @@ fun HomeLibrary(
 
     val search = Search(lazyGridState)
 
-    val sort = Sort( HOME_LIBRARY_SORT_BY, HOME_LIBRARY_SORT_ORDER )
-    val itemSize = ItemSize.init( HOME_LIBRARY_ITEM_SIZE )
+    val sort = remember {
+        Sort(menuState, HOME_LIBRARY_SORT_BY, HOME_LIBRARY_SORT_ORDER)
+    }
+    val itemSize = remember { ItemSize(HOME_LIBRARY_ITEM_SIZE, menuState) }
 
     //<editor-fold desc="Songs shuffler">
     /**

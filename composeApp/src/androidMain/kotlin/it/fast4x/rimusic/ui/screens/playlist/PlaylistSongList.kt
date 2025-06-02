@@ -75,6 +75,7 @@ import androidx.compose.ui.util.fastFirst
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImage
 import it.fast4x.compose.persist.persist
 import it.fast4x.compose.persist.persistList
@@ -88,7 +89,6 @@ import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.models.Song
@@ -139,7 +139,6 @@ import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -260,10 +259,7 @@ fun PlaylistSongList(
         mutableStateOf(false)
     }
 
-    var thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
+    var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     var showYoutubeLikeConfirmDialog by remember {
         mutableStateOf(false)

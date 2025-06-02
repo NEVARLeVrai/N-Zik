@@ -48,6 +48,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.fast4x.rimusic.Database
@@ -55,12 +56,10 @@ import it.fast4x.rimusic.LocalPlayerAwareWindowInsets
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.enums.MaxStatisticsItems
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.StatisticsCategory
 import it.fast4x.rimusic.enums.StatisticsType
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.ButtonsRow
@@ -88,14 +87,10 @@ import it.fast4x.rimusic.utils.getDownloadState
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.maxStatisticsItemsKey
-import it.fast4x.rimusic.utils.navigationBarPositionKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showStatsListeningTimeKey
-import it.fast4x.rimusic.utils.statisticsCategoryKey
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -132,10 +127,7 @@ fun StatisticsPage(
 
     val endPaddingValues = windowInsets.only(WindowInsetsSides.End).asPaddingValues()
 
-    val thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
+    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     val showStatsListeningTime by rememberPreference(showStatsListeningTimeKey, true)
     val disableScrollingText by rememberPreference(disableScrollingTextKey, false)
@@ -145,7 +137,7 @@ fun StatisticsPage(
     val thumbnailSizeDp = Dimensions.thumbnails.song
     val thumbnailSize = thumbnailSizeDp.px
 
-    val maxStatisticsItems by rememberPreference( maxStatisticsItemsKey, MaxStatisticsItems.`10` )
+    val maxStatisticsItems by Settings.MAX_NUMBER_OF_STATISTIC_ITEMS
     val from = remember( statisticsType ) { statisticsType.timeStampInMillis() }
 
     val artists by remember {
@@ -199,15 +191,9 @@ fun StatisticsPage(
         mutableStateOf(Download.STATE_STOPPED)
     }
 
-    val navigationBarPosition by rememberPreference(
-        navigationBarPositionKey,
-        NavigationBarPosition.Bottom
-    )
+    val navigationBarPosition by Settings.NAVIGATION_BAR_POSITION
 
-    var statisticsCategory by rememberPreference(
-        statisticsCategoryKey,
-        StatisticsCategory.Songs
-    )
+    var statisticsCategory by Settings.STATISTIC_PAGE_CATEGORY
     val buttonsList = listOf(
         StatisticsCategory.Songs to StatisticsCategory.Songs.text,
         StatisticsCategory.Artists to StatisticsCategory.Artists.text,

@@ -7,16 +7,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.media3.common.util.UnstableApi
+import app.kreate.android.Settings
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.enums.ExoPlayerCacheLocation
 import it.fast4x.rimusic.enums.ExoPlayerDiskCacheMaxSize
+import it.fast4x.rimusic.enums.ExoPlayerDiskDownloadCacheMaxSize
 import it.fast4x.rimusic.service.MyDownloadHelper
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
-import it.fast4x.rimusic.utils.exoPlayerCacheLocationKey
-import it.fast4x.rimusic.utils.exoPlayerDiskCacheMaxSizeKey
-import it.fast4x.rimusic.utils.exoPlayerDiskDownloadCacheMaxSizeKey
-import it.fast4x.rimusic.utils.getEnum
-import it.fast4x.rimusic.utils.preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +50,7 @@ class ImportMigration private constructor(
                                    ZipInputStream( inStream ).use { zipIn ->
                                        var entry: ZipEntry? = zipIn.nextEntry
 
-                                       val cacheDir = when( context.preferences.getEnum( exoPlayerDiskCacheMaxSizeKey, ExoPlayerDiskCacheMaxSize.`2GB` ) ) {
+                                       val cacheDir = when( Settings.SONG_CACHE_SIZE.value ) {
                                            // Temporary directory deletes itself after close
                                            // It means songs remain on device as long as it's open
                                            ExoPlayerDiskCacheMaxSize.Disabled -> createTempDirectory( PlayerServiceModern.CACHE_DIRNAME ).toFile()
@@ -62,7 +59,7 @@ class ImportMigration private constructor(
                                                // Looks a bit ugly but what it does is
                                                // check location set by user and return
                                                // appropriate path with [CACHE_DIRNAME] appended.
-                                               when( context.preferences.getEnum( exoPlayerCacheLocationKey, ExoPlayerCacheLocation.System ) ) {
+                                               when( Settings.EXO_CACHE_LOCATION.value ) {
                                                    ExoPlayerCacheLocation.System -> context.cacheDir
                                                    ExoPlayerCacheLocation.Private -> context.filesDir
                                                }.resolve( PlayerServiceModern.CACHE_DIRNAME )
@@ -70,16 +67,16 @@ class ImportMigration private constructor(
                                        // Ensure folder is empty
                                        cacheDir.listFiles()?.forEach( File::deleteRecursively )
 
-                                       val downloadDir = when( context.preferences.getEnum( exoPlayerDiskDownloadCacheMaxSizeKey, ExoPlayerDiskCacheMaxSize.`2GB` ) ) {
+                                       val downloadDir = when( Settings.SONG_DOWNLOAD_SIZE.value ) {
                                            // Temporary directory deletes itself after close
                                            // It means songs remain on device as long as it's open
-                                           ExoPlayerDiskCacheMaxSize.Disabled -> createTempDirectory( MyDownloadHelper.CACHE_DIRNAME ).toFile()
+                                           ExoPlayerDiskDownloadCacheMaxSize.Disabled -> createTempDirectory( MyDownloadHelper.CACHE_DIRNAME ).toFile()
 
                                            else                               ->
                                                // Looks a bit ugly but what it does is
                                                // check location set by user and return
                                                // appropriate path with [CACHE_DIRNAME] appended.
-                                               when( context.preferences.getEnum( exoPlayerCacheLocationKey, ExoPlayerCacheLocation.System ) ) {
+                                               when( Settings.EXO_CACHE_LOCATION.value ) {
                                                    ExoPlayerCacheLocation.System -> context.cacheDir
                                                    ExoPlayerCacheLocation.Private -> context.filesDir
                                                }.resolve( MyDownloadHelper.CACHE_DIRNAME )

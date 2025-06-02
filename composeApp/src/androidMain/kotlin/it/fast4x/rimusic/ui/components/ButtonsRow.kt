@@ -13,11 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.BuiltInPlaylist
 import it.fast4x.rimusic.enums.ColorPaletteMode
-import it.fast4x.rimusic.utils.colorPaletteModeKey
-import it.fast4x.rimusic.utils.rememberPreference
 
 @Composable
 fun <E> ButtonsRow(
@@ -26,7 +25,7 @@ fun <E> ButtonsRow(
     onValueUpdate: (E) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+    val colorPaletteMode by Settings.THEME_MODE
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -64,7 +63,7 @@ fun ButtonsRow(
     onValueUpdate: (BuiltInPlaylist) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+    val colorPaletteMode by Settings.THEME_MODE
     Row(
         modifier = modifier
             .fillMaxWidth()

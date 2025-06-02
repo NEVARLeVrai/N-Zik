@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.compose.persist.persist
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.Innertube
@@ -58,7 +59,6 @@ import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerAwareWindowInsets
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.ShimmerHost
@@ -77,7 +77,6 @@ import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showSearchTabKey
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -322,10 +321,7 @@ fun MoodItemColored(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
+    var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     val moodColor by remember { derivedStateOf { Color(mood.stripeColor) } }
 
@@ -377,10 +373,7 @@ fun MoodGridItemColored(
     modifier: Modifier = Modifier,
     thumbnailSizeDp: Dp
 ) {
-    var thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
+    var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     val moodColor by remember { derivedStateOf { Color(mood.stripeColor) } }
 
@@ -438,11 +431,7 @@ fun MoodItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
-
+    var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     Column (
         verticalArrangement = Arrangement.SpaceAround,
@@ -484,11 +473,7 @@ fun MoodGridItem(
     modifier: Modifier = Modifier,
     thumbnailSizeDp: Dp
 ) {
-    var thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
-
+    var thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     Column (
         verticalArrangement = Arrangement.SpaceAround,

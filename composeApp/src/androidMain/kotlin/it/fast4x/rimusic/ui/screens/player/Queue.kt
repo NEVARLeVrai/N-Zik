@@ -54,6 +54,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import com.valentinilk.shimmer.shimmer
 import it.fast4x.compose.persist.persist
 import it.fast4x.compose.persist.persistList
@@ -89,7 +90,6 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
-import it.fast4x.rimusic.utils.queueTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.shouldBePlaying
 import it.fast4x.rimusic.utils.showButtonPlayerDiscoverKey
@@ -217,7 +217,7 @@ fun Queue(
         (deleteDialog as Dialog).Render()
 
         Column {
-            val queueType by rememberPreference( queueTypeKey, QueueType.Essential )
+            val queueType by Settings.QUEUE_TYPE
             val backgroundAlpha = if( queueType == QueueType.Modern ) .5f else 1f
 
             LazyColumn(

@@ -29,10 +29,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.innertube.Innertube
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.models.Album
 import it.fast4x.rimusic.thumbnailShape
 import it.fast4x.rimusic.typography
@@ -40,11 +40,9 @@ import it.fast4x.rimusic.ui.components.themed.TextPlaceholder
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.shimmer
 import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.shimmerEffect
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import me.knighthat.coil.ImageCacheFactory
 
 @Composable
@@ -225,7 +223,7 @@ fun AlbumPlaceholder(
 ) {
     val thumbnailSizeDp = Dimensions.thumbnails.album
 
-    val thumbnailRoundness by rememberPreference( thumbnailRoundnessKey, ThumbnailRoundness.None )
+    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

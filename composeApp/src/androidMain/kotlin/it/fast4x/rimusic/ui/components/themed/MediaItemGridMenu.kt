@@ -61,8 +61,6 @@ import it.fast4x.rimusic.PIPED_PREFIX
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavRoutes
-import it.fast4x.rimusic.enums.PlaylistSortBy
-import it.fast4x.rimusic.enums.SortOrder
 import it.fast4x.rimusic.models.Info
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.service.modern.isLocal
@@ -81,10 +79,7 @@ import it.fast4x.rimusic.utils.getDownloadState
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.isNetworkConnected
 import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.playlistSortByKey
-import it.fast4x.rimusic.utils.playlistSortOrderKey
 import it.fast4x.rimusic.utils.positionAndDurationState
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.thumbnail
 import kotlinx.coroutines.CoroutineScope
@@ -633,10 +628,8 @@ fun MediaItemGridMenu (
         }, label = ""
     ) { currentIsViewingPlaylists ->
         if (currentIsViewingPlaylists) {
-            val sortBy by rememberPreference(playlistSortByKey, PlaylistSortBy.DateAdded)
-            val sortOrder by rememberPreference(playlistSortOrderKey, SortOrder.Descending)
             val playlistPreviews by remember {
-                Database.playlistTable.sortPreviews( sortBy, sortOrder )
+                Database.playlistTable.sortPreviewsByName()
             }.collectAsState( emptyList(), Dispatchers.IO )
 
             val playlistIds by remember {

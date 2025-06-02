@@ -97,6 +97,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import it.fast4x.innertube.Innertube
@@ -109,7 +110,6 @@ import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.ValidationType
 import it.fast4x.rimusic.isBassBoostEnabled
 import it.fast4x.rimusic.models.Album
@@ -132,7 +132,6 @@ import it.fast4x.rimusic.utils.blurDarkenFactorKey
 import it.fast4x.rimusic.utils.blurStrengthKey
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.center
-import it.fast4x.rimusic.utils.colorPaletteModeKey
 import it.fast4x.rimusic.utils.drawCircle
 import it.fast4x.rimusic.utils.expandedplayerKey
 import it.fast4x.rimusic.utils.fadingedgeKey
@@ -160,7 +159,6 @@ import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.thumbnail
 import it.fast4x.rimusic.utils.thumbnailFadeExKey
 import it.fast4x.rimusic.utils.thumbnailFadeKey
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import it.fast4x.rimusic.utils.thumbnailSpacingKey
 import it.fast4x.rimusic.utils.thumbnailSpacingLKey
 import kotlinx.coroutines.CoroutineScope
@@ -556,7 +554,7 @@ inline fun SelectorArtistsDialog(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    val thumbnailRoundness by rememberPreference(thumbnailRoundnessKey, ThumbnailRoundness.Heavy)
+    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -567,7 +565,7 @@ inline fun SelectorArtistsDialog(
         ) {
             if (values != null) {
                 val pagerState = rememberPagerState(pageCount = { values.size })
-                val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+                val colorPaletteMode by Settings.THEME_MODE
 
                 Box {
                     HorizontalPager(state = pagerState) { idArtist ->

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
 import it.fast4x.rimusic.enums.PauseBetweenSongs
@@ -44,9 +45,7 @@ import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.utils.DURATION_INDICATOR_HEIGHT
-import it.fast4x.rimusic.utils.colorPaletteModeKey
 import it.fast4x.rimusic.utils.formatAsDuration
-import it.fast4x.rimusic.utils.pauseBetweenSongsKey
 import it.fast4x.rimusic.utils.positionAndDurationState
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -104,7 +103,7 @@ private fun RowScope.SkipTimeButton(
 
 @Composable
 private fun outlineColorState(): State<Color> {
-    val colorPaletteMode by rememberPreference( colorPaletteModeKey, ColorPaletteMode.Dark )
+    val colorPaletteMode by Settings.THEME_MODE
     val textOutline by rememberPreference( textoutlineKey, false )
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -203,7 +202,7 @@ fun DurationIndicator(
                 }
                 var isPaused by remember { mutableStateOf(false) }
 
-                val pauseBetweenSongs by rememberPreference(pauseBetweenSongsKey, PauseBetweenSongs.`0`)
+                val pauseBetweenSongs by Settings.PAUSE_BETWEEN_SONGS
                 if(pauseBetweenSongs != PauseBetweenSongs.`0`)
                     LaunchedEffect(timeRemaining) {
                         if(timeRemaining < 500) {

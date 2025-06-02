@@ -3,11 +3,13 @@ package me.knighthat.coil
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import app.kreate.android.R
+import app.kreate.android.Settings
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -22,15 +24,13 @@ import it.fast4x.rimusic.enums.CoilDiskCacheMaxSize
 import it.fast4x.rimusic.thumbnail
 import it.fast4x.rimusic.thumbnailShape
 import it.fast4x.rimusic.utils.coilCustomDiskCacheKey
-import it.fast4x.rimusic.utils.coilDiskCacheMaxSizeKey
-import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.preferences
 
 object ImageCacheFactory {
 
     private val DISK_CACHE: DiskCache by lazy {
         val preferences = appContext().preferences
-        val diskSize = preferences.getEnum( coilDiskCacheMaxSizeKey, CoilDiskCacheMaxSize.`128MB` )
+        val diskSize by Settings.THUMBNAIL_CACHE_SIZE
 
         DiskCache.Builder()
                  .directory( appContext().filesDir.resolve( "coil" ) )

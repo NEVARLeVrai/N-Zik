@@ -55,6 +55,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.compose.persist.persist
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.Innertube
@@ -114,7 +115,6 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isNowPlaying
 import it.fast4x.rimusic.utils.loadedDataKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.playEventsTypeKey
 import it.fast4x.rimusic.utils.playVideo
 import it.fast4x.rimusic.utils.quickPicsDiscoverPageKey
 import it.fast4x.rimusic.utils.quickPicsHomePageKey
@@ -122,7 +122,6 @@ import it.fast4x.rimusic.utils.quickPicsRelatedPageKey
 import it.fast4x.rimusic.utils.quickPicsTrendingSongKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.secondary
-import it.fast4x.rimusic.utils.selectedCountryCodeKey
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showChartsKey
 import it.fast4x.rimusic.utils.showFloatingIconKey
@@ -165,7 +164,7 @@ fun HomeQuickPicks(
     val binder = LocalPlayerServiceBinder.current
     val menuState = LocalMenuState.current
     val windowInsets = LocalPlayerAwareWindowInsets.current
-    var playEventType by rememberPreference(playEventsTypeKey, PlayEventsType.MostPlayed)
+    var playEventType by Settings.QUICK_PICKS_TYPE
 
     var trendingList by remember { mutableStateOf<List<Song>>(emptyList()) }
     var trending by persist<Song?>("home/trending")
@@ -212,7 +211,7 @@ fun HomeQuickPicks(
     val last50Year: Duration = 18250.days
     val from = last50Year.inWholeMilliseconds
 
-    var selectedCountryCode by rememberPreference(selectedCountryCodeKey, Countries.ZZ)
+    var selectedCountryCode = Countries.US
 
     val parentalControlEnabled by rememberPreference(parentalControlEnabledKey, false)
 

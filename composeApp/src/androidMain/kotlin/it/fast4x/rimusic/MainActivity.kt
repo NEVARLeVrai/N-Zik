@@ -113,12 +113,9 @@ import it.fast4x.innertube.utils.NewPipeDownloaderImpl
 import it.fast4x.innertube.utils.ProxyPreferenceItem
 import it.fast4x.innertube.utils.ProxyPreferences
 import it.fast4x.rimusic.enums.AnimatedGradient
-import it.fast4x.rimusic.enums.AudioQualityFormat
 import it.fast4x.rimusic.enums.ColorPaletteMode
 import it.fast4x.rimusic.enums.ColorPaletteName
-import it.fast4x.rimusic.enums.FontType
 import it.fast4x.rimusic.enums.HomeScreenTabs
-import it.fast4x.rimusic.enums.Languages
 import it.fast4x.rimusic.enums.LogType
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.PipModule
@@ -148,15 +145,9 @@ import it.fast4x.rimusic.ui.styling.typographyOf
 import it.fast4x.rimusic.utils.InitDownloader
 import it.fast4x.rimusic.utils.LocalMonetCompat
 import it.fast4x.rimusic.utils.OkHttpRequest
-import it.fast4x.rimusic.utils.UiTypeKey
-import it.fast4x.rimusic.utils.animatedGradientKey
 import it.fast4x.rimusic.utils.applyFontPaddingKey
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.audioQualityFormatKey
-import it.fast4x.rimusic.utils.backgroundProgressKey
 import it.fast4x.rimusic.utils.closeWithBackButtonKey
-import it.fast4x.rimusic.utils.colorPaletteModeKey
-import it.fast4x.rimusic.utils.colorPaletteNameKey
 import it.fast4x.rimusic.utils.customColorKey
 import it.fast4x.rimusic.utils.customThemeDark_Background0Key
 import it.fast4x.rimusic.utils.customThemeDark_Background1Key
@@ -181,7 +172,6 @@ import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
 import it.fast4x.rimusic.utils.disableClosingPlayerSwipingDownKey
 import it.fast4x.rimusic.utils.disablePlayerHorizontalSwipeKey
 import it.fast4x.rimusic.utils.effectRotationKey
-import it.fast4x.rimusic.utils.fontTypeKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.intent
@@ -193,22 +183,15 @@ import it.fast4x.rimusic.utils.isProxyEnabledKey
 import it.fast4x.rimusic.utils.isValidIP
 import it.fast4x.rimusic.utils.isVideo
 import it.fast4x.rimusic.utils.keepPlayerMinimizedKey
-import it.fast4x.rimusic.utils.languageAppKey
 import it.fast4x.rimusic.utils.loadAppLog
 import it.fast4x.rimusic.utils.loadedDataKey
 import it.fast4x.rimusic.utils.logDebugEnabledKey
-import it.fast4x.rimusic.utils.miniPlayerTypeKey
-import it.fast4x.rimusic.utils.navigationBarPositionKey
-import it.fast4x.rimusic.utils.navigationBarTypeKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.pipModuleKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playerBackgroundColorsKey
-import it.fast4x.rimusic.utils.playerThumbnailSizeKey
 import it.fast4x.rimusic.utils.playerVisualizerTypeKey
 import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.proxyHostnameKey
-import it.fast4x.rimusic.utils.proxyModeKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
@@ -220,8 +203,6 @@ import it.fast4x.rimusic.utils.showSearchTabKey
 import it.fast4x.rimusic.utils.showTotalTimeQueueKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
-import it.fast4x.rimusic.utils.transitionEffectKey
 import it.fast4x.rimusic.utils.useSystemFontKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -457,7 +438,7 @@ class MainActivity :
             if (getBoolean(isProxyEnabledKey, false)) {
                 val hostName = getString(proxyHostnameKey, null)
                 val proxyPort = getInt(proxyPortKey, 8080)
-                val proxyMode = getEnum(proxyModeKey, Proxy.Type.HTTP)
+                val proxyMode by Settings.PROXY_SCHEME
                 if (isValidIP(hostName)) {
                     hostName?.let { hName ->
                         ProxyPreferences.preference =
@@ -472,7 +453,7 @@ class MainActivity :
         }
 
         setContent {
-            val colorPaletteMode by rememberPreference(colorPaletteModeKey, ColorPaletteMode.Dark)
+            val colorPaletteMode by Settings.THEME_MODE
             val isPicthBlack = colorPaletteMode == ColorPaletteMode.PitchBlack
 //            val isDark =
 //                colorPaletteMode == ColorPaletteMode.Dark || isPicthBlack || (colorPaletteMode == ColorPaletteMode.System && isSystemInDarkTheme())
@@ -501,7 +482,7 @@ class MainActivity :
             val navController = rememberNavController()
             var showPlayer by rememberSaveable { mutableStateOf(false) }
             var switchToAudioPlayer by rememberSaveable { mutableStateOf(false) }
-            var animatedGradient by rememberPreference(animatedGradientKey, AnimatedGradient.Linear)
+            var animatedGradient by Settings.ANIMATED_GRADIENT
             var customColor by rememberPreference(customColorKey, Color.Green.hashCode())
             val lightTheme = colorPaletteMode == ColorPaletteMode.Light || (colorPaletteMode == ColorPaletteMode.System && (!isSystemInDarkTheme()))
 
@@ -512,25 +493,21 @@ class MainActivity :
                     gl = Locale.getDefault().country
                 )
 
-            preferences.getEnum(audioQualityFormatKey, AudioQualityFormat.Auto)
-
             var appearance by rememberSaveable(
                 !lightTheme,
                 stateSaver = Appearance.Companion
             ) {
                 with(preferences) {
-                    val colorPaletteName =
-                        getEnum(colorPaletteNameKey, ColorPaletteName.Dynamic)
-                    val colorPaletteMode = getEnum(colorPaletteModeKey, ColorPaletteMode.Dark)
-                    val thumbnailRoundness =
-                        getEnum(thumbnailRoundnessKey, ThumbnailRoundness.Heavy)
+                    val colorPaletteName by Settings.COLOR_PALETTE
+                    val colorPaletteMode by Settings.THEME_MODE
+                    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
                     val useSystemFont = getBoolean(useSystemFontKey, false)
                     val applyFontPadding = getBoolean(applyFontPaddingKey, false)
 
                     var colorPalette =
                         colorPaletteOf(colorPaletteName, colorPaletteMode, !lightTheme)
 
-                    val fontType = getEnum(fontTypeKey, FontType.Rubik)
+                    val fontType by Settings.FONT
 
                     if (colorPaletteName == ColorPaletteName.MaterialYou) {
                         colorPalette = dynamicColorPaletteOf(
@@ -565,12 +542,8 @@ class MainActivity :
             }
 
             fun setDynamicPalette(url: String) {
-                val playerBackgroundColors = preferences.getEnum(
-                    playerBackgroundColorsKey,
-                    PlayerBackgroundColors.BlurredCoverColor
-                )
-                val colorPaletteName =
-                    preferences.getEnum(colorPaletteNameKey, ColorPaletteName.Dynamic)
+                val playerBackgroundColors by Settings.PLAYER_BACKGROUND
+                val colorPaletteName by Settings.COLOR_PALETTE
                 val isDynamicPalette = colorPaletteName == ColorPaletteName.Dynamic
                 val isCoverColor =
                     playerBackgroundColors == PlayerBackgroundColors.CoverColorGradient ||
@@ -579,8 +552,7 @@ class MainActivity :
 
                 if (!isDynamicPalette) return
 
-                val colorPaletteMode =
-                    preferences.getEnum(colorPaletteModeKey, ColorPaletteMode.Dark)
+                val colorPaletteMode by Settings.THEME_MODE
                 coroutineScope.launch(Dispatchers.Main) {
                     val result = imageLoader.execute(
                         ImageRequest.Builder(this@MainActivity)
@@ -672,8 +644,8 @@ class MainActivity :
                     SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                         when (key) {
 
-                            languageAppKey -> {
-                                val lang = sharedPreferences.getEnum( languageAppKey, Languages.English )
+                            Settings.APP_LANGUAGE.key -> {
+                                val lang by Settings.APP_LANGUAGE
                                 val languageTag: String = lang.code.ifEmpty {
                                     AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag().orEmpty()
                                 }
@@ -682,26 +654,28 @@ class MainActivity :
                                 )
                             }
 
-                            effectRotationKey, playerThumbnailSizeKey,
+                            effectRotationKey,
+                            Settings.PLAYER_PORTRAIT_THUMBNAIL_SIZE.key,
                             playerVisualizerTypeKey,
-                            UiTypeKey,
+                            Settings.MAIN_THEME.key,
                             disablePlayerHorizontalSwipeKey,
                             disableClosingPlayerSwipingDownKey,
                             showSearchTabKey,
-                            navigationBarPositionKey,
-                            navigationBarTypeKey,
+                            Settings.NAVIGATION_BAR_POSITION.key,
+                            Settings.NAVIGATION_BAR_TYPE.key,
                             showTotalTimeQueueKey,
-                            backgroundProgressKey,
-                            transitionEffectKey,
-                            playerBackgroundColorsKey,
-                            miniPlayerTypeKey,
+                            Settings.MINI_PLAYER_PROGRESS_BAR.key,
+                            Settings.TRANSITION_EFFECT.key,
+                            Settings.PLAYER_BACKGROUND.key,
+                            Settings.MINI_PLAYER_TYPE.key,
                             restartActivityKey
                                 -> {
                                 this@MainActivity.recreate()
                                 println("MainActivity.recreate()")
                             }
 
-                            colorPaletteNameKey, colorPaletteModeKey,
+                            Settings.COLOR_PALETTE.key,
+                            Settings.THEME_MODE.key,
                             customThemeLight_Background0Key,
                             customThemeLight_Background1Key,
                             customThemeLight_Background2Key,
@@ -723,17 +697,8 @@ class MainActivity :
                             customThemeDark_iconButtonPlayerKey,
                             customThemeDark_accentKey,
                                 -> {
-                                val colorPaletteName =
-                                    sharedPreferences.getEnum(
-                                        colorPaletteNameKey,
-                                        ColorPaletteName.Dynamic
-                                    )
-
-                                val colorPaletteMode =
-                                    sharedPreferences.getEnum(
-                                        colorPaletteModeKey,
-                                        ColorPaletteMode.System
-                                    )
+                                val colorPaletteName by Settings.COLOR_PALETTE
+                                val colorPaletteMode by Settings.THEME_MODE
 
                                 var colorPalette = colorPaletteOf(
                                     colorPaletteName,
@@ -809,7 +774,7 @@ class MainActivity :
                                 }
                             }
 
-                            thumbnailRoundnessKey -> {
+                            Settings.THUMBNAIL_BORDER_RADIUS.key -> {
                                 val thumbnailRoundness =
                                     sharedPreferences.getEnum(key, ThumbnailRoundness.Heavy)
 
@@ -818,13 +783,12 @@ class MainActivity :
                                 )
                             }
 
-                            useSystemFontKey, applyFontPaddingKey, fontTypeKey -> {
+                            useSystemFontKey, applyFontPaddingKey, Settings.FONT.key -> {
                                 val useSystemFont =
                                     sharedPreferences.getBoolean(useSystemFontKey, false)
                                 val applyFontPadding =
                                     sharedPreferences.getBoolean(applyFontPaddingKey, false)
-                                val fontType =
-                                    sharedPreferences.getEnum(fontTypeKey, FontType.Rubik)
+                                val fontType by Settings.FONT
 
                                 appearance = appearance.copy(
                                     typography = typographyOf(
@@ -841,8 +805,7 @@ class MainActivity :
                 with(preferences) {
                     registerOnSharedPreferenceChangeListener(listener)
 
-                    val colorPaletteName =
-                        getEnum(colorPaletteNameKey, ColorPaletteName.Dynamic)
+                    val colorPaletteName by Settings.COLOR_PALETTE
                     if (colorPaletteName == ColorPaletteName.Dynamic) {
                         setDynamicPalette(
                             (binder?.player?.currentMediaItem?.mediaMetadata?.artworkUri.thumbnail(1200)
@@ -882,8 +845,7 @@ class MainActivity :
             }
 
             LaunchedEffect(Unit) {
-                val colorPaletteName =
-                    preferences.getEnum(colorPaletteNameKey, ColorPaletteName.Dynamic)
+                val colorPaletteName by Settings.COLOR_PALETTE
                 if (colorPaletteName == ColorPaletteName.Customized) {
                     appearance = appearance.copy(
                         colorPalette = customColorPalette(
@@ -964,7 +926,7 @@ class MainActivity :
 
                 CrossfadeContainer(state = pipState.value) { isCurrentInPip ->
                     println("MainActivity pipState ${pipState.value} CrossfadeContainer isCurrentInPip $isCurrentInPip ")
-                    val pipModule by rememberPreference(pipModuleKey, PipModule.Cover)
+                    val pipModule by Settings.PIP_MODULE
                     if (isCurrentInPip) {
                         Box(
                             modifier = Modifier
@@ -1015,10 +977,7 @@ class MainActivity :
                             checkIfAppIsRunningInBackground()
 
 
-                            val thumbnailRoundness by rememberPreference(
-                                thumbnailRoundnessKey,
-                                ThumbnailRoundness.Heavy
-                            )
+                            val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
                             val isVideo = binder?.player?.currentMediaItem?.isVideo ?: false
                             val isVideoEnabled =
@@ -1344,8 +1303,7 @@ class MainActivity :
         monetColors: ColorScheme,
         isInitialChange: Boolean
     ) {
-        val colorPaletteName =
-            preferences.getEnum(colorPaletteNameKey, ColorPaletteName.Dynamic)
+        val colorPaletteName by Settings.COLOR_PALETTE
         if (!isInitialChange && colorPaletteName == ColorPaletteName.MaterialYou) {
             /*
             monet.updateMonetColors()

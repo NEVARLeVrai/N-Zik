@@ -50,6 +50,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import app.kreate.android.R
+import app.kreate.android.Settings
+import app.kreate.android.themed.rimusic.component.playlist.PlaylistSongsSort
 import com.github.doyaaaaaken.kotlincsv.client.KotlinCsvExperimental
 import it.fast4x.compose.persist.persistList
 import it.fast4x.compose.reordering.draggedItem
@@ -70,14 +72,13 @@ import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.PlaylistSongSortBy
-import it.fast4x.rimusic.enums.RecommendationsNumber
-import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.models.SongPlaylistMap
 import it.fast4x.rimusic.service.modern.isLocal
 import it.fast4x.rimusic.thumbnailShape
 import it.fast4x.rimusic.typography
+import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.SwipeableQueueItem
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
 import it.fast4x.rimusic.ui.components.tab.toolbar.Button
@@ -124,14 +125,12 @@ import it.fast4x.rimusic.utils.isPipedEnabledKey
 import it.fast4x.rimusic.utils.isRecommendationEnabledKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.recommendationsNumberKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.removeFromPipedPlaylist
 import it.fast4x.rimusic.utils.saveImageToInternalStorage
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.showFloatingIconKey
 import it.fast4x.rimusic.utils.syncSongsInPipedPlaylist
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -141,7 +140,6 @@ import kotlinx.coroutines.withContext
 import me.knighthat.component.ResetCache
 import me.knighthat.component.SongItem
 import me.knighthat.component.playlist.PinPlaylist
-import me.knighthat.component.playlist.PlaylistSongsSort
 import me.knighthat.component.playlist.RenamePlaylistDialog
 import me.knighthat.component.playlist.Reposition
 import me.knighthat.component.tab.DeleteAllDownloadedSongsDialog
@@ -176,6 +174,7 @@ fun LocalPlaylistSongs(
     val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
     val uriHandler = LocalUriHandler.current
+    val menuState = LocalMenuState.current
 
     // Settings
     val parentalControlEnabled by rememberPreference( parentalControlEnabledKey, false )
@@ -192,7 +191,7 @@ fun LocalPlaylistSongs(
                 .findById( playlistId )
     }.collectAsState( null, Dispatchers.IO )
 
-    val sort = PlaylistSongsSort()
+    val sort = remember { PlaylistSongsSort(menuState) }
     val items by remember( sort.sortBy, sort.sortOrder ) {
         Database.songPlaylistMapTable
                 .sortSongs( playlistId, sort.sortBy, sort.sortOrder )
@@ -381,7 +380,7 @@ fun LocalPlaylistSongs(
     val locator = Locator( lazyListState, ::getSongs )
 
     //<editor-fold defaultstate="collapsed" desc="Smart recommendation">
-    val recommendationsNumber by rememberPreference( recommendationsNumberKey, RecommendationsNumber.`5` )
+    val recommendationsNumber by Settings.MAX_NUMBER_OF_SMART_RECOMMENDATIONS
     var relatedSongs by rememberSaveable {
         // SongEntity before Int in case random position is equal
         mutableStateOf( emptyMap<Song, Int>() )
@@ -481,11 +480,7 @@ fun LocalPlaylistSongs(
 
     var autosync by rememberPreference(autosyncKey, false)
 
-    val thumbnailRoundness by rememberPreference(
-        thumbnailRoundnessKey,
-        ThumbnailRoundness.Heavy
-    )
-
+    val thumbnailRoundness by Settings.THUMBNAIL_BORDER_RADIUS
 
     val reorderingState = rememberReorderingState(
         lazyListState = lazyListState,

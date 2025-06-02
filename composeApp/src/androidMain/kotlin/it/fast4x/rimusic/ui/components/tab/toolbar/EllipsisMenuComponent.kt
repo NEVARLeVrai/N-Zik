@@ -14,12 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.MenuState
 import it.fast4x.rimusic.ui.components.themed.Menu
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.rememberPreference
 
 class EllipsisMenuComponent private constructor(
     private val buttons: () -> List<Button>,
@@ -33,7 +32,7 @@ class EllipsisMenuComponent private constructor(
         fun init( items: () -> List<Button> ) = EllipsisMenuComponent(
             items,
             LocalMenuState.current,
-            rememberPreference( menuStyleKey, MenuStyle.List )
+            Settings.MENU_STYLE
         )
     }
 
