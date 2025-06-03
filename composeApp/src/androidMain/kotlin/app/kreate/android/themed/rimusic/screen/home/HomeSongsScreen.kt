@@ -56,6 +56,7 @@ import it.fast4x.rimusic.utils.showDownloadedPlaylistKey
 import it.fast4x.rimusic.utils.showFavoritesPlaylistKey
 import it.fast4x.rimusic.utils.showFloatingIconKey
 import it.fast4x.rimusic.utils.showMyTopPlaylistKey
+import it.fast4x.rimusic.utils.showOnDevicePlaylistKey
 import me.knighthat.component.ResetCache
 import me.knighthat.component.tab.ImportSongsFromCSV
 import me.knighthat.component.tab.ItemSelector
@@ -162,6 +163,7 @@ fun HomeSongsScreen(navController: NavController ) {
                     val showCachedPlaylist by rememberPreference( showCachedPlaylistKey, true )
                     val showMyTopPlaylist by rememberPreference( showMyTopPlaylistKey, true )
                     val showDownloadedPlaylist by rememberPreference( showDownloadedPlaylistKey, true )
+                    val showOnDeviceChip by rememberPreference( showOnDevicePlaylistKey, true )
                     val chips = remember( showFavoritesPlaylist, showCachedPlaylist, showMyTopPlaylist, showDownloadedPlaylist) {
                         buildList {
                             add( BuiltInPlaylist.All )
@@ -173,7 +175,8 @@ fun HomeSongsScreen(navController: NavController ) {
                                 add( BuiltInPlaylist.Downloaded )
                             if( showMyTopPlaylist )
                                 add( BuiltInPlaylist.Top )
-                            add( BuiltInPlaylist.OnDevice )
+                            if( showOnDeviceChip )
+                                add( BuiltInPlaylist.OnDevice )
                         }
                     }
                     //</editor-fold>
