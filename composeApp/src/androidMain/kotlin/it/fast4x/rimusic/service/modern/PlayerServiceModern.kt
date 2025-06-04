@@ -335,8 +335,6 @@ class PlayerServiceModern : MediaLibraryService(),
             Timber.e("Failed init bitmap provider in PlayerService ${it.stackTraceToString()}")
         }
 
-        preferences.registerOnSharedPreferenceChangeListener(this)
-
         val preferences = preferences
         isPersistentQueueEnabled = preferences.getBoolean(persistentQueueKey, false)
 
@@ -401,6 +399,8 @@ class PlayerServiceModern : MediaLibraryService(),
                 addListener(sleepTimer)
                 addAnalyticsListener(PlaybackStatsListener(false, this@PlayerServiceModern))
             }
+
+        preferences.registerOnSharedPreferenceChangeListener(this)
 
         // Force player to add all commands available, prior to android 13
         val forwardingPlayer =
@@ -662,10 +662,7 @@ class PlayerServiceModern : MediaLibraryService(),
                 player.skipSilenceEnabled = sharedPreferences.getBoolean(key, false)
             }
 
-            Settings.QUEUE_LOOP_TYPE.key -> {
-                if( ::player.isInitialized )
-                    player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
-            }
+            Settings.QUEUE_LOOP_TYPE.key -> player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
 
             bassboostLevelKey, bassboostEnabledKey -> maybeBassBoost()
             Settings.AUDIO_REVERB_PRESET.key -> maybeReverb()
