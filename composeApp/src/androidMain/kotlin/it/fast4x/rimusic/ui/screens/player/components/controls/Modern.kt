@@ -71,10 +71,8 @@ import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.dropShadow
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.getUnlikedIcon
-import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import kotlinx.coroutines.CoroutineScope
@@ -384,7 +382,7 @@ fun ControlsModern(
         targetValue = if (isRotated) 360F else 0f,
         animationSpec = tween(durationMillis = 200), label = ""
     )
-    var jumpPrevious by rememberPreference(jumpPreviousKey, "3")
+    var jumpPrevious by Settings.JUMP_PREVIOUS
 
   if (playerPlayButtonType != PlayerPlayButtonType.Disabled) {
       CustomElevatedButton(

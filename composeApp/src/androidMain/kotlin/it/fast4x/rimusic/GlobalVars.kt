@@ -8,8 +8,6 @@ import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.isConnectionMetered
 import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.useYtLoginOnlyForBrowseKey
-import it.fast4x.rimusic.utils.ytAccountNameKey
-import it.fast4x.rimusic.utils.ytAccountThumbnailKey
 
 @Composable
 fun typography() = LocalAppearance.current.typography
@@ -33,9 +31,9 @@ fun binder() = LocalPlayerServiceBinder.current?.service
 fun appContext(): Context = Dependencies.application.applicationContext
 fun context(): Context = Dependencies.application
 
-fun ytAccountName() = appContext().preferences.getString(ytAccountNameKey, "")
-fun ytAccountThumbnail() = appContext().preferences.getString(ytAccountThumbnailKey, "")
 fun useYtLoginOnlyForBrowse() = appContext().preferences.getBoolean(useYtLoginOnlyForBrowseKey, false)
+fun ytAccountName() = Settings.YOUTUBE_ACCOUNT_NAME.value
+fun ytAccountThumbnail() = Settings.YOUTUBE_ACCOUNT_AVATAR.value
 fun isVideoEnabled() = Settings.PLAYER_ACTION_TOGGLE_VIDEO.value
 
 fun isConnectionMetered() = appContext().isConnectionMetered()

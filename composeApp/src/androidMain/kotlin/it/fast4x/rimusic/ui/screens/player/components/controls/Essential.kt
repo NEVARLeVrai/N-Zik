@@ -74,10 +74,8 @@ import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.getUnlikedIcon
-import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import kotlinx.coroutines.CoroutineScope
@@ -389,7 +387,7 @@ fun ControlsEssential(
 
     var queueLoopType by Settings.QUEUE_LOOP_TYPE
     val playerBackgroundColors by Settings.PLAYER_BACKGROUND
-    var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
+    var jumpPrevious by Settings.JUMP_PREVIOUS
     val currentMediaItem = binder.player.currentMediaItem
 
     Box {

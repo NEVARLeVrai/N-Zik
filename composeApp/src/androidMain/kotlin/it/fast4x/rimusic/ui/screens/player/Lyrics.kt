@@ -134,7 +134,6 @@ import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.getHttpClient
-import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.languageDestination
 import it.fast4x.rimusic.utils.languageDestinationName
 import it.fast4x.rimusic.utils.lyricsSizeKey
@@ -338,7 +337,7 @@ fun Lyrics(
         val lightTheme = colorPaletteMode == ColorPaletteMode.Light || (colorPaletteMode == ColorPaletteMode.System && (!isSystemInDarkTheme()))
         val effectRotationEnabled by Settings.ROTATION_EFFECT
         var landscapeControls by Settings.LYRICS_LANDSCAPE_CONTROLS
-        var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
+        var jumpPrevious by Settings.JUMP_PREVIOUS
         var isRotated by rememberSaveable { mutableStateOf(false) }
         val rotationAngle by animateFloatAsState(
             targetValue = if (isRotated) 360F else 0f,

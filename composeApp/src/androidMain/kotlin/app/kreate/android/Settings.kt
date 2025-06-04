@@ -520,6 +520,30 @@ object Settings {
     val YOUTUBE_PLAYLISTS_SYNC by lazy {
         Preference.BooleanPreference( preferences, "YouTubePlaylistsSync", "enableYoutubeSync", false )
     }
+    val YOUTUBE_VISITOR_DATA by lazy {
+        Preference.StringPreference( preferences, "YouTubeVisitorData", "ytVisitorData", Constants.VISITOR_DATA )
+    }
+    val YOUTUBE_SYNC_ID by lazy {
+        Preference.StringPreference( preferences, "YouTubeSyncId", "ytDataSyncIdKey", "" )
+    }
+    val YOUTUBE_COOKIES by lazy {
+        Preference.StringPreference( preferences, "YouTubeCookies", "ytCookie", "" )
+    }
+    val YOUTUBE_ACCOUNT_NAME by lazy {
+        Preference.StringPreference( preferences, "YouTubeAccountName", "ytAccountNameKey", "" )
+    }
+    val YOUTUBE_ACCOUNT_EMAIL by lazy {
+        Preference.StringPreference( preferences, "YouTubeAccountEmail", "ytAccountEmailKey", "" )
+    }
+    val YOUTUBE_SELF_CHANNEL_HANDLE by lazy {
+        Preference.StringPreference( preferences, "YouTubeSelfChannelHandle", "ytAccountChannelHandleKey", "" )
+    }
+    val YOUTUBE_ACCOUNT_AVATAR by lazy {
+        Preference.StringPreference( preferences, "YouTubeAccountAvatar", "ytAccountThumbnailKey", "" )
+    }
+    val YOUTUBE_LAST_VIDEO_ID by lazy {
+        Preference.StringPreference( preferences, "YouTubeLastVideoId", "lastVideoId", "" )
+    }
     //</editor-fold>
     //<editor-fold desc="Quick picks">
     val QUICK_PICKS_TYPE by lazy {
@@ -562,6 +586,17 @@ object Settings {
     //<editor-fold desc="Discord">
     val DISCORD_LOGIN by lazy {
         Preference.BooleanPreference( preferences, "DiscordLogin", "isDiscordPresenceEnabled", false )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Proxy">
+    val IS_PROXY_ENABLED by lazy {
+        Preference.BooleanPreference( preferences, "IsProxyEnabled", "isProxyEnabled", false )
+    }
+    val PROXY_SCHEME by lazy {
+        Preference.EnumPreference( preferences, "ProxyScheme", "ProxyMode", Proxy.Type.HTTP )
+    }
+    val PROXY_HOST by lazy {
+        Preference.StringPreference( preferences, "ProxyHost", "proxyHostnameKey", "" )
     }
     //</editor-fold>
 
@@ -648,12 +683,6 @@ object Settings {
     }
     val STATISTIC_PAGE_CATEGORY by lazy {
         Preference.EnumPreference( preferences, "StatisticPageCategory", "statisticsCategory", StatisticsCategory.Songs )
-    }
-    val IS_PROXY_ENABLED by lazy {
-        Preference.BooleanPreference( preferences, "IsProxyEnabled", "isProxyEnabled", false )
-    }
-    val PROXY_SCHEME by lazy {
-        Preference.EnumPreference( preferences, "ProxyScheme", "ProxyMode", Proxy.Type.HTTP )
     }
     val SCROLLING_TEXT_DISABLED by lazy {
         Preference.BooleanPreference( preferences, "ScrollingText", "disableScrollingText", false )
@@ -804,6 +833,15 @@ object Settings {
     }
     val IS_CONNECTION_METERED by lazy {
         Preference.BooleanPreference( preferences, "IsConnectionMetered", "isConnectionMeteredEnabled", true )
+    }
+    val JUMP_PREVIOUS by lazy {
+        Preference.StringPreference( preferences, "JumpPrevious", "jumpPrevious", "3" )
+    }
+    val LOCAL_SONGS_FOLDER by lazy {
+        Preference.StringPreference( preferences, "LocalSongsFolder", "defaultFolder", "/" )
+    }
+    val SEEN_CHANGELOGS_VERSION by lazy {
+        Preference.StringPreference( preferences, "SeenChangelogsVersion", "seenChangelogsVersionKey", "" )
     }
 
     /**

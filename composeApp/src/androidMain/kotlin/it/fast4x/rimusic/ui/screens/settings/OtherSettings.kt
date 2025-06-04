@@ -33,19 +33,20 @@ import app.kreate.android.Settings.DEBUG_LOG
 import app.kreate.android.Settings.HOME_SONGS_ON_DEVICE_SHOW_FOLDERS
 import app.kreate.android.Settings.IS_PROXY_ENABLED
 import app.kreate.android.Settings.KEEP_SCREEN_ON
+import app.kreate.android.Settings.LOCAL_SONGS_FOLDER
 import app.kreate.android.Settings.PARENTAL_CONTROL
 import app.kreate.android.Settings.PLAYER_EXTRA_SPACE
+import app.kreate.android.Settings.PROXY_HOST
+import app.kreate.android.Settings.PROXY_SCHEME
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.ValidationType
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.defaultFolderKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid10
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.isIgnoringBatteryOptimizations
-import it.fast4x.rimusic.utils.proxyHostnameKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.textCopyToClipboard
@@ -92,11 +93,11 @@ fun OtherSettings() {
         }
 
     var isProxyEnabled by IS_PROXY_ENABLED
-    var proxyHost by rememberPreference(proxyHostnameKey, "")
+    var proxyHost by PROXY_HOST
     var proxyPort by rememberPreference(proxyPortKey, 1080)
-    var proxyMode by app.kreate.android.Settings.PROXY_SCHEME
+    var proxyMode by PROXY_SCHEME
 
-    var defaultFolder by rememberPreference(defaultFolderKey, "/")
+    var defaultFolder by LOCAL_SONGS_FOLDER
 
     var isKeepScreenOnEnabled by KEEP_SCREEN_ON
 

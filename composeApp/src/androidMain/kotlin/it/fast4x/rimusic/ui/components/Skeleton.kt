@@ -40,8 +40,6 @@ import it.fast4x.rimusic.ui.components.navigation.header.AppHeader
 import it.fast4x.rimusic.ui.components.navigation.nav.AbstractNavigationBar
 import it.fast4x.rimusic.ui.components.navigation.nav.HorizontalNavigationBar
 import it.fast4x.rimusic.ui.components.navigation.nav.VerticalNavigationBar
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.seenChangelogsVersionKey
 import it.fast4x.rimusic.utils.transition
 import me.knighthat.updater.ChangelogsDialog
 import me.knighthat.updater.CheckForUpdateDialog
@@ -159,7 +157,7 @@ fun Skeleton(
         }
     }
 
-    val seenChangelogs = rememberPreference( seenChangelogsVersionKey, "" )
+    val seenChangelogs = Settings.SEEN_CHANGELOGS_VERSION
     if( seenChangelogs.value != BuildConfig.VERSION_NAME ) {
         val changelogs = remember {
             ChangelogsDialog( seenChangelogs )

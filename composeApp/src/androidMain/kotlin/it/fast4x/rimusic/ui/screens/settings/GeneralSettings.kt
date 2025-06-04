@@ -74,7 +74,6 @@ import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
 import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
-import it.fast4x.rimusic.utils.jumpPreviousKey
 import it.fast4x.rimusic.utils.languageDestinationName
 import it.fast4x.rimusic.utils.loudnessBaseGainKey
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
@@ -170,7 +169,7 @@ fun GeneralSettings(
     var enablePictureInPicture by Settings.IS_PIP_ENABLED
     var enablePictureInPictureAuto by Settings.IS_AUTO_PIP_ENABLED
     var pipModule by Settings.PIP_MODULE
-    var jumpPrevious by rememberPreference(jumpPreviousKey,"3")
+    var jumpPrevious by Settings.JUMP_PREVIOUS
     var notificationType by Settings.NOTIFICATION_TYPE
     var autoDownloadSong by Settings.AUTO_DOWNLOAD
     var autoDownloadSongWhenLiked by Settings.AUTO_DOWNLOAD_ON_LIKE

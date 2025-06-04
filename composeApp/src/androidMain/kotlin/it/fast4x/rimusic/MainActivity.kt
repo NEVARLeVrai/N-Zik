@@ -180,7 +180,6 @@ import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playerBackgroundColorsKey
 import it.fast4x.rimusic.utils.playerVisualizerTypeKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.proxyHostnameKey
 import it.fast4x.rimusic.utils.proxyPortKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
@@ -418,7 +417,7 @@ class MainActivity :
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
             if ( Settings.IS_PROXY_ENABLED.value ) {
-                val hostName = getString(proxyHostnameKey, null)
+                val hostName by Settings.PROXY_HOST
                 val proxyPort = getInt(proxyPortKey, 8080)
                 val proxyMode by Settings.PROXY_SCHEME
                 if (isValidIP(hostName)) {
