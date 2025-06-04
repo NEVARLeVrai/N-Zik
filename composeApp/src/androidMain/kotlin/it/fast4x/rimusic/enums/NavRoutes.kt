@@ -43,9 +43,12 @@ enum class NavRoutes {
      * main thread, so you can safely call it from other threads
      */
     @AnyThread
-    fun navigateHere( navController: NavController, path: String ) {
+    fun navigateHere( navController: NavController, path: String = "" ) {
         CoroutineScope( Dispatchers.Main ).launch {
-            navController.navigate( "$name/$path" )
+            if( path.isBlank() )
+                navController.navigate( name )
+            else
+                navController.navigate( "$name/$path" )
         }
     }
 }
