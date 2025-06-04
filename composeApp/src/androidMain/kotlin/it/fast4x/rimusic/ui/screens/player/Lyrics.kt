@@ -136,12 +136,9 @@ import it.fast4x.rimusic.utils.conditional
 import it.fast4x.rimusic.utils.getHttpClient
 import it.fast4x.rimusic.utils.languageDestination
 import it.fast4x.rimusic.utils.languageDestinationName
-import it.fast4x.rimusic.utils.lyricsSizeKey
-import it.fast4x.rimusic.utils.lyricsSizeLKey
 import it.fast4x.rimusic.utils.medium
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.verticalFadingEdge
 import kotlinx.coroutines.Dispatchers
@@ -328,8 +325,8 @@ fun Lyrics(
         val mediaMetadata = mediaMetadataProvider()
         var artistName by rememberSaveable { mutableStateOf(cleanPrefix(mediaMetadata.artist?.toString().orEmpty()))}
         var title by rememberSaveable { mutableStateOf(cleanPrefix(mediaMetadata.title?.toString().orEmpty()))}
-        var lyricsSize by rememberPreference(lyricsSizeKey, 20f)
-        var lyricsSizeL by rememberPreference(lyricsSizeLKey, 20f)
+        var lyricsSize by Settings.LYRICS_SIZE
+        var lyricsSizeL by Settings.LYRICS_SIZE_LANDSCAPE
         var customSize = if (isLandscape) lyricsSizeL else lyricsSize
         var showLyricsSizeDialog by rememberSaveable {
             mutableStateOf(false)

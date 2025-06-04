@@ -24,9 +24,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.ui.styling.collapsedPlayerProgressBar
-import it.fast4x.rimusic.utils.lastVideoSecondsKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.colorPalette
 
 
 @Composable
@@ -40,8 +37,8 @@ fun YoutubePlayer(
 
     if (!showPlayer) return
 
-    var lastYTVideoSeconds by rememberPreference(key = lastVideoSecondsKey, defaultValue = 0f)
     var lastYTVideoId by Settings.YOUTUBE_LAST_VIDEO_ID
+    var lastYTVideoSeconds by Settings.YOUTUBE_LAST_VIDEO_SECONDS
 
 //    val currentYTVideoId by remember { mutableStateOf(ytVideoId) }
 //    println("mediaItem youtubePlayer called currentYTVideoId $currentYTVideoId ytVideoId $ytVideoId lastYTVideoId $lastYTVideoId")

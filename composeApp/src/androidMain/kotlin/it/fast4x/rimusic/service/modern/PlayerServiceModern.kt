@@ -115,7 +115,6 @@ import it.fast4x.rimusic.utils.TimerJob
 import it.fast4x.rimusic.utils.YouTubeRadio
 import it.fast4x.rimusic.utils.activityPendingIntent
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.bassboostLevelKey
 import it.fast4x.rimusic.utils.broadCastPendingIntent
 import it.fast4x.rimusic.utils.collect
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
@@ -130,15 +129,11 @@ import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.isAtLeastAndroid7
 import it.fast4x.rimusic.utils.isAtLeastAndroid8
 import it.fast4x.rimusic.utils.isAtLeastAndroid81
-import it.fast4x.rimusic.utils.loudnessBaseGainKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
 import it.fast4x.rimusic.utils.minimumSilenceDurationKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
-import it.fast4x.rimusic.utils.playbackPitchKey
-import it.fast4x.rimusic.utils.playbackSpeedKey
-import it.fast4x.rimusic.utils.playbackVolumeKey
 import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.setGlobalVolume
 import it.fast4x.rimusic.utils.timer
@@ -433,10 +428,10 @@ class PlayerServiceModern : MediaLibraryService(),
         player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
 
         binder.player.playbackParameters = PlaybackParameters(
-            preferences.getFloat(playbackSpeedKey, 1f),
-            preferences.getFloat(playbackPitchKey, 1f)
+            Settings.AUDIO_SPEED_VALUE.value,
+            Settings.AUDIO_PITCH.value
         )
-        binder.player.volume = preferences.getFloat(playbackVolumeKey, 1f)
+        binder.player.volume = Settings.AUDIO_VOLUME.value
         binder.player.setGlobalVolume(binder.player.volume)
 
         // Keep a connected controller so that notification works
@@ -637,7 +632,7 @@ class PlayerServiceModern : MediaLibraryService(),
             }
 
             Settings.AUDIO_VOLUME_NORMALIZATION.key,
-            loudnessBaseGainKey -> maybeNormalizeVolume()
+            Settings.AUDIO_VOLUME_NORMALIZATION_TARGET.key -> maybeNormalizeVolume()
 
             Settings.RESUME_PLAYBACK_WHEN_CONNECT_TO_AUDIO_DEVICE.key -> maybeResumePlaybackWhenDeviceConnected()
 
@@ -647,7 +642,7 @@ class PlayerServiceModern : MediaLibraryService(),
 
             Settings.QUEUE_LOOP_TYPE.key -> player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
 
-            bassboostLevelKey,
+            Settings.AUDIO_BASS_BOOST_LEVEL.key,
             Settings.AUDIO_BASS_BOOSTED.key -> maybeBassBoost()
 
             Settings.AUDIO_REVERB_PRESET.key -> maybeReverb()
@@ -829,7 +824,7 @@ class PlayerServiceModern : MediaLibraryService(),
         runCatching {
             if (bassBoost == null) bassBoost = BassBoost(0, player.audioSessionId)
             val bassboostLevel =
-                (preferences.getFloat(bassboostLevelKey, 0.5f) * 1000f).toInt().toShort()
+                (Settings.AUDIO_BASS_BOOST_LEVEL.value * 1000f).toInt().toShort()
             println("PlayerServiceModern maybeBassBoost bassboostLevel $bassboostLevel")
             bassBoost?.enabled = false
             bassBoost?.setStrength(bassboostLevel)
@@ -882,7 +877,7 @@ class PlayerServiceModern : MediaLibraryService(),
             return
         }
 
-        val baseGain = preferences.getFloat(loudnessBaseGainKey, 5.00f)
+        val baseGain by Settings.AUDIO_VOLUME_NORMALIZATION_TARGET
         player.currentMediaItem?.mediaId?.let { songId ->
             volumeNormalizationJob?.cancel()
             volumeNormalizationJob = coroutineScope.launch(Dispatchers.Main) {

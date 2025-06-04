@@ -171,7 +171,6 @@ import it.fast4x.rimusic.ui.styling.favoritesOverlay
 import it.fast4x.rimusic.utils.DisposableListener
 import it.fast4x.rimusic.utils.SearchYoutubeEntity
 import it.fast4x.rimusic.utils.VerticalfadingEdge2
-import it.fast4x.rimusic.utils.VinylSizeKey
 import it.fast4x.rimusic.utils.currentWindow
 import it.fast4x.rimusic.utils.doubleShadowDrop
 import it.fast4x.rimusic.utils.durationTextToMillis
@@ -186,14 +185,9 @@ import it.fast4x.rimusic.utils.playAtIndex
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
 import it.fast4x.rimusic.utils.positionAndDurationState
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.shouldBePlaying
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.thumbnailFadeExKey
-import it.fast4x.rimusic.utils.thumbnailFadeKey
-import it.fast4x.rimusic.utils.thumbnailSpacingKey
-import it.fast4x.rimusic.utils.thumbnailSpacingLKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -230,11 +224,11 @@ fun Player(
     val playerThumbnailSize by Settings.PLAYER_PORTRAIT_THUMBNAIL_SIZE
     var playerThumbnailSizeL by Settings.PLAYER_LANDSCAPE_THUMBNAIL_SIZE
     val showvisthumbnail by Settings.PLAYER_SHOW_THUMBNAIL_ON_VISUALIZER
-    var thumbnailSpacing  by rememberPreference( thumbnailSpacingKey, 0f )
-    var thumbnailSpacingL  by rememberPreference( thumbnailSpacingLKey, 0f )
-    var thumbnailFade  by rememberPreference( thumbnailFadeKey, 5f )
-    var thumbnailFadeEx  by rememberPreference( thumbnailFadeExKey, 5f )
-    var imageCoverSize by rememberPreference( VinylSizeKey, 50f )
+    var thumbnailSpacing  by Settings.PLAYER_THUMBNAIL_SPACING
+    var thumbnailSpacingL  by Settings.PLAYER_THUMBNAIL_SPACING_LANDSCAPE
+    var thumbnailFade  by Settings.PLAYER_THUMBNAIL_FADE
+    var thumbnailFadeEx  by Settings.PLAYER_THUMBNAIL_FADE_EX
+    var imageCoverSize by Settings.PLAYER_THUMBNAIL_VINYL_SIZE
     val queueDurationExpanded by Settings.PLAYER_IS_QUEUE_DURATION_EXPANDED
     val statsExpanded by Settings.PLAYER_IS_STATS_FOR_NERDS_EXPANDED
     var showthumbnail by Settings.PLAYER_SHOW_THUMBNAIL

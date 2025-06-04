@@ -124,12 +124,8 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.favoritesIcon
 import it.fast4x.rimusic.ui.styling.px
 import it.fast4x.rimusic.ui.styling.shimmer
-import it.fast4x.rimusic.utils.VinylSizeKey
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.asSong
-import it.fast4x.rimusic.utils.bassboostLevelKey
-import it.fast4x.rimusic.utils.blurDarkenFactorKey
-import it.fast4x.rimusic.utils.blurStrengthKey
 import it.fast4x.rimusic.utils.bold
 import it.fast4x.rimusic.utils.center
 import it.fast4x.rimusic.utils.drawCircle
@@ -138,15 +134,7 @@ import it.fast4x.rimusic.utils.getLikeState
 import it.fast4x.rimusic.utils.isExplicit
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isValidIP
-import it.fast4x.rimusic.utils.lyricsSizeKey
-import it.fast4x.rimusic.utils.lyricsSizeLKey
 import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.playbackDeviceVolumeKey
-import it.fast4x.rimusic.utils.playbackDurationKey
-import it.fast4x.rimusic.utils.playbackPitchKey
-import it.fast4x.rimusic.utils.playbackSpeedKey
-import it.fast4x.rimusic.utils.playbackVolumeKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.removeYTSongFromPlaylist
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.secondary
@@ -154,10 +142,6 @@ import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.setDeviceVolume
 import it.fast4x.rimusic.utils.setGlobalVolume
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.thumbnailFadeExKey
-import it.fast4x.rimusic.utils.thumbnailFadeKey
-import it.fast4x.rimusic.utils.thumbnailSpacingKey
-import it.fast4x.rimusic.utils.thumbnailSpacingLKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -1237,9 +1221,9 @@ fun BlurParamsDialog(
     val defaultStrength = 25f
     //val defaultStrength2 = 30f
     val defaultDarkenFactor = 0.2f
-    var blurStrength  by rememberPreference(blurStrengthKey, defaultStrength)
+    var blurStrength  by Settings.PLAYER_BACKGROUND_BLUR_STRENGTH
     //var blurStrength2  by rememberPreference(blurStrength2Key, defaultStrength2)
-    var blurDarkenFactor  by rememberPreference(blurDarkenFactorKey, defaultDarkenFactor)
+    var blurDarkenFactor  by Settings.PLAYER_BACKGROUND_BACK_DROP
 
     /*
     var isShowingLyrics by rememberSaveable {
@@ -1351,12 +1335,12 @@ fun BlurParamsDialog(
         val defaultFade = 5f
         val defaultSpacing = 0f
         val defaultImageCoverSize = 50f
-        var thumbnailSpacing by rememberPreference(thumbnailSpacingKey, defaultSpacing)
-        var thumbnailSpacingL by rememberPreference(thumbnailSpacingLKey, defaultSpacing)
-        var thumbnailFade by rememberPreference(thumbnailFadeKey, defaultFade)
-        var thumbnailFadeEx by rememberPreference(thumbnailFadeExKey, defaultFade)
+        var thumbnailSpacing by Settings.PLAYER_THUMBNAIL_SPACING
+        var thumbnailSpacingL by Settings.PLAYER_THUMBNAIL_SPACING_LANDSCAPE
+        var thumbnailFade by Settings.PLAYER_THUMBNAIL_FADE
+        var thumbnailFadeEx by Settings.PLAYER_THUMBNAIL_FADE_EX
         var fadingedge by Settings.PLAYER_BACKGROUND_FADING_EDGE
-        var imageCoverSize by rememberPreference(VinylSizeKey, defaultImageCoverSize)
+        var imageCoverSize by Settings.PLAYER_THUMBNAIL_VINYL_SIZE
         val showCoverThumbnailAnimation by Settings.PLAYER_THUMBNAIL_ANIMATION
         val expandedplayer by Settings.PLAYER_EXPANDED
         DefaultDialog(
@@ -1728,8 +1712,8 @@ fun LyricsSizeDialog(
     sizeValue: (Float) -> Unit,
     sizeValueL: (Float) -> Unit,
 ) {
-    var lyricsSize by rememberPreference(lyricsSizeKey, 20f)
-    var lyricsSizeL by rememberPreference(lyricsSizeLKey, 20f)
+    var lyricsSize by Settings.LYRICS_SIZE
+    var lyricsSizeL by Settings.LYRICS_SIZE_LANDSCAPE
     DefaultDialog(
         onDismiss = {
             sizeValue(lyricsSize)
@@ -2310,13 +2294,13 @@ fun PlaybackParamsDialog(
     val defaultDuration = 0f
     val defaultStrength = 25f
     val defaultBassboost = 0.5f
-    var playbackSpeed  by rememberPreference(playbackSpeedKey,   defaultSpeed)
-    var playbackPitch  by rememberPreference(playbackPitchKey,   defaultPitch)
-    var playbackVolume  by rememberPreference(playbackVolumeKey, 0.5f)
-    var playbackDeviceVolume  by rememberPreference(playbackDeviceVolumeKey, getDeviceVolume(context))
-    var playbackDuration by rememberPreference(playbackDurationKey, defaultDuration)
-    var blurStrength  by rememberPreference(blurStrengthKey, defaultStrength)
-    var bassBoost  by rememberPreference(bassboostLevelKey, defaultBassboost)
+    var playbackSpeed  by Settings.AUDIO_SPEED_VALUE
+    var playbackPitch  by Settings.AUDIO_PITCH
+    var playbackVolume  by Settings.AUDIO_VOLUME
+    var playbackDeviceVolume  by Settings.AUDIO_DEVICE_VOLUME
+    var playbackDuration by Settings.PLAYBACK_DURATION
+    var blurStrength  by Settings.PLAYER_BACKGROUND_BLUR_STRENGTH
+    var bassBoost  by Settings.AUDIO_BASS_BOOST_LEVEL
 
     DefaultDialog(
         onDismiss = {

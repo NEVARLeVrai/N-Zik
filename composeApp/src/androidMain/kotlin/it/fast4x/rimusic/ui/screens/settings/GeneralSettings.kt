@@ -51,7 +51,6 @@ import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartActivity
 import it.fast4x.rimusic.utils.RestartPlayerService
-import it.fast4x.rimusic.utils.bassboostLevelKey
 import it.fast4x.rimusic.utils.customThemeDark_Background0Key
 import it.fast4x.rimusic.utils.customThemeDark_Background1Key
 import it.fast4x.rimusic.utils.customThemeDark_Background2Key
@@ -75,8 +74,6 @@ import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.languageDestinationName
-import it.fast4x.rimusic.utils.loudnessBaseGainKey
-import it.fast4x.rimusic.utils.minimumSilenceDurationKey
 import it.fast4x.rimusic.utils.rememberEqualizerLauncher
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
@@ -158,11 +155,11 @@ fun GeneralSettings(
     var restartService by rememberSaveable { mutableStateOf(false) }
     var restartActivity by rememberSaveable { mutableStateOf(false) }
 
-    var loudnessBaseGain by rememberPreference(loudnessBaseGainKey, 5.00f)
+    var loudnessBaseGain by Settings.AUDIO_VOLUME_NORMALIZATION_TARGET
     var autoLoadSongsInQueue by Settings.QUEUE_AUTO_APPEND
 
     var bassboostEnabled by Settings.AUDIO_BASS_BOOSTED
-    var bassboostLevel by rememberPreference(bassboostLevelKey, 0.5f)
+    var bassboostLevel by Settings.AUDIO_BASS_BOOST_LEVEL
     var audioReverb by Settings.AUDIO_REVERB_PRESET
     var audioFocusEnabled by Settings.AUDIO_SMART_PAUSE_DURING_CALLS
 

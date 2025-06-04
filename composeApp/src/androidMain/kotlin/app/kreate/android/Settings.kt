@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
+import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.enums.AlbumSortBy
 import it.fast4x.rimusic.enums.AlbumSwipeAction
 import it.fast4x.rimusic.enums.AlbumsType
@@ -87,6 +88,8 @@ import it.fast4x.rimusic.enums.ThumbnailType
 import it.fast4x.rimusic.enums.TransitionEffect
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.enums.WallpaperType
+import it.fast4x.rimusic.utils.getDeviceVolume
+import me.knighthat.innertube.Constants
 import org.jetbrains.annotations.Blocking
 import org.jetbrains.annotations.NonBlocking
 import java.net.Proxy
@@ -244,6 +247,9 @@ object Settings {
     val PLAYER_THUMBNAIL_TYPE by lazy {
         Preference.EnumPreference( preferences, "PlayerThumbnailType", "coverThumbnailAnimation", ThumbnailCoverType.Vinyl )
     }
+    val PLAYER_THUMBNAIL_VINYL_SIZE by lazy {
+        Preference.FloatPreference( preferences, "PlayerThumbnailVinylSize", "VinylSize", 50F )
+    }
     val PLAYER_NO_THUMBNAIL_SWIPE_ANIMATION by lazy {
         Preference.EnumPreference( preferences, "PlayerNoThumbnailSwipeAnimation", "swipeAnimationsNoThumbnail", SwipeAnimationNoThumbnail.Sliding )
     }
@@ -258,6 +264,18 @@ object Settings {
     }
     val PLAYER_THUMBNAIL_HORIZONTAL_SWIPE_DISABLED by lazy {
         Preference.BooleanPreference( preferences, "PlayerThumbnailHorizontalSwipe", "disablePlayerHorizontalSwipe", false )
+    }
+    val PLAYER_THUMBNAIL_FADE by lazy {
+        Preference.FloatPreference( preferences, "PlayerThumbnailFade", "thumbnailFade", 5F )
+    }
+    val PLAYER_THUMBNAIL_FADE_EX by lazy {
+        Preference.FloatPreference( preferences, "PlayerThumbnailFadeEx", "thumbnailFadeEx", 5F )
+    }
+    val PLAYER_THUMBNAIL_SPACING by lazy {
+        Preference.FloatPreference( preferences, "PlayerThumbnailSpacing", "thumbnailSpacing", 0F )
+    }
+    val PLAYER_THUMBNAIL_SPACING_LANDSCAPE by lazy {
+        Preference.FloatPreference( preferences, "PlayerThumbnailSpacingLandscape", "thumbnailSpacingL", 0F )
     }
     val PLAYER_VISUALIZER by lazy {
         Preference.BooleanPreference( preferences, "PlayerVisualizer", "visualizerEnabled", false )
@@ -358,6 +376,12 @@ object Settings {
     val PLAYER_BACKGROUND_BLUR by lazy {
         Preference.BooleanPreference( preferences, "PlayerBackgroundBlur", "noblur", true )
     }
+    val PLAYER_BACKGROUND_BLUR_STRENGTH by lazy {
+        Preference.FloatPreference( preferences, "PlayerBackgroundBlurStrength", "blurScale", 25F )
+    }
+    val PLAYER_BACKGROUND_BACK_DROP by lazy {
+        Preference.FloatPreference( preferences, "PlayerBackgroundBackDrop", "playerBackdrop", 0F )
+    }
     val PLAYER_BACKGROUND_FADING_EDGE by lazy {
         Preference.BooleanPreference( preferences, "PlayerBackgroundFadingEdge", "fadingedge", false )
     }
@@ -421,6 +445,12 @@ object Settings {
     }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Lyrics">
+    val LYRICS_SIZE by lazy {
+        Preference.FloatPreference( preferences, "LyricsSize", "lyricsSize", 5F )
+    }
+    val LYRICS_SIZE_LANDSCAPE by lazy {
+        Preference.FloatPreference( preferences, "LyricsSizeLandscape", "lyricsSizeL", 5F )
+    }
     val LYRICS_COLOR by lazy {
         Preference.EnumPreference( preferences, "LyricsColor", "lyricsColor", LyricsColor.Thememode )
     }
@@ -497,6 +527,9 @@ object Settings {
     val AUDIO_VOLUME_NORMALIZATION by lazy {
         Preference.BooleanPreference( preferences, "AudioVolumeNormalization", "volumeNormalization", false )
     }
+    val AUDIO_VOLUME_NORMALIZATION_TARGET by lazy {
+        Preference.FloatPreference( preferences, "AudioVolumeNormalizationTarget", "loudnessBaseGain", 5F )
+    }
     val AUDIO_SHAKE_TO_SKIP by lazy {
         Preference.BooleanPreference( preferences, "AudioShakeToSkip", "shakeEventEnabled", false )
     }
@@ -506,11 +539,26 @@ object Settings {
     val AUDIO_BASS_BOOSTED by lazy {
         Preference.BooleanPreference( preferences, "AudioBassBoosted", "bassboostEnabled", false )
     }
+    val AUDIO_BASS_BOOST_LEVEL by lazy {
+        Preference.FloatPreference( preferences, "AudioBassBoostLevel", "bassboostLevel", .5F )
+    }
     val AUDIO_SMART_PAUSE_DURING_CALLS by lazy {
         Preference.BooleanPreference( preferences, "AudioSmartPauseDuringCalls", "handleAudioFocusEnabled", true )
     }
     val AUDIO_SPEED by lazy {
         Preference.BooleanPreference( preferences, "AudioSpeed", "showPlaybackSpeedButton", false )
+    }
+    val AUDIO_SPEED_VALUE by lazy {
+        Preference.FloatPreference( preferences, "AudioSpeedValue", "playbackSpeed", 5F )
+    }
+    val AUDIO_PITCH by lazy {
+        Preference.FloatPreference( preferences, "AudioPitch", "playbackPitch", 1F )
+    }
+    val AUDIO_VOLUME by lazy {
+        Preference.FloatPreference( preferences, "AudioVolume", "playbackVolume", .5F )
+    }
+    val AUDIO_DEVICE_VOLUME by lazy {
+        Preference.FloatPreference( preferences, "AudioVolume", "playbackVolume", getDeviceVolume( appContext() ) )
     }
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="YouTube">
@@ -543,6 +591,9 @@ object Settings {
     }
     val YOUTUBE_LAST_VIDEO_ID by lazy {
         Preference.StringPreference( preferences, "YouTubeLastVideoId", "lastVideoId", "" )
+    }
+    val YOUTUBE_LAST_VIDEO_SECONDS by lazy {
+        Preference.FloatPreference( preferences, "YouTubeLastVideoSeconds", "lastVideoSeconds", 0F )
     }
     //</editor-fold>
     //<editor-fold desc="Quick picks">
@@ -705,6 +756,18 @@ object Settings {
     val SHOW_FLOATING_ICON by lazy {
         Preference.BooleanPreference( preferences, "ShowFloatingIcon", "showFloatingIcon", false )
     }
+    val FLOATING_ICON_X_OFFSET by lazy {
+        Preference.FloatPreference( preferences, "FloatingIconXOffset", "floatActionIconOffsetX", 0F )
+    }
+    val FLOATING_ICON_Y_OFFSET by lazy {
+        Preference.FloatPreference( preferences, "FloatingIconYOffset", "floatActionIconOffsetY", 0F )
+    }
+    val MULTI_FLOATING_ICON_X_OFFSET by lazy {
+        Preference.FloatPreference( preferences, "MultiFloatingIconXOffset", "multiFloatActionIconOffsetX", 0F )
+    }
+    val MULTI_FLOATING_ICON_Y_OFFSET by lazy {
+        Preference.FloatPreference( preferences, "MultiFloatingIconYOffset", "multiFloatActionIconOffsetY", 0F )
+    }
     val ZOOM_OUT_ANIMATION by lazy {
         Preference.BooleanPreference( preferences, "ZoomOutAnimation", "buttonzoomout", false )
     }
@@ -842,6 +905,9 @@ object Settings {
     }
     val SEEN_CHANGELOGS_VERSION by lazy {
         Preference.StringPreference( preferences, "SeenChangelogsVersion", "seenChangelogsVersionKey", "" )
+    }
+    val PLAYBACK_DURATION by lazy {
+        Preference.FloatPreference( preferences, "AudioVolume", "playbackVolume", 0F )
     }
 
     /**

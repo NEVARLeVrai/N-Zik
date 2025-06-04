@@ -54,11 +54,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
+import app.kreate.android.Settings
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.ui.styling.favoritesIcon
-import it.fast4x.rimusic.utils.multiFloatActionIconOffsetXkey
-import it.fast4x.rimusic.utils.multiFloatActionIconOffsetYkey
-import it.fast4x.rimusic.utils.rememberPreference
 
 enum class MultiFabState {
     Collapsed, Expanded
@@ -117,8 +115,8 @@ fun MultiFloatingActionsButton (
     //var offsetX by remember { mutableStateOf(0f) }
     //var offsetY by remember { mutableStateOf(0f) }
 
-    var offsetX = rememberPreference(multiFloatActionIconOffsetXkey, 0F )
-    var offsetY = rememberPreference(multiFloatActionIconOffsetYkey, 0F )
+    var offsetX = Settings.MULTI_FLOATING_ICON_X_OFFSET
+    var offsetY = Settings.MULTI_FLOATING_ICON_Y_OFFSET
 
     Box(
         modifier = modifier,

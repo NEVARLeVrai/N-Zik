@@ -46,8 +46,8 @@ fun GetControls(
     val isGradientBackgroundEnabled = playerBackgroundColors == PlayerBackgroundColors.ThemeColorGradient ||
             playerBackgroundColors == PlayerBackgroundColors.CoverColorGradient
 
-    var playbackSpeed by rememberPreference(playbackSpeedKey, 1f)
-    var playbackDuration by rememberPreference(playbackDurationKey, 0f)
+    var playbackSpeed by Settings.AUDIO_SPEED_VALUE
+    var playbackDuration by Settings.PLAYBACK_DURATION
     var setPlaybackDuration by remember { mutableStateOf(false) }
 
     var showSpeedPlayerDialog by rememberSaveable {

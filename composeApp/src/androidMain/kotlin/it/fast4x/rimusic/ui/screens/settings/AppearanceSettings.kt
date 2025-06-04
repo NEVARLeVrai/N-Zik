@@ -56,14 +56,9 @@ import it.fast4x.rimusic.ui.components.themed.AppearancePresetDialog
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartPlayerService
-import it.fast4x.rimusic.utils.blurStrengthKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid7
 import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.thumbnailFadeExKey
-import it.fast4x.rimusic.utils.thumbnailFadeKey
-import it.fast4x.rimusic.utils.thumbnailSpacingKey
 import me.knighthat.component.tab.Search
 import me.knighthat.utils.Toaster
 
@@ -349,10 +344,10 @@ fun AppearanceSettings(
             thumbnailpause = false
             //keepPlayerMinimized = false
         }
-        var blurStrength by rememberPreference(blurStrengthKey, 25f)
-        var thumbnailFadeEx  by rememberPreference(thumbnailFadeExKey, 5f)
-        var thumbnailFade  by rememberPreference(thumbnailFadeKey, 5f)
-        var thumbnailSpacing  by rememberPreference(thumbnailSpacingKey, 0f)
+        var blurStrength by Settings.PLAYER_BACKGROUND_BLUR_STRENGTH
+        var thumbnailFadeEx  by Settings.PLAYER_THUMBNAIL_FADE_EX
+        var thumbnailFade  by Settings.PLAYER_THUMBNAIL_FADE
+        var thumbnailSpacing  by Settings.PLAYER_THUMBNAIL_SPACING
         var colorPaletteName by Settings.COLOR_PALETTE
         var colorPaletteMode by Settings.THEME_MODE
         var swipeAnimationNoThumbnail by Settings.PLAYER_NO_THUMBNAIL_SWIPE_ANIMATION

@@ -24,9 +24,6 @@ import it.fast4x.rimusic.ui.components.themed.IconButton
 import it.fast4x.rimusic.ui.components.themed.SliderControl
 import it.fast4x.rimusic.ui.screens.settings.SwitchSettingEntry
 import it.fast4x.rimusic.ui.styling.favoritesIcon
-import it.fast4x.rimusic.utils.blurStrengthKey
-import it.fast4x.rimusic.utils.playerBackdropKey
-import it.fast4x.rimusic.utils.rememberPreference
 import me.knighthat.component.dialog.Dialog
 
 class BlurAdjuster private constructor(
@@ -40,8 +37,8 @@ class BlurAdjuster private constructor(
         @Composable
         operator fun invoke() = BlurAdjuster(
             remember { mutableStateOf( false ) },
-            rememberPreference( blurStrengthKey, 25f ),
-            rememberPreference( playerBackdropKey, 0f ),
+            Settings.PLAYER_BACKGROUND_BLUR_STRENGTH,
+            Settings.PLAYER_BACKGROUND_BACK_DROP,
             Settings.PLAYER_ROTATING_ALBUM_COVER
         )
     }
