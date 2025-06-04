@@ -131,7 +131,6 @@ import it.fast4x.rimusic.utils.isAtLeastAndroid8
 import it.fast4x.rimusic.utils.isAtLeastAndroid81
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.mediaItems
-import it.fast4x.rimusic.utils.minimumSilenceDurationKey
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
 import it.fast4x.rimusic.utils.preferences
@@ -951,9 +950,9 @@ class PlayerServiceModern : MediaLibraryService(),
             enableFloatOutput: Boolean,
             enableAudioTrackPlaybackParams: Boolean
         ): AudioSink {
-            val minimumSilenceDuration = preferences.getLong(
-                minimumSilenceDurationKey, 2_000_000L
-            ).coerceIn(1000L..2_000_000L)
+            val minimumSilenceDuration: Long = Settings.AUDIO_SKIP_SILENCE_LENGTH
+                                                       .value
+                                                       .coerceIn( 1_000L..2_000_000L )
 
             return DefaultAudioSink.Builder(applicationContext)
                 .setEnableFloatOutput(enableFloatOutput)

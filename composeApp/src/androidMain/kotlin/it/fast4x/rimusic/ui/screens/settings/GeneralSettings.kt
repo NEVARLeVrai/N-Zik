@@ -149,7 +149,7 @@ fun GeneralSettings(
 
     val launchEqualizer by rememberEqualizerLauncher(audioSessionId = { binder?.player?.audioSessionId })
 
-    var minimumSilenceDuration by rememberPreference(minimumSilenceDurationKey, 2_000_000L)
+    var minimumSilenceDuration by Settings.AUDIO_SKIP_SILENCE_LENGTH
 
     var pauseListenHistory by Settings.PAUSE_HISTORY
     var restartService by rememberSaveable { mutableStateOf(false) }

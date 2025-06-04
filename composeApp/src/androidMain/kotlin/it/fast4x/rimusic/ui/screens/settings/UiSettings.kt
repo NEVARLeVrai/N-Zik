@@ -89,7 +89,6 @@ import it.fast4x.rimusic.utils.customThemeLight_accentKey
 import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
 import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
 import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.minimumSilenceDurationKey
 import it.fast4x.rimusic.utils.rememberPreference
 import me.knighthat.component.dialog.RestartAppDialog
 import me.knighthat.component.tab.Search
@@ -242,7 +241,7 @@ fun DefaultUiSettings() {
     discoverIsEnabled = false
     var isPauseOnVolumeZeroEnabled by Settings.PAUSE_WHEN_VOLUME_SET_TO_ZERO
     isPauseOnVolumeZeroEnabled = false
-    var minimumSilenceDuration by rememberPreference(minimumSilenceDurationKey, 2_000_000L)
+    var minimumSilenceDuration by Settings.AUDIO_SKIP_SILENCE_LENGTH
     minimumSilenceDuration = 2_000_000L
     var pauseListenHistory by Settings.PAUSE_HISTORY
     pauseListenHistory = false

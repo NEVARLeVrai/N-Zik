@@ -555,15 +555,6 @@ fun rememberPreference(key: String, defaultValue: Int): MutableState<Int> {
     }
 }
 
-@Composable
-fun rememberPreference(key: String, defaultValue: Long): MutableState<Long> {
-    val context = LocalContext.current
-    return remember {
-        mutableStatePreferenceOf(context.preferences.getLong(key, defaultValue)) {
-            context.preferences.edit { putLong(key, it) }
-        }
-    }
-}
 fun clearPreference(context: Context, key: String): Unit {
     try {
         context.preferences.edit { remove(key) }

@@ -524,6 +524,9 @@ object Settings {
     val AUDIO_SKIP_SILENCE by lazy {
         Preference.BooleanPreference( preferences, "AudioSkipSilence", "skipSilence", false )
     }
+    val AUDIO_SKIP_SILENCE_LENGTH by lazy {
+        Preference.LongPreference( preferences, "AudioSkipSilenceLength", "minimumSilenceDuration", 2_000_000L )
+    }
     val AUDIO_VOLUME_NORMALIZATION by lazy {
         Preference.BooleanPreference( preferences, "AudioVolumeNormalization", "volumeNormalization", false )
     }
