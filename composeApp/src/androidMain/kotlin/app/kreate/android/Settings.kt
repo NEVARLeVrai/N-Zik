@@ -413,6 +413,9 @@ object Settings {
      * to work.
      */
     fun load( context: Context ) {
+        if( ::preferences.isInitialized )
+            return
+
         this.preferences = context.getSharedPreferences( "preferences", Context.MODE_PRIVATE )
     }
 
