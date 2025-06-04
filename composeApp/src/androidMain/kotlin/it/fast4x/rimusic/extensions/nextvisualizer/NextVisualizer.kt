@@ -37,6 +37,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import app.kreate.android.R
+import app.kreate.android.Settings.PLAYER_CURRENT_VISUALIZER
 import app.kreate.android.Settings.PLAYER_VISUALIZER
 import app.kreate.android.drawable.APP_ICON_BITMAP
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -66,12 +67,10 @@ import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.components.themed.IconButton
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import it.fast4x.rimusic.utils.DisposableListener
-import it.fast4x.rimusic.utils.currentVisualizerKey
 import it.fast4x.rimusic.utils.currentWindow
 import it.fast4x.rimusic.utils.getBitmapFromUrl
 import it.fast4x.rimusic.utils.hasPermission
 import it.fast4x.rimusic.utils.isCompositionLaunched
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.semiBold
 import kotlinx.coroutines.launch
@@ -148,7 +147,7 @@ fun NextVisualizer() {
             val helper = VisualizerHelper(binder?.player?.audioSessionId ?: 0)
 
             val visualizersList = getVisualizers()
-            var currentVisualizer by rememberPreference(currentVisualizerKey, 0)
+            var currentVisualizer by PLAYER_CURRENT_VISUALIZER
             if (currentVisualizer < 0) currentVisualizer = 0
 
             Box(

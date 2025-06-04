@@ -51,31 +51,10 @@ import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartActivity
 import it.fast4x.rimusic.utils.RestartPlayerService
-import it.fast4x.rimusic.utils.customThemeDark_Background0Key
-import it.fast4x.rimusic.utils.customThemeDark_Background1Key
-import it.fast4x.rimusic.utils.customThemeDark_Background2Key
-import it.fast4x.rimusic.utils.customThemeDark_Background3Key
-import it.fast4x.rimusic.utils.customThemeDark_Background4Key
-import it.fast4x.rimusic.utils.customThemeDark_TextKey
-import it.fast4x.rimusic.utils.customThemeDark_accentKey
-import it.fast4x.rimusic.utils.customThemeDark_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeDark_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeDark_textSecondaryKey
-import it.fast4x.rimusic.utils.customThemeLight_Background0Key
-import it.fast4x.rimusic.utils.customThemeLight_Background1Key
-import it.fast4x.rimusic.utils.customThemeLight_Background2Key
-import it.fast4x.rimusic.utils.customThemeLight_Background3Key
-import it.fast4x.rimusic.utils.customThemeLight_Background4Key
-import it.fast4x.rimusic.utils.customThemeLight_TextKey
-import it.fast4x.rimusic.utils.customThemeLight_accentKey
-import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.languageDestinationName
 import it.fast4x.rimusic.utils.rememberEqualizerLauncher
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.component.dialog.RestartAppDialog
 import me.knighthat.component.tab.Search
@@ -115,27 +94,27 @@ fun GeneralSettings(
     var shakeEventEnabled by Settings.AUDIO_SHAKE_TO_SKIP
     var useVolumeKeysToChangeSong by Settings.AUDIO_VOLUME_BUTTONS_CHANGE_SONG
 
-    var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
-    var customThemeLight_Background1 by rememberPreference(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())
-    var customThemeLight_Background2 by rememberPreference(customThemeLight_Background2Key, DefaultLightColorPalette.background2.hashCode())
-    var customThemeLight_Background3 by rememberPreference(customThemeLight_Background3Key, DefaultLightColorPalette.background3.hashCode())
-    var customThemeLight_Background4 by rememberPreference(customThemeLight_Background4Key, DefaultLightColorPalette.background4.hashCode())
-    var customThemeLight_Text by rememberPreference(customThemeLight_TextKey, DefaultLightColorPalette.text.hashCode())
-    var customThemeLight_TextSecondary by rememberPreference(customThemeLight_textSecondaryKey, DefaultLightColorPalette.textSecondary.hashCode())
-    var customThemeLight_TextDisabled by rememberPreference(customThemeLight_textDisabledKey, DefaultLightColorPalette.textDisabled.hashCode())
-    var customThemeLight_IconButtonPlayer by rememberPreference(customThemeLight_iconButtonPlayerKey, DefaultLightColorPalette.iconButtonPlayer.hashCode())
-    var customThemeLight_Accent by rememberPreference(customThemeLight_accentKey, DefaultLightColorPalette.accent.hashCode())
+    var customThemeLight_Background0 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE
+    var customThemeLight_Background1 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE
+    var customThemeLight_Background2 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE
+    var customThemeLight_Background3 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE
+    var customThemeLight_Background4 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE
+    var customThemeLight_Text by Settings.CUSTOM_LIGHT_TEXT_HASH_CODE
+    var customThemeLight_TextSecondary by Settings.CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE
+    var customThemeLight_TextDisabled by Settings.CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE
+    var customThemeLight_IconButtonPlayer by Settings.CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE
+    var customThemeLight_Accent by Settings.CUSTOM_LIGHT_ACCENT_HASH_CODE
 
-    var customThemeDark_Background0 by rememberPreference(customThemeDark_Background0Key, DefaultDarkColorPalette.background0.hashCode())
-    var customThemeDark_Background1 by rememberPreference(customThemeDark_Background1Key, DefaultDarkColorPalette.background1.hashCode())
-    var customThemeDark_Background2 by rememberPreference(customThemeDark_Background2Key, DefaultDarkColorPalette.background2.hashCode())
-    var customThemeDark_Background3 by rememberPreference(customThemeDark_Background3Key, DefaultDarkColorPalette.background3.hashCode())
-    var customThemeDark_Background4 by rememberPreference(customThemeDark_Background4Key, DefaultDarkColorPalette.background4.hashCode())
-    var customThemeDark_Text by rememberPreference(customThemeDark_TextKey, DefaultDarkColorPalette.text.hashCode())
-    var customThemeDark_TextSecondary by rememberPreference(customThemeDark_textSecondaryKey, DefaultDarkColorPalette.textSecondary.hashCode())
-    var customThemeDark_TextDisabled by rememberPreference(customThemeDark_textDisabledKey, DefaultDarkColorPalette.textDisabled.hashCode())
-    var customThemeDark_IconButtonPlayer by rememberPreference(customThemeDark_iconButtonPlayerKey, DefaultDarkColorPalette.iconButtonPlayer.hashCode())
-    var customThemeDark_Accent by rememberPreference(customThemeDark_accentKey, DefaultDarkColorPalette.accent.hashCode())
+    var customThemeDark_Background0 by Settings.CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE
+    var customThemeDark_Background1 by Settings.CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE
+    var customThemeDark_Background2 by Settings.CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE
+    var customThemeDark_Background3 by Settings.CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE
+    var customThemeDark_Background4 by Settings.CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE
+    var customThemeDark_Text by Settings.CUSTOM_DARK_TEXT_HASH_CODE
+    var customThemeDark_TextSecondary by Settings.CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE
+    var customThemeDark_TextDisabled by Settings.CUSTOM_DARK_TEXT_DISABLED_HASH_CODE
+    var customThemeDark_IconButtonPlayer by Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE
+    var customThemeDark_Accent by Settings.CUSTOM_DARK_ACCENT_HASH_CODE
 
     var resetCustomLightThemeDialog by rememberSaveable { mutableStateOf(false) }
     var resetCustomDarkThemeDialog by rememberSaveable { mutableStateOf(false) }

@@ -26,9 +26,7 @@ import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.toUiMood
 import it.fast4x.rimusic.ui.components.Skeleton
-import it.fast4x.rimusic.utils.homeScreenTabIndexKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -71,7 +69,7 @@ fun HomeScreen(
             else -> openTabFromShortcut1
         }
 
-    var (tabIndex, onTabChanged) = rememberPreference(homeScreenTabIndexKey, initialtabIndex)
+    var (tabIndex, onTabChanged) = Settings.HOME_TAB_INDEX
 
     if (tabIndex == -2) navController.navigate(NavRoutes.search.name)
 

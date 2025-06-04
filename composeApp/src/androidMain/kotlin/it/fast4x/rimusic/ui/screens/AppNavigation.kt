@@ -66,7 +66,6 @@ import it.fast4x.rimusic.ui.screens.searchresult.SearchResultScreen
 import it.fast4x.rimusic.ui.screens.settings.SettingsScreen
 import it.fast4x.rimusic.ui.screens.statistics.StatisticsScreen
 import it.fast4x.rimusic.utils.clearPreference
-import it.fast4x.rimusic.utils.homeScreenTabIndexKey
 
 @androidx.annotation.OptIn()
 @OptIn(
@@ -113,7 +112,7 @@ fun AppNavigation(
 
     // Clearing homeScreenTabIndex in opening app.
     val context = LocalContext.current
-    clearPreference(context, homeScreenTabIndexKey)
+    clearPreference(context, Settings.HOME_TAB_INDEX.key)
 
     val enterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         {

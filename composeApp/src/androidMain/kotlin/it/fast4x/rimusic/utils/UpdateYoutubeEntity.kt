@@ -8,6 +8,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.media3.common.util.UnstableApi
+import app.kreate.android.Settings
 import it.fast4x.compose.persist.persist
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.bodies.BrowseBody
@@ -28,7 +29,7 @@ fun UpdateYoutubeArtist(browseId: String) {
 
     var artistPage by persist<Innertube.ArtistInfoPage?>("artist/$browseId/artistPage")
     var artist by persist<Artist?>("artist/$browseId/artist")
-    val tabIndex by rememberPreference(artistScreenTabIndexKey, defaultValue = 0)
+    val tabIndex by Settings.ARTIST_SCREEN_TAB_INDEX
 
     LaunchedEffect(browseId) {
         Database.artistTable

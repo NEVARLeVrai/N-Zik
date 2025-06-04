@@ -37,6 +37,7 @@ import app.kreate.android.Settings.LOCAL_SONGS_FOLDER
 import app.kreate.android.Settings.PARENTAL_CONTROL
 import app.kreate.android.Settings.PLAYER_EXTRA_SPACE
 import app.kreate.android.Settings.PROXY_HOST
+import app.kreate.android.Settings.PROXY_PORT
 import app.kreate.android.Settings.PROXY_SCHEME
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition
@@ -47,8 +48,6 @@ import it.fast4x.rimusic.utils.isAtLeastAndroid10
 import it.fast4x.rimusic.utils.isAtLeastAndroid12
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
 import it.fast4x.rimusic.utils.isIgnoringBatteryOptimizations
-import it.fast4x.rimusic.utils.proxyPortKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import me.knighthat.utils.Toaster
 import java.io.File
@@ -94,7 +93,7 @@ fun OtherSettings() {
 
     var isProxyEnabled by IS_PROXY_ENABLED
     var proxyHost by PROXY_HOST
-    var proxyPort by rememberPreference(proxyPortKey, 1080)
+    var proxyPort by PROXY_PORT
     var proxyMode by PROXY_SCHEME
 
     var defaultFolder by LOCAL_SONGS_FOLDER

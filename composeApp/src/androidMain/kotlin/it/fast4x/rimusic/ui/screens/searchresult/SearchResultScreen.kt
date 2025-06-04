@@ -63,8 +63,6 @@ import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.playVideo
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.searchResultScreenTabIndexKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -89,7 +87,7 @@ fun SearchResultScreen(
     val context = LocalContext.current
     val binder = LocalPlayerServiceBinder.current
     val saveableStateHolder = rememberSaveableStateHolder()
-    val (tabIndex, onTabIndexChanges) = rememberPreference(searchResultScreenTabIndexKey, 0)
+    val (tabIndex, onTabIndexChanges) = Settings.SEARCH_RESULTS_TAB_INDEX
 
     val hapticFeedback = LocalHapticFeedback.current
 

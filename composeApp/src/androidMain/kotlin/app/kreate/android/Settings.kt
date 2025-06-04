@@ -8,6 +8,7 @@ import androidx.compose.runtime.SnapshotMutationPolicy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.edit
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.enums.AlbumSortBy
@@ -88,6 +89,8 @@ import it.fast4x.rimusic.enums.ThumbnailType
 import it.fast4x.rimusic.enums.TransitionEffect
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.enums.WallpaperType
+import it.fast4x.rimusic.ui.styling.DefaultDarkColorPalette
+import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.utils.getDeviceVolume
 import me.knighthat.innertube.Constants
 import org.jetbrains.annotations.Blocking
@@ -280,6 +283,9 @@ object Settings {
     val PLAYER_VISUALIZER by lazy {
         Preference.BooleanPreference( preferences, "PlayerVisualizer", "visualizerEnabled", false )
     }
+    val PLAYER_CURRENT_VISUALIZER  by lazy {
+        Preference.IntPreference( preferences, "PlayerCurrentVisualizer", "currentVisualizerKey", 0 )
+    }
     val PLAYER_TAP_THUMBNAIL_FOR_LYRICS by lazy {
         Preference.BooleanPreference( preferences, "PlayerTapThumbnailForLyrics", "thumbnailTapEnabled", true )
     }
@@ -423,8 +429,14 @@ object Settings {
     val THUMBNAIL_CACHE_SIZE by lazy {
         Preference.EnumPreference( preferences, "ThumbnailCacheSize", "coilDiskCacheMaxSize", CoilDiskCacheMaxSize.`128MB` )
     }
+    val THUMBNAIL_CACHE_CUSTOM_SIZE by lazy {
+        Preference.IntPreference( preferences, "ThumbnailCacheCustomSize", "exoPlayerCustomCache", 32 )
+    }
     val SONG_CACHE_SIZE by lazy {
         Preference.EnumPreference( preferences, "SongCacheSize", "exoPlayerDiskCacheMaxSize", ExoPlayerDiskCacheMaxSize.`2GB` )
+    }
+    val SONG_CACHE_CUSTOM_SIZE by lazy {
+        Preference.IntPreference( preferences, "SongCacheCustomSize", "", 32 )
     }
     val SONG_DOWNLOAD_SIZE by lazy {
         Preference.EnumPreference( preferences, "SongDownloadSize", "exoPlayerDiskDownloadCacheMaxSize", ExoPlayerDiskDownloadCacheMaxSize.`2GB` )
@@ -552,7 +564,7 @@ object Settings {
         Preference.BooleanPreference( preferences, "AudioSpeed", "showPlaybackSpeedButton", false )
     }
     val AUDIO_SPEED_VALUE by lazy {
-        Preference.FloatPreference( preferences, "AudioSpeedValue", "playbackSpeed", 5F )
+        Preference.FloatPreference( preferences, "AudioSpeedValue", "playbackSpeed", 1F )
     }
     val AUDIO_PITCH by lazy {
         Preference.FloatPreference( preferences, "AudioPitch", "playbackPitch", 1F )
@@ -651,6 +663,73 @@ object Settings {
     }
     val PROXY_HOST by lazy {
         Preference.StringPreference( preferences, "ProxyHost", "proxyHostnameKey", "" )
+    }
+    val PROXY_PORT  by lazy {
+        Preference.IntPreference( preferences, "ProxyPort", "proxyPort", 1080 )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Custom light colors">
+    val CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeBackground0", "customThemeLight_Background0", DefaultLightColorPalette.background0.hashCode() )
+    }
+    val CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeBackground1", "customThemeLight_Background1", DefaultLightColorPalette.background1.hashCode() )
+    }
+    val CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeBackground2", "customThemeLight_Background2", DefaultLightColorPalette.background2.hashCode() )
+    }
+    val CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeBackground3", "customThemeLight_Background3", DefaultLightColorPalette.background3.hashCode() )
+    }
+    val CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeBackground4", "customThemeLight_Background4", DefaultLightColorPalette.background4.hashCode() )
+    }
+    val CUSTOM_LIGHT_TEXT_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeText", "customThemeLight_Text", DefaultLightColorPalette.text.hashCode() )
+    }
+    val CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeTextSecondary", "customThemeLight_textSecondary", DefaultLightColorPalette.textSecondary.hashCode() )
+    }
+    val CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeTextDisabled", "customThemeLight_textDisabled", DefaultLightColorPalette.textDisabled.hashCode() )
+    }
+    val CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemePlayButton", "customThemeLight_iconButtonPlayer", DefaultLightColorPalette.iconButtonPlayer.hashCode() )
+    }
+    val CUSTOM_LIGHT_ACCENT_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomLightThemeAccent", "customThemeLight_accent", DefaultLightColorPalette.accent.hashCode() )
+    }
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Custom dark theme">
+    val CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeBackground0", "customThemeDark_Background0", DefaultDarkColorPalette.background0.hashCode() )
+    }
+    val CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeBackground1", "customThemeDark_Background1", DefaultDarkColorPalette.background1.hashCode() )
+    }
+    val CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeBackground2", "customThemeDark_Background2", DefaultDarkColorPalette.background2.hashCode() )
+    }
+    val CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeBackground3", "customThemeDark_Background3", DefaultDarkColorPalette.background3.hashCode() )
+    }
+    val CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeBackground4", "customThemeDark_Background4", DefaultDarkColorPalette.background4.hashCode() )
+    }
+    val CUSTOM_DARK_TEXT_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeText", "customThemeDark_Text", DefaultDarkColorPalette.text.hashCode() )
+    }
+    val CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeTextSecondary", "customThemeDark_textSecondary", DefaultDarkColorPalette.textSecondary.hashCode() )
+    }
+    val CUSTOM_DARK_TEXT_DISABLED_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeTextDisabled", "customThemeDark_textDisabled", DefaultDarkColorPalette.textDisabled.hashCode() )
+    }
+    val CUSTOM_DARK_PLAY_BUTTON_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemePlayButton", "customThemeDark_iconButtonPlayer", DefaultDarkColorPalette.iconButtonPlayer.hashCode() )
+    }
+    val CUSTOM_DARK_ACCENT_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomDarkThemeAccent", "customThemeDark_accent", DefaultDarkColorPalette.accent.hashCode() )
     }
     //</editor-fold>
 
@@ -911,6 +990,18 @@ object Settings {
     }
     val PLAYBACK_DURATION by lazy {
         Preference.FloatPreference( preferences, "AudioVolume", "playbackVolume", 0F )
+    }
+    val CUSTOM_COLOR_HASH_CODE by lazy {
+        Preference.IntPreference( preferences, "CustomColorHashCode", "customColor", Color.Green.hashCode() )
+    }
+    val SEARCH_RESULTS_TAB_INDEX by lazy {
+        Preference.IntPreference( preferences, "SearchResultsTabIndex", "searchResultScreenTabIndex", 0 )
+    }
+    val HOME_TAB_INDEX by lazy {
+        Preference.IntPreference( preferences, "HomeTabIndex", "homeScreenTabIndex", 0 )
+    }
+    val ARTIST_SCREEN_TAB_INDEX  by lazy {
+        Preference.IntPreference( preferences, "ArtistScreenTabIndex", "artistScreenTabIndex", 0 )
     }
 
     /**

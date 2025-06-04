@@ -119,7 +119,6 @@ import it.fast4x.rimusic.utils.broadCastPendingIntent
 import it.fast4x.rimusic.utils.collect
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
 import it.fast4x.rimusic.utils.encryptedPreferences
-import it.fast4x.rimusic.utils.exoPlayerCustomCacheKey
 import it.fast4x.rimusic.utils.fadeInEffect
 import it.fast4x.rimusic.utils.fadeOutEffect
 import it.fast4x.rimusic.utils.forcePlay
@@ -323,7 +322,7 @@ class PlayerServiceModern : MediaLibraryService(),
             ExoPlayerDiskCacheMaxSize.Unlimited -> NoOpCacheEvictor()
 
             ExoPlayerDiskCacheMaxSize.Custom    -> {
-                val customCacheSize = preferences.getInt( exoPlayerCustomCacheKey, 32 ) * 1000 * 1000L
+                val customCacheSize = Settings.SONG_CACHE_CUSTOM_SIZE.value * 1000 * 1000L
                 LeastRecentlyUsedCacheEvictor( customCacheSize )
             }
 

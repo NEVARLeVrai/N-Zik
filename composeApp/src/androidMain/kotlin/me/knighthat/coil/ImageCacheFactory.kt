@@ -23,7 +23,6 @@ import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.enums.CoilDiskCacheMaxSize
 import it.fast4x.rimusic.thumbnail
 import it.fast4x.rimusic.thumbnailShape
-import it.fast4x.rimusic.utils.coilCustomDiskCacheKey
 import it.fast4x.rimusic.utils.preferences
 
 object ImageCacheFactory {
@@ -36,9 +35,10 @@ object ImageCacheFactory {
                  .directory( appContext().filesDir.resolve( "coil" ) )
                  .maxSizeBytes(
                      when( diskSize ) {
-                         CoilDiskCacheMaxSize.Custom -> preferences.getInt( coilCustomDiskCacheKey, 128 )
-                                                                   .times( 1000L )
-                                                                   .times( 1000 )
+                         CoilDiskCacheMaxSize.Custom -> Settings.THUMBNAIL_CACHE_CUSTOM_SIZE
+                                                                .value
+                                                                .times( 1000L )
+                                                                .times( 1000 )
 
                          else                        -> diskSize.bytes
                      }

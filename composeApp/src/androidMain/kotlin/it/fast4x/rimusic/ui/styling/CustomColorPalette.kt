@@ -5,56 +5,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import app.kreate.android.Settings
 import it.fast4x.rimusic.enums.ColorPaletteMode
-import it.fast4x.rimusic.utils.customThemeDark_Background0Key
-import it.fast4x.rimusic.utils.customThemeDark_Background1Key
-import it.fast4x.rimusic.utils.customThemeDark_Background2Key
-import it.fast4x.rimusic.utils.customThemeDark_Background3Key
-import it.fast4x.rimusic.utils.customThemeDark_Background4Key
-import it.fast4x.rimusic.utils.customThemeDark_TextKey
-import it.fast4x.rimusic.utils.customThemeDark_accentKey
-import it.fast4x.rimusic.utils.customThemeDark_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeDark_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeDark_textSecondaryKey
-import it.fast4x.rimusic.utils.customThemeLight_Background0Key
-import it.fast4x.rimusic.utils.customThemeLight_Background1Key
-import it.fast4x.rimusic.utils.customThemeLight_Background2Key
-import it.fast4x.rimusic.utils.customThemeLight_Background3Key
-import it.fast4x.rimusic.utils.customThemeLight_Background4Key
-import it.fast4x.rimusic.utils.customThemeLight_TextKey
-import it.fast4x.rimusic.utils.customThemeLight_accentKey
-import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.preferences
 
 
 fun customColorPalette(colorPalette: ColorPalette, context: Context, isSystemInDarkTheme: Boolean): ColorPalette {
     val colorPaletteMode by Settings.THEME_MODE
 
     val customThemeLight = colorPalette.copy(
-        background0 = Color(context.preferences.getInt(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())),
-        background1 = Color(context.preferences.getInt(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())),
-        background2 = Color(context.preferences.getInt(customThemeLight_Background2Key, DefaultLightColorPalette.background2.hashCode())),
-        background3 = Color(context.preferences.getInt(customThemeLight_Background3Key, DefaultLightColorPalette.background3.hashCode())),
-        background4 = Color(context.preferences.getInt(customThemeLight_Background4Key, DefaultLightColorPalette.background4.hashCode())),
-        text = Color(context.preferences.getInt(customThemeLight_TextKey, DefaultLightColorPalette.text.hashCode())),
-        textSecondary = Color(context.preferences.getInt(customThemeLight_textSecondaryKey, DefaultLightColorPalette.textSecondary.hashCode())),
-        textDisabled = Color(context.preferences.getInt(customThemeLight_textDisabledKey, DefaultLightColorPalette.textDisabled.hashCode())),
-        iconButtonPlayer = Color(context.preferences.getInt(customThemeLight_iconButtonPlayerKey, DefaultLightColorPalette.iconButtonPlayer.hashCode())),
-        accent = Color(context.preferences.getInt(customThemeLight_accentKey, DefaultLightColorPalette.accent.hashCode()))
+        background0 = Color(Settings.CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE.value),
+        background1 = Color(Settings.CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE.value),
+        background2 = Color(Settings.CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE.value),
+        background3 = Color(Settings.CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE.value),
+        background4 = Color(Settings.CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE.value),
+        text = Color(Settings.CUSTOM_LIGHT_TEXT_HASH_CODE.value),
+        textSecondary = Color(Settings.CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE.value),
+        textDisabled = Color(Settings.CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE.value),
+        iconButtonPlayer = Color(Settings.CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE.value),
+        accent = Color(Settings.CUSTOM_LIGHT_ACCENT_HASH_CODE.value)
     )
 
     val customThemeDark = colorPalette.copy(
-        background0 = Color(context.preferences.getInt(customThemeDark_Background0Key, DefaultDarkColorPalette.background0.hashCode())),
-        background1 = Color(context.preferences.getInt(customThemeDark_Background1Key, DefaultDarkColorPalette.background1.hashCode())),
-        background2 = Color(context.preferences.getInt(customThemeDark_Background2Key, DefaultDarkColorPalette.background2.hashCode())),
-        background3 = Color(context.preferences.getInt(customThemeDark_Background3Key, DefaultDarkColorPalette.background3.hashCode())),
-        background4 = Color(context.preferences.getInt(customThemeDark_Background4Key, DefaultDarkColorPalette.background4.hashCode())),
-        text = Color(context.preferences.getInt(customThemeDark_TextKey, DefaultDarkColorPalette.text.hashCode())),
-        textSecondary = Color(context.preferences.getInt(customThemeDark_textSecondaryKey, DefaultDarkColorPalette.textSecondary.hashCode())),
-        textDisabled = Color(context.preferences.getInt(customThemeDark_textDisabledKey, DefaultDarkColorPalette.textDisabled.hashCode())),
-        iconButtonPlayer = Color(context.preferences.getInt(customThemeDark_iconButtonPlayerKey, DefaultDarkColorPalette.iconButtonPlayer.hashCode())),
-        accent = Color(context.preferences.getInt(customThemeDark_accentKey, DefaultDarkColorPalette.accent.hashCode()))
+        background0 = Color(Settings.CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE.value),
+        background1 = Color(Settings.CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE.value),
+        background2 = Color(Settings.CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE.value),
+        background3 = Color(Settings.CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE.value),
+        background4 = Color(Settings.CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE.value),
+        text = Color(Settings.CUSTOM_DARK_TEXT_HASH_CODE.value),
+        textSecondary = Color(Settings.CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE.value),
+        textDisabled = Color(Settings.CUSTOM_DARK_TEXT_DISABLED_HASH_CODE.value),
+        iconButtonPlayer = Color(Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE.value),
+        accent = Color(Settings.CUSTOM_DARK_ACCENT_HASH_CODE.value)
     )
 
     return when (colorPaletteMode) {

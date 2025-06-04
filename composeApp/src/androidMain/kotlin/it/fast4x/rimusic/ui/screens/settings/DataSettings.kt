@@ -43,9 +43,6 @@ import it.fast4x.rimusic.ui.components.themed.InputNumericDialog
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.utils.RestartPlayerService
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.coilCustomDiskCacheKey
-import it.fast4x.rimusic.utils.exoPlayerCustomCacheKey
-import it.fast4x.rimusic.utils.rememberPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -93,14 +90,10 @@ fun DataSettings() {
 
 
     var showExoPlayerCustomCacheDialog by remember { mutableStateOf(false) }
-    var exoPlayerCustomCache by rememberPreference(
-        exoPlayerCustomCacheKey,32
-    )
+    var exoPlayerCustomCache by Settings.SONG_CACHE_CUSTOM_SIZE
 
     var showCoilCustomDiskCacheDialog by remember { mutableStateOf(false) }
-    var coilCustomDiskCache by rememberPreference(
-        coilCustomDiskCacheKey,32
-    )
+    var coilCustomDiskCache by Settings.THUMBNAIL_CACHE_CUSTOM_SIZE
 
     var pauseSearchHistory by Settings.PAUSE_SEARCH_HISTORY
 

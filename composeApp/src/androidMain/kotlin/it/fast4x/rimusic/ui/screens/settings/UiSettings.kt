@@ -68,28 +68,6 @@ import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.styling.DefaultDarkColorPalette
 import it.fast4x.rimusic.ui.styling.DefaultLightColorPalette
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.customColorKey
-import it.fast4x.rimusic.utils.customThemeDark_Background0Key
-import it.fast4x.rimusic.utils.customThemeDark_Background1Key
-import it.fast4x.rimusic.utils.customThemeDark_Background2Key
-import it.fast4x.rimusic.utils.customThemeDark_Background3Key
-import it.fast4x.rimusic.utils.customThemeDark_Background4Key
-import it.fast4x.rimusic.utils.customThemeDark_TextKey
-import it.fast4x.rimusic.utils.customThemeDark_accentKey
-import it.fast4x.rimusic.utils.customThemeDark_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeDark_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeDark_textSecondaryKey
-import it.fast4x.rimusic.utils.customThemeLight_Background0Key
-import it.fast4x.rimusic.utils.customThemeLight_Background1Key
-import it.fast4x.rimusic.utils.customThemeLight_Background2Key
-import it.fast4x.rimusic.utils.customThemeLight_Background3Key
-import it.fast4x.rimusic.utils.customThemeLight_Background4Key
-import it.fast4x.rimusic.utils.customThemeLight_TextKey
-import it.fast4x.rimusic.utils.customThemeLight_accentKey
-import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
-import it.fast4x.rimusic.utils.rememberPreference
 import me.knighthat.component.dialog.RestartAppDialog
 import me.knighthat.component.tab.Search
 import me.knighthat.utils.Toaster
@@ -185,45 +163,45 @@ fun DefaultUiSettings() {
     showPinnedPlaylists = true
     var showMonthlyPlaylists by Settings.SHOW_MONTHLY_PLAYLISTS
     showMonthlyPlaylists = true
-    var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
+    var customThemeLight_Background0 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE
     customThemeLight_Background0 = DefaultLightColorPalette.background0.hashCode()
-    var customThemeLight_Background1 by rememberPreference(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())
+    var customThemeLight_Background1 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE
     customThemeLight_Background1 = DefaultLightColorPalette.background1.hashCode()
-    var customThemeLight_Background2 by rememberPreference(customThemeLight_Background2Key, DefaultLightColorPalette.background2.hashCode())
+    var customThemeLight_Background2 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE
     customThemeLight_Background2 = DefaultLightColorPalette.background2.hashCode()
-    var customThemeLight_Background3 by rememberPreference(customThemeLight_Background3Key, DefaultLightColorPalette.background3.hashCode())
+    var customThemeLight_Background3 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE
     customThemeLight_Background3 = DefaultLightColorPalette.background3.hashCode()
-    var customThemeLight_Background4 by rememberPreference(customThemeLight_Background4Key, DefaultLightColorPalette.background4.hashCode())
+    var customThemeLight_Background4 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE
     customThemeLight_Background4 = DefaultLightColorPalette.background4.hashCode()
-    var customThemeLight_Text by rememberPreference(customThemeLight_TextKey, DefaultLightColorPalette.text.hashCode())
+    var customThemeLight_Text by Settings.CUSTOM_LIGHT_TEXT_HASH_CODE
     customThemeLight_Text = DefaultLightColorPalette.text.hashCode()
-    var customThemeLight_TextSecondary by rememberPreference(customThemeLight_textSecondaryKey, DefaultLightColorPalette.textSecondary.hashCode())
+    var customThemeLight_TextSecondary by Settings.CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE
     customThemeLight_TextSecondary = DefaultLightColorPalette.textSecondary.hashCode()
-    var customThemeLight_TextDisabled by rememberPreference(customThemeLight_textDisabledKey, DefaultLightColorPalette.textDisabled.hashCode())
+    var customThemeLight_TextDisabled by Settings.CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE
     customThemeLight_TextDisabled = DefaultLightColorPalette.textDisabled.hashCode()
-    var customThemeLight_IconButtonPlayer by rememberPreference(customThemeLight_iconButtonPlayerKey, DefaultLightColorPalette.iconButtonPlayer.hashCode())
+    var customThemeLight_IconButtonPlayer by Settings.CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE
     customThemeLight_IconButtonPlayer = DefaultLightColorPalette.iconButtonPlayer.hashCode()
-    var customThemeLight_Accent by rememberPreference(customThemeLight_accentKey, DefaultLightColorPalette.accent.hashCode())
+    var customThemeLight_Accent by Settings.CUSTOM_LIGHT_ACCENT_HASH_CODE
     customThemeLight_Accent = DefaultLightColorPalette.accent.hashCode()
-    var customThemeDark_Background0 by rememberPreference(customThemeDark_Background0Key, DefaultDarkColorPalette.background0.hashCode())
+    var customThemeDark_Background0 by Settings.CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE
     customThemeDark_Background0 = DefaultDarkColorPalette.background0.hashCode()
-    var customThemeDark_Background1 by rememberPreference(customThemeDark_Background1Key, DefaultDarkColorPalette.background1.hashCode())
+    var customThemeDark_Background1 by Settings.CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE
     customThemeDark_Background1 = DefaultDarkColorPalette.background1.hashCode()
-    var customThemeDark_Background2 by rememberPreference(customThemeDark_Background2Key, DefaultDarkColorPalette.background2.hashCode())
+    var customThemeDark_Background2 by Settings.CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE
     customThemeDark_Background2 = DefaultDarkColorPalette.background2.hashCode()
-    var customThemeDark_Background3 by rememberPreference(customThemeDark_Background3Key, DefaultDarkColorPalette.background3.hashCode())
+    var customThemeDark_Background3 by Settings.CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE
     customThemeDark_Background3 = DefaultDarkColorPalette.background3.hashCode()
-    var customThemeDark_Background4 by rememberPreference(customThemeDark_Background4Key, DefaultDarkColorPalette.background4.hashCode())
+    var customThemeDark_Background4 by Settings.CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE
     customThemeDark_Background4 = DefaultDarkColorPalette.background4.hashCode()
-    var customThemeDark_Text by rememberPreference(customThemeDark_TextKey, DefaultDarkColorPalette.text.hashCode())
+    var customThemeDark_Text by Settings.CUSTOM_DARK_TEXT_HASH_CODE
     customThemeDark_Text = DefaultDarkColorPalette.text.hashCode()
-    var customThemeDark_TextSecondary by rememberPreference(customThemeDark_textSecondaryKey, DefaultDarkColorPalette.textSecondary.hashCode())
+    var customThemeDark_TextSecondary by Settings.CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE
     customThemeDark_TextSecondary = DefaultDarkColorPalette.textSecondary.hashCode()
-    var customThemeDark_TextDisabled by rememberPreference(customThemeDark_textDisabledKey, DefaultDarkColorPalette.textDisabled.hashCode())
+    var customThemeDark_TextDisabled by Settings.CUSTOM_DARK_TEXT_DISABLED_HASH_CODE
     customThemeDark_TextDisabled = DefaultDarkColorPalette.textDisabled.hashCode()
-    var customThemeDark_IconButtonPlayer by rememberPreference(customThemeDark_iconButtonPlayerKey, DefaultDarkColorPalette.iconButtonPlayer.hashCode())
+    var customThemeDark_IconButtonPlayer by Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE
     customThemeDark_IconButtonPlayer = DefaultDarkColorPalette.iconButtonPlayer.hashCode()
-    var customThemeDark_Accent by rememberPreference(customThemeDark_accentKey, DefaultDarkColorPalette.accent.hashCode())
+    var customThemeDark_Accent by Settings.CUSTOM_DARK_ACCENT_HASH_CODE
     customThemeDark_Accent = DefaultDarkColorPalette.accent.hashCode()
     var resetCustomLightThemeDialog by rememberSaveable { mutableStateOf(false) }
     resetCustomLightThemeDialog = false
@@ -399,27 +377,27 @@ fun UiSettings(
     var showPinnedPlaylists by Settings.SHOW_PINNED_PLAYLISTS
     var showMonthlyPlaylists by Settings.SHOW_MONTHLY_PLAYLISTS
 
-    var customThemeLight_Background0 by rememberPreference(customThemeLight_Background0Key, DefaultLightColorPalette.background0.hashCode())
-    var customThemeLight_Background1 by rememberPreference(customThemeLight_Background1Key, DefaultLightColorPalette.background1.hashCode())
-    var customThemeLight_Background2 by rememberPreference(customThemeLight_Background2Key, DefaultLightColorPalette.background2.hashCode())
-    var customThemeLight_Background3 by rememberPreference(customThemeLight_Background3Key, DefaultLightColorPalette.background3.hashCode())
-    var customThemeLight_Background4 by rememberPreference(customThemeLight_Background4Key, DefaultLightColorPalette.background4.hashCode())
-    var customThemeLight_Text by rememberPreference(customThemeLight_TextKey, DefaultLightColorPalette.text.hashCode())
-    var customThemeLight_TextSecondary by rememberPreference(customThemeLight_textSecondaryKey, DefaultLightColorPalette.textSecondary.hashCode())
-    var customThemeLight_TextDisabled by rememberPreference(customThemeLight_textDisabledKey, DefaultLightColorPalette.textDisabled.hashCode())
-    var customThemeLight_IconButtonPlayer by rememberPreference(customThemeLight_iconButtonPlayerKey, DefaultLightColorPalette.iconButtonPlayer.hashCode())
-    var customThemeLight_Accent by rememberPreference(customThemeLight_accentKey, DefaultLightColorPalette.accent.hashCode())
+    var customThemeLight_Background0 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE
+    var customThemeLight_Background1 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE
+    var customThemeLight_Background2 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE
+    var customThemeLight_Background3 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE
+    var customThemeLight_Background4 by Settings.CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE
+    var customThemeLight_Text by Settings.CUSTOM_LIGHT_TEXT_HASH_CODE
+    var customThemeLight_TextSecondary by Settings.CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE
+    var customThemeLight_TextDisabled by Settings.CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE
+    var customThemeLight_IconButtonPlayer by Settings.CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE
+    var customThemeLight_Accent by Settings.CUSTOM_LIGHT_ACCENT_HASH_CODE
 
-    var customThemeDark_Background0 by rememberPreference(customThemeDark_Background0Key, DefaultDarkColorPalette.background0.hashCode())
-    var customThemeDark_Background1 by rememberPreference(customThemeDark_Background1Key, DefaultDarkColorPalette.background1.hashCode())
-    var customThemeDark_Background2 by rememberPreference(customThemeDark_Background2Key, DefaultDarkColorPalette.background2.hashCode())
-    var customThemeDark_Background3 by rememberPreference(customThemeDark_Background3Key, DefaultDarkColorPalette.background3.hashCode())
-    var customThemeDark_Background4 by rememberPreference(customThemeDark_Background4Key, DefaultDarkColorPalette.background4.hashCode())
-    var customThemeDark_Text by rememberPreference(customThemeDark_TextKey, DefaultDarkColorPalette.text.hashCode())
-    var customThemeDark_TextSecondary by rememberPreference(customThemeDark_textSecondaryKey, DefaultDarkColorPalette.textSecondary.hashCode())
-    var customThemeDark_TextDisabled by rememberPreference(customThemeDark_textDisabledKey, DefaultDarkColorPalette.textDisabled.hashCode())
-    var customThemeDark_IconButtonPlayer by rememberPreference(customThemeDark_iconButtonPlayerKey, DefaultDarkColorPalette.iconButtonPlayer.hashCode())
-    var customThemeDark_Accent by rememberPreference(customThemeDark_accentKey, DefaultDarkColorPalette.accent.hashCode())
+    var customThemeDark_Background0 by Settings.CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE
+    var customThemeDark_Background1 by Settings.CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE
+    var customThemeDark_Background2 by Settings.CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE
+    var customThemeDark_Background3 by Settings.CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE
+    var customThemeDark_Background4 by Settings.CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE
+    var customThemeDark_Text by Settings.CUSTOM_DARK_TEXT_HASH_CODE
+    var customThemeDark_TextSecondary by Settings.CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE
+    var customThemeDark_TextDisabled by Settings.CUSTOM_DARK_TEXT_DISABLED_HASH_CODE
+    var customThemeDark_IconButtonPlayer by Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE
+    var customThemeDark_Accent by Settings.CUSTOM_DARK_ACCENT_HASH_CODE
 
     var resetCustomLightThemeDialog by rememberSaveable { mutableStateOf(false) }
     var resetCustomDarkThemeDialog by rememberSaveable { mutableStateOf(false) }
@@ -480,7 +458,7 @@ fun UiSettings(
     var albumSwipeLeftAction by Settings.ALBUM_SWIPE_LEFT_ACTION
     var albumSwipeRightAction by Settings.ALBUM_SWIPE_RIGHT_ACTION
 
-    var customColor by rememberPreference(customColorKey, Color.Green.hashCode())
+    var customColor by Settings.CUSTOM_COLOR_HASH_CODE
 
     Column(
         modifier = Modifier

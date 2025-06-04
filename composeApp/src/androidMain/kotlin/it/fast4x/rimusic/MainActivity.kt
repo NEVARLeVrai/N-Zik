@@ -145,27 +145,6 @@ import it.fast4x.rimusic.utils.InitDownloader
 import it.fast4x.rimusic.utils.LocalMonetCompat
 import it.fast4x.rimusic.utils.OkHttpRequest
 import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.customColorKey
-import it.fast4x.rimusic.utils.customThemeDark_Background0Key
-import it.fast4x.rimusic.utils.customThemeDark_Background1Key
-import it.fast4x.rimusic.utils.customThemeDark_Background2Key
-import it.fast4x.rimusic.utils.customThemeDark_Background3Key
-import it.fast4x.rimusic.utils.customThemeDark_Background4Key
-import it.fast4x.rimusic.utils.customThemeDark_TextKey
-import it.fast4x.rimusic.utils.customThemeDark_accentKey
-import it.fast4x.rimusic.utils.customThemeDark_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeDark_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeDark_textSecondaryKey
-import it.fast4x.rimusic.utils.customThemeLight_Background0Key
-import it.fast4x.rimusic.utils.customThemeLight_Background1Key
-import it.fast4x.rimusic.utils.customThemeLight_Background2Key
-import it.fast4x.rimusic.utils.customThemeLight_Background3Key
-import it.fast4x.rimusic.utils.customThemeLight_Background4Key
-import it.fast4x.rimusic.utils.customThemeLight_TextKey
-import it.fast4x.rimusic.utils.customThemeLight_accentKey
-import it.fast4x.rimusic.utils.customThemeLight_iconButtonPlayerKey
-import it.fast4x.rimusic.utils.customThemeLight_textDisabledKey
-import it.fast4x.rimusic.utils.customThemeLight_textSecondaryKey
 import it.fast4x.rimusic.utils.effectRotationKey
 import it.fast4x.rimusic.utils.forcePlay
 import it.fast4x.rimusic.utils.getEnum
@@ -180,8 +159,6 @@ import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playerBackgroundColorsKey
 import it.fast4x.rimusic.utils.playerVisualizerTypeKey
 import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.proxyPortKey
-import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.setDefaultPalette
 import it.fast4x.rimusic.utils.showSearchTabKey
@@ -418,7 +395,7 @@ class MainActivity :
             }
             if ( Settings.IS_PROXY_ENABLED.value ) {
                 val hostName by Settings.PROXY_HOST
-                val proxyPort = getInt(proxyPortKey, 8080)
+                val proxyPort by Settings.PROXY_PORT
                 val proxyMode by Settings.PROXY_SCHEME
                 if (isValidIP(hostName)) {
                     hostName?.let { hName ->
@@ -462,7 +439,7 @@ class MainActivity :
             var showPlayer by rememberSaveable { mutableStateOf(false) }
             var switchToAudioPlayer by rememberSaveable { mutableStateOf(false) }
             var animatedGradient by Settings.ANIMATED_GRADIENT
-            var customColor by rememberPreference(customColorKey, Color.Green.hashCode())
+            var customColor by Settings.CUSTOM_COLOR_HASH_CODE
             val lightTheme = colorPaletteMode == ColorPaletteMode.Light || (colorPaletteMode == ColorPaletteMode.System && (!isSystemInDarkTheme()))
 
 
@@ -655,26 +632,26 @@ class MainActivity :
 
                             Settings.COLOR_PALETTE.key,
                             Settings.THEME_MODE.key,
-                            customThemeLight_Background0Key,
-                            customThemeLight_Background1Key,
-                            customThemeLight_Background2Key,
-                            customThemeLight_Background3Key,
-                            customThemeLight_Background4Key,
-                            customThemeLight_TextKey,
-                            customThemeLight_textSecondaryKey,
-                            customThemeLight_textDisabledKey,
-                            customThemeLight_iconButtonPlayerKey,
-                            customThemeLight_accentKey,
-                            customThemeDark_Background0Key,
-                            customThemeDark_Background1Key,
-                            customThemeDark_Background2Key,
-                            customThemeDark_Background3Key,
-                            customThemeDark_Background4Key,
-                            customThemeDark_TextKey,
-                            customThemeDark_textSecondaryKey,
-                            customThemeDark_textDisabledKey,
-                            customThemeDark_iconButtonPlayerKey,
-                            customThemeDark_accentKey,
+                            Settings.CUSTOM_LIGHT_THEME_BACKGROUND_0_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_THEME_BACKGROUND_1_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_THEME_BACKGROUND_2_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_THEME_BACKGROUND_3_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_THEME_BACKGROUND_4_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_TEXT_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_TEXT_SECONDARY_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_TEXT_DISABLED_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_PLAY_BUTTON_HASH_CODE.key,
+                            Settings.CUSTOM_LIGHT_ACCENT_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_THEME_BACKGROUND_0_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_THEME_BACKGROUND_1_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_THEME_BACKGROUND_2_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_THEME_BACKGROUND_3_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_THEME_BACKGROUND_4_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_TEXT_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_TEXT_SECONDARY_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_TEXT_DISABLED_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE.key,
+                            Settings.CUSTOM_DARK_ACCENT_HASH_CODE.key,
                                 -> {
                                 val colorPaletteName by Settings.COLOR_PALETTE
                                 val colorPaletteMode by Settings.THEME_MODE
