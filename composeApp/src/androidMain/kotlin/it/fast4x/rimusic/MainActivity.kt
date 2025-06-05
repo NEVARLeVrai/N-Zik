@@ -859,27 +859,6 @@ class MainActivity :
                     }
                 }
 
-                var openTabFromShortcut = remember { -1 }
-                if (intent.action in arrayOf(
-                        action_songs,
-                        action_albums,
-                        actions_artists,
-                        action_library,
-                        action_search
-                    )
-                ) {
-                    openTabFromShortcut =
-                        when (intent?.action) {
-                            action_songs -> HomeScreenTabs.Songs.index
-                            action_albums -> HomeScreenTabs.Albums.index
-                            actions_artists -> HomeScreenTabs.Artists.index
-                            action_library -> HomeScreenTabs.Playlists.index
-                            action_search -> -2
-                            else -> -1
-                        }
-                    intent.action = null
-                }
-
                 CrossfadeContainer(state = pipState.value) { isCurrentInPip ->
                     println("MainActivity pipState ${pipState.value} CrossfadeContainer isCurrentInPip $isCurrentInPip ")
                     val pipModule by Settings.PIP_MODULE
@@ -904,6 +883,7 @@ class MainActivity :
                         }
 
                     } else
+                        // FIXME: Why is this block getting called twice on start?
                         CompositionLocalProvider(
                             LocalAppearance provides appearance,
                             LocalIndication provides ripple(bounded = true),
@@ -915,19 +895,44 @@ class MainActivity :
                             LocalDownloadHelper provides downloadHelper,
                             LocalPlayerSheetState provides playerState,
                             LocalMonetCompat provides monet,
-                            //LocalInternetConnected provides internetConnected
                         ) {
+                            // This block gets called twice on startup, first run resets
+                            // [intent.action] to empty string, second run sets
+                            // [Settings.HOME_TAB_INDEX] to default page, resulting
+                            // in default page shows regardless of shortcut
+                            val startPage = remember {
+                                // This step picks index from shortcut (if applicable)
+                                var tab = when( intent.action ) {
+                                    action_songs    -> HomeScreenTabs.Songs
+                                    action_albums   -> HomeScreenTabs.Albums
+                                    actions_artists -> HomeScreenTabs.Artists
+                                    action_library  -> HomeScreenTabs.Playlists
+                                    action_search   -> HomeScreenTabs.Search
+                                    // If not opened from shortcuts, then use default page (from settings)
+                                    else            -> Settings.STARTUP_SCREEN.value
+                                }
+
+                                // In case [tabIndex] results to 0 and quick page
+                                // isn't enabled change it to Songs page.
+                                if( !Settings.QUICK_PICKS_PAGE.value && tab == HomeScreenTabs.QuickPics )
+                                    tab = HomeScreenTabs.Songs
+
+                                // Always set to empty to prevent unwanted outcome
+                                intent.action = ""
+
+                                return@remember tab
+                            }
 
                             AppNavigation(
                                 navController = navController,
+                                startPage = startPage,
                                 miniPlayer = {
                                     MiniPlayer(
                                         showPlayer = { showPlayer = true },
                                         hidePlayer = { showPlayer = false },
                                         navController = navController
                                     )
-                                },
-                                openTabFromShortcut = openTabFromShortcut
+                                }
                             )
 
                             checkIfAppIsRunningInBackground()

@@ -22,13 +22,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -42,6 +42,7 @@ import androidx.navigation.navArgument
 import app.kreate.android.Settings
 import app.kreate.android.themed.rimusic.screen.artist.ArtistAlbums
 import it.fast4x.rimusic.Database
+import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.StatisticsType
 import it.fast4x.rimusic.enums.TransitionEffect
@@ -65,7 +66,6 @@ import it.fast4x.rimusic.ui.screens.search.SearchScreen
 import it.fast4x.rimusic.ui.screens.searchresult.SearchResultScreen
 import it.fast4x.rimusic.ui.screens.settings.SettingsScreen
 import it.fast4x.rimusic.ui.screens.statistics.StatisticsScreen
-import it.fast4x.rimusic.utils.clearPreference
 
 @androidx.annotation.OptIn()
 @OptIn(
@@ -79,9 +79,19 @@ import it.fast4x.rimusic.utils.clearPreference
 @Composable
 fun AppNavigation(
     navController: NavHostController,
-    miniPlayer: @Composable () -> Unit = {},
-    openTabFromShortcut: Int
+    startPage: HomeScreenTabs,
+    miniPlayer: @Composable () -> Unit = {}
 ) {
+    val startDestination = remember( startPage ) {
+        Settings.HOME_TAB_INDEX.value =
+            if( startPage == HomeScreenTabs.Search ) Settings.STARTUP_SCREEN.value.index else startPage.index
+
+        return@remember if( startPage == HomeScreenTabs.Search )
+            NavRoutes.search
+        else
+            NavRoutes.home
+    }
+
     val transitionEffect by Settings.TRANSITION_EFFECT
 
     @Composable
@@ -110,10 +120,6 @@ fun AppNavigation(
         }
     }
 
-    // Clearing homeScreenTabIndex in opening app.
-    val context = LocalContext.current
-    clearPreference(context, Settings.HOME_TAB_INDEX.key)
-
     val enterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         {
             when (transitionEffect) {
@@ -139,7 +145,7 @@ fun AppNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = NavRoutes.home.name,
+        startDestination = startDestination.name,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
         popEnterTransition = enterTransition,
@@ -152,8 +158,7 @@ fun AppNavigation(
             HomeScreen(
                 navController = navController,
                 onPlaylistUrl = navigateToPlaylist,
-                miniPlayer = miniPlayer,
-                openTabFromShortcut = openTabFromShortcut
+                miniPlayer = miniPlayer
             )
         }
 

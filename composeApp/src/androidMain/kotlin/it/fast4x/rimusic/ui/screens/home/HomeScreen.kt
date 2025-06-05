@@ -22,11 +22,9 @@ import app.kreate.android.R
 import app.kreate.android.Settings
 import app.kreate.android.themed.rimusic.screen.home.HomeSongsScreen
 import it.fast4x.compose.persist.PersistMapCleanup
-import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.toUiMood
 import it.fast4x.rimusic.ui.components.Skeleton
-import it.fast4x.rimusic.utils.preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -45,36 +43,13 @@ import kotlin.system.exitProcess
 fun HomeScreen(
     navController: NavController,
     onPlaylistUrl: (String) -> Unit,
-    miniPlayer: @Composable () -> Unit = {},
-    openTabFromShortcut: Int
+    miniPlayer: @Composable () -> Unit = {}
 ) {
     val saveableStateHolder = rememberSaveableStateHolder()
 
-    val preferences = LocalContext.current.preferences
-    //val showSearchTab by rememberPreference(showSearchTabKey, false)
-    //val showStatsInNavbar by rememberPreference(showStatsInNavbarKey, false)
-    val enableQuickPicksPage by Settings.QUICK_PICKS_PAGE
-
     PersistMapCleanup("home/")
 
-    val openTabFromShortcut1 by remember{ mutableIntStateOf(openTabFromShortcut) }
-
-    val startupScreen by Settings.STARTUP_SCREEN
-    var initialtabIndex =
-        when (openTabFromShortcut1) {
-            -1 -> when (startupScreen) {
-                HomeScreenTabs.Default -> HomeScreenTabs.QuickPics.index
-                else -> startupScreen.index
-            }
-            else -> openTabFromShortcut1
-        }
-
-    var (tabIndex, onTabChanged) = Settings.HOME_TAB_INDEX
-
-    if (tabIndex == -2) navController.navigate(NavRoutes.search.name)
-
-
-    if (!enableQuickPicksPage && tabIndex==0) tabIndex = 1
+    val (tabIndex, onTabChanged) = Settings.HOME_TAB_INDEX
 
     Skeleton(
         navController,
@@ -82,7 +57,7 @@ fun HomeScreen(
         onTabChanged,
         miniPlayer,
         navBarContent = { Item ->
-            if (enableQuickPicksPage)
+            if ( Settings.QUICK_PICKS_PAGE.value )
                 Item(0, stringResource(R.string.quick_picks), R.drawable.sparkles)
             Item(1, stringResource(R.string.songs), R.drawable.musical_notes)
             Item(2, stringResource(R.string.artists), R.drawable.people)
