@@ -601,7 +601,7 @@ class MainActivity :
                         when (key) {
 
                             Settings.APP_LANGUAGE.key -> {
-                                val lang by Settings.APP_LANGUAGE
+                                val lang = sharedPreferences.getEnum( key, Settings.APP_LANGUAGE.defaultValue )
                                 val languageTag: String = lang.code.ifEmpty {
                                     AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag().orEmpty()
                                 }
@@ -653,8 +653,8 @@ class MainActivity :
                             Settings.CUSTOM_DARK_PLAY_BUTTON_HASH_CODE.key,
                             Settings.CUSTOM_DARK_ACCENT_HASH_CODE.key,
                                 -> {
-                                val colorPaletteName by Settings.COLOR_PALETTE
-                                val colorPaletteMode by Settings.THEME_MODE
+                                val colorPaletteName = sharedPreferences.getEnum( Settings.COLOR_PALETTE.key, Settings.COLOR_PALETTE.defaultValue )
+                                val colorPaletteMode = sharedPreferences.getEnum( Settings.THEME_MODE.key, Settings.THEME_MODE.defaultValue )
 
                                 var colorPalette = colorPaletteOf(
                                     colorPaletteName,
@@ -742,9 +742,9 @@ class MainActivity :
                             Settings.USE_SYSTEM_FONT.key,
                             Settings.APPLY_FONT_PADDING.key,
                             Settings.FONT.key -> {
-                                val useSystemFont by Settings.USE_SYSTEM_FONT
-                                val applyFontPadding by Settings.APPLY_FONT_PADDING
-                                val fontType by Settings.FONT
+                                val useSystemFont = sharedPreferences.getBoolean( Settings.USE_SYSTEM_FONT.key, Settings.USE_SYSTEM_FONT.defaultValue )
+                                val applyFontPadding = sharedPreferences.getBoolean( Settings.APPLY_FONT_PADDING.key, Settings.APPLY_FONT_PADDING.defaultValue )
+                                val fontType = sharedPreferences.getEnum( Settings.FONT.key, Settings.FONT.defaultValue )
 
                                 appearance = appearance.copy(
                                     typography = typographyOf(

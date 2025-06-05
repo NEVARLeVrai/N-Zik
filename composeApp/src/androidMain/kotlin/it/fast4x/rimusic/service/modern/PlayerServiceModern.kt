@@ -122,6 +122,7 @@ import it.fast4x.rimusic.utils.encryptedPreferences
 import it.fast4x.rimusic.utils.fadeInEffect
 import it.fast4x.rimusic.utils.fadeOutEffect
 import it.fast4x.rimusic.utils.forcePlay
+import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.intent
 import it.fast4x.rimusic.utils.isAtLeastAndroid10
 import it.fast4x.rimusic.utils.isAtLeastAndroid6
@@ -622,23 +623,21 @@ class PlayerServiceModern : MediaLibraryService(),
     }
 
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         when (key) {
-            Settings.ENABLE_PERSISTENT_QUEUE.key -> if (sharedPreferences != null) {
-                isPersistentQueueEnabled =
-                    sharedPreferences.getBoolean(key, isPersistentQueueEnabled)
-            }
+            Settings.ENABLE_PERSISTENT_QUEUE.key ->
+                isPersistentQueueEnabled = sharedPreferences.getBoolean( key, Settings.ENABLE_PERSISTENT_QUEUE.defaultValue )
 
             Settings.AUDIO_VOLUME_NORMALIZATION.key,
             Settings.AUDIO_VOLUME_NORMALIZATION_TARGET.key -> maybeNormalizeVolume()
 
             Settings.RESUME_PLAYBACK_WHEN_CONNECT_TO_AUDIO_DEVICE.key -> maybeResumePlaybackWhenDeviceConnected()
 
-            Settings.AUDIO_SKIP_SILENCE.key -> if (sharedPreferences != null) {
-                player.skipSilenceEnabled = sharedPreferences.getBoolean(key, false)
-            }
+            Settings.AUDIO_SKIP_SILENCE.key ->
+                player.skipSilenceEnabled = sharedPreferences.getBoolean( key, Settings.AUDIO_SKIP_SILENCE.defaultValue )
 
-            Settings.QUEUE_LOOP_TYPE.key -> player.repeatMode = Settings.QUEUE_LOOP_TYPE.value.type
+            Settings.QUEUE_LOOP_TYPE.key ->
+                player.repeatMode = sharedPreferences.getEnum( key, Settings.QUEUE_LOOP_TYPE.defaultValue ).type
 
             Settings.AUDIO_BASS_BOOST_LEVEL.key,
             Settings.AUDIO_BASS_BOOSTED.key -> maybeBassBoost()
