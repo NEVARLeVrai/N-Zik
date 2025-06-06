@@ -38,7 +38,6 @@ import it.fast4x.kugou.KuGou
 import it.fast4x.lrclib.LrcLib
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.EXPLICIT_PREFIX
-import it.fast4x.rimusic.MODIFIED_PREFIX
 import it.fast4x.rimusic.appContext
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.context
@@ -198,18 +197,18 @@ val MediaItem.asSong: Song
 val MediaItem.cleaned: MediaItem
     get() {
         // Add more if needed
-        val isTitleModified = mediaMetadata.title?.startsWith( MODIFIED_PREFIX )
-        val isArtistModified = mediaMetadata.artist?.startsWith( MODIFIED_PREFIX )
+        val cleanTitle = cleanPrefix( mediaMetadata.title.toString() )
+        val cleanArtistName = cleanPrefix( mediaMetadata.artist.toString() )
 
-        if( isTitleModified == false && isArtistModified == false )
+        if( cleanTitle == mediaMetadata.title && cleanArtistName == mediaMetadata.artist )
             // Return as-is if no property is modified
             // Reduce conversion time significantly when
             // some (if not most) of media items are not modified.
             return this
 
         val newMetadata: MediaMetadata = mediaMetadata.buildUpon()
-                                                      .setTitle( cleanPrefix(mediaMetadata.title.toString()) )
-                                                      .setArtist( cleanPrefix(mediaMetadata.artist.toString()) )
+                                                      .setTitle( cleanTitle )
+                                                      .setArtist( cleanArtistName )
                                                       .build()
         return buildUpon().setMediaMetadata( newMetadata ).build()
     }
