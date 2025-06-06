@@ -13,7 +13,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,8 +38,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import app.kreate.android.R
 import it.fast4x.rimusic.enums.ThumbnailCoverType
-import it.fast4x.rimusic.utils.VinylSizeKey
-import it.fast4x.rimusic.utils.rememberPreference
 
 @Composable
 fun RotateThumbnailCover(

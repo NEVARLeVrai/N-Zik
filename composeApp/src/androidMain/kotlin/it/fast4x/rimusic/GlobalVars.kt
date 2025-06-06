@@ -5,9 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import app.kreate.android.Settings
 import it.fast4x.rimusic.ui.styling.LocalAppearance
-import it.fast4x.rimusic.utils.isConnectionMetered
-import it.fast4x.rimusic.utils.preferences
-import it.fast4x.rimusic.utils.useYtLoginOnlyForBrowseKey
 
 @Composable
 fun typography() = LocalAppearance.current.typography
@@ -31,12 +28,10 @@ fun binder() = LocalPlayerServiceBinder.current?.service
 fun appContext(): Context = Dependencies.application.applicationContext
 fun context(): Context = Dependencies.application
 
-fun useYtLoginOnlyForBrowse() = appContext().preferences.getBoolean(useYtLoginOnlyForBrowseKey, false)
 fun ytAccountName() = Settings.YOUTUBE_ACCOUNT_NAME.value
 fun ytAccountThumbnail() = Settings.YOUTUBE_ACCOUNT_AVATAR.value
 fun isVideoEnabled() = Settings.PLAYER_ACTION_TOGGLE_VIDEO.value
 
-fun isConnectionMetered() = appContext().isConnectionMetered()
 fun isConnectionMeteredEnabled() = Settings.IS_CONNECTION_METERED.value
 fun isAutoSyncEnabled() = Settings.AUTO_SYNC.value
 fun isHandleAudioFocusEnabled() = Settings.AUDIO_SMART_PAUSE_DURING_CALLS.value
